@@ -41,6 +41,4 @@ export default {
 </script>
 
 <style>
-  .task-box {
-  }
 </style>

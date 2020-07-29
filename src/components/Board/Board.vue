@@ -46,7 +46,7 @@ export default {
     }
   },
   methods: {
-    onEmitDeleteTask (payload) {
+    onEmitDeleteTask () {
       console.log('Board component, onEmitDeleteTask')
       this.tasks--
     },
@@ -63,9 +63,6 @@ export default {
 </script>
 
 <style>
-  .add-task-btn {
-    /*float: right;*/
-  }
   .board {
     margin-bottom: 100px;
     overflow: auto;

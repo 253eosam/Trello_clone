@@ -25,11 +25,6 @@ const routes: Array<RouteConfig> = [
     path: '/user/:uid/trello',
     name: 'Trello',
     component: () => import('@/views/Trello/Trello.vue')
-  },
-  {
-    path: '/user/:uid/trello/task/:tid',
-    name: 'TaskDetail',
-    component: () => import('@/views/Trello/Board/Task/Detail.vue')
   }
 ]
 
