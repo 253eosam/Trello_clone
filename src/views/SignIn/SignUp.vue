@@ -18,7 +18,7 @@
               <el-input show-password placeholder="Please input password" v-model="signUpForm.VerifyPwd"></el-input>
             </el-form-item>
             <el-form-item style="text-align: right">
-              <el-button type="primary" class="sign-up-btn" round>회원가입</el-button>
+              <el-button type="primary" @click="onClickSignUp" class="sign-up-btn" round>회원가입</el-button>
               <el-button class="sign-up-btn" @click="onClickCancle" round>취소</el-button>
             </el-form-item>
           </el-form>
@@ -35,6 +35,7 @@
     data () {
       return {
         signUpForm: {
+          uid: 0,
           id: '',
           pwd: '',
           VerifyPwd: '',
@@ -44,11 +45,12 @@
     methods: {
       onClickSignUp (){
         console.log("SignUp page, onClickSignUp method")
-        this.$router.push({path : `/`})
+        alert(`success sign up..!!`)
+        this.$router.push({path : `/user/${this.signUpForm.uid}/trello`})
       },
       onClickCancle () {
         console.log("SignUp page, onClickCancle method")
-        window.history.length ? this.$router.go(-1) : this.$router.psuh({path : '/sign-in'});
+        window.history.length ? this.$router.go(-1) : this.$router.psuh({path : '/'});
       }
     },
     watch: {

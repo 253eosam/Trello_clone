@@ -42,8 +42,8 @@ export default {
     onClickSignIn(){
       console.log("SignIn page, onClickSignIn method")
       console.log("No Implements Feature" + "onClickSignIn")
-      console.log(this.signInForm)
       this.$router.push({path : `/user/${this.signInForm.uid}/trello`})
+      alert("success sign in..!!")
     },
     onClickSignUp () {
       console.log("SignIn page, onClickSignUp method")
