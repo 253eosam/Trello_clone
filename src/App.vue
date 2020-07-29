@@ -4,6 +4,40 @@
   </div>
 </template>
 
+<script>
+import { Loading } from 'element-ui'
+export default {
+  name: 'App',
+  data () {
+    return {
+    }
+  },
+  methods: {
+    loadingHandler (loadingFlag) {
+      console.log('methods, loadingHandler')
+
+      if (loadingFlag) {
+        Loading.service({ fullscreen: true })
+
+        // temp close logic
+        setTimeout(() => {
+          Loading.service().close()
+        }, 500)
+        // ---------------
+      } else {
+        Loading.service().close()
+      }
+    }
+  },
+  watch: {
+    '$store.getters.isLoading' (newValue) {
+      console.log('watch, $store,getter.isLoading')
+      this.loadingHandler(newValue)
+    }
+  }
+}
+</script>
+
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
