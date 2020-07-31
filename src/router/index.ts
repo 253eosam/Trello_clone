@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Hello from '@/views/Hello.vue'
-import store from '@/store'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -35,6 +35,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  store.commit('showPageLoading')
   next()
 })
 

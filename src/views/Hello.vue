@@ -2,7 +2,6 @@
   <div class="hello">
     <h1 class="title">Hello Trello</h1>
     <el-button @click="onClickStart" round>시작하기</el-button>
-    <el-button @click="onClickLoadingTest" round>loading test</el-button>
   </div>
 </template>
 
@@ -19,12 +18,6 @@ export default {
     }
   },
   methods: {
-    onClickLoadingTest () {
-      console.log('methods, onClickLoadingTest')
-      const isLoading = this.$store.getters.isLoading
-      console.log(`isLoading : ${isLoading}`)
-      this.$store.state.loading.status = !isLoading
-    },
     onClickStart () {
       this.$router.push({ path: '/sign-in' })
     }

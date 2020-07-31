@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import { Loading } from 'element-ui'
+import { Loading } from 'element-ui'
 
 Vue.use(Vuex)
 
@@ -13,10 +13,9 @@ export default new Vuex.Store({
       id: null,
       pwd: null
     },
-    schedule: {
-      tasks: []
-    },
+    schedule: 0,
     loading: {
+      service: '',
       status: false
     }
   },
@@ -26,30 +25,29 @@ export default new Vuex.Store({
     },
     isLoading: state => {
       return state.loading.status
+    },
+    schedule: state => {
+      return { isEmpty: state.schedule === 0 }
     }
   },
   mutations: {
-    /* experimental logic
-    lazyLoadingHandler: (state, payload) => {
-      return {
-        redirectPageLoading: () => {
-          const loadingInstance = Loading.service({ fullscreen: true })
-          setTimeout(() => {
-            loadingInstance.close()
-          }, payload.timeout)
-        }
-      }
-    }, */
-    /* completed logic
-    loadingHandler: (state) => {
-      const loadingInstance = Loading
-      if (state.lazyLoading.isLoading) {
-        loadingInstance.service({ fullscreen: true })
-      }else {
-        loadingInstance.service({ fullscreen: true }).close()
-      }
-    }, */
-
+    // manage a schedule
+    addSchedule: state => {
+      state.schedule++
+    },
+    deleteSchedule: state => {
+      state.schedule--
+    },
+    showPageLoading: () => {
+    // loading switch (on/off)
+      const loadingInstance = Loading.service({ fullscreen: true })
+      setTimeout(() => {
+        loadingInstance.close()
+      }, 500)
+      // if ((state.loading.status = (state.schedule > 0))) {
+      //   state.loading.service = loadingInstance
+      // } else state.loading.service.close()
+    }
   },
   actions: {
   },
