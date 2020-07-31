@@ -42,6 +42,7 @@ export default {
         res => {
         if(res.data.length === 1 && res.data[0].pwd === this.signInForm.pwd){
           console.log("Success Login")
+          this.$store.commit('setUser',res.data[0])
           this.$router.push({path : `/user/${res.data[0].id}/trello`})
         }else {
           console.log("Fail Login")
