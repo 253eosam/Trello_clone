@@ -19,7 +19,7 @@
 
 <script>
 import Header from '@/components/common/Header/Header.vue'
-
+import userAPI from '../../api/userAPI'
 export default {
   name: 'Login',
   components: {
@@ -29,16 +29,28 @@ export default {
     return {
       signInForm: {
         uid : 0,
-        email: '',
-        pwd: ''
+        email: 'wmp@wemakeprice.com',
+        pwd: 'q1w2e3r4'
       }
     }
   },
   methods: {
     onClickSignIn(){
       console.log("SignIn page, onClickSignIn method")
-      console.log("No Implements Feature" + "onClickSignIn")
-      this.$router.push({path : `/user/${this.signInForm.uid}/trello`})
+      userAPI
+        .findByEmail({email: this.signInForm.email},
+        res => {
+        if(res.data.length === 1 && res.data[0].pwd === this.signInForm.pwd){
+          console.log("Success Login")
+          this.$router.push({path : `/user/${res.data[0].id}/trello`})
+        }else {
+          console.log("Fail Login")
+        }
+      },
+      err => console.log(err),
+        () => {
+          console.log("finally")
+        })
     },
     onClickSignUp () {
       console.log("SignIn page, onClickSignUp method")

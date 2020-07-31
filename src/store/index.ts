@@ -8,11 +8,7 @@ export default new Vuex.Store({
   // static variable
   state: {
     // user info
-    user: {
-      uid: null,
-      email: null,
-      pwd: null
-    },
+    user: null,
     schedule: 0,
     loading: {
       service: '',
@@ -31,6 +27,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setUser: (state, payload) => {
+      state.user = payload
+    },
     // manage a schedule
     addSchedule: state => {
       state.schedule++
