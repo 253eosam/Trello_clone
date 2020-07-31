@@ -1,12 +1,12 @@
 <template>
   <div class="trello">
-    <Header />
+    <Header :subTitle="user.email"/>
     <div class="navigation-bar">
       <el-button @click="onClickAddBoard" icon="el-icon-folder-add" circle></el-button>
       <el-button @click="onClickSignOut" type="danger" plain>Logout</el-button>
     </div>
       <el-row>
-        <el-col v-for="idx in boardCnt" :key="idx" :span="24 / boardCnt">
+        <el-col v-for="idx in boardCnt" :key="idx" :span="4">
           <Board />
         </el-col>
       </el-row>
@@ -24,12 +24,18 @@ export default {
   },
   data () {
     return {
-      boardCnt: 0
+      boardCnt: 0,
+      maxBoardCnt: 6
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.getters.userInfo
     }
   },
   methods: {
     onClickAddBoard () {
-      this.boardCnt++
+      if (this.boardCnt < this.maxBoardCnt) { this.boardCnt++ } else alert('Don\'t create board..')
     },
     onClickSignOut () {
       this.$router.push('/sign-in')

@@ -1,11 +1,13 @@
 <template>
   <div class="task">
-    <el-card shadow="hover">
-      <div class="task-box">
-        <span @click="onClickShowDetailTask">{{text}}</span>
-        <el-button style="float: right; padding: 1px 0" @click="onClickDeleteTask" type="danger" icon="el-icon-delete" circle></el-button>
-      </div>
-    </el-card>
+    <div @click="onClickShowDetailTask">
+      <el-card shadow="hover">
+        <div class="task-box">
+          <span v-if="firstFlag">{{text}}</span>
+          <input class="task-first-title" type="text" v-else v-model="text" @keypress.enter="firstFlag = true"/>
+        </div>
+      </el-card>
+    </div>
     <el-dialog :visible.sync="dialogFormVisible">
       <task-detail></task-detail>
       <span slot="footer" class="dialog-footer">
@@ -24,7 +26,8 @@ export default {
   props: ['tid'],
   data () {
     return {
-      text: this.tid + '. Task',
+      text: '',
+      firstFlag: false,
       dialogFormVisible: false
     }
   },
@@ -33,6 +36,7 @@ export default {
       this.$emit('onEmitDeleteTask', this.tid)
     },
     onClickShowDetailTask () {
+      if (!this.firstFlag) return
       console.log('Board component, onClickShowDetailTask method' + `, tid : ${this.tid}`)
       this.dialogFormVisible = true
     }
@@ -41,4 +45,7 @@ export default {
 </script>
 
 <style>
+  .task-first-title {
+    border: white;
+  }
 </style>

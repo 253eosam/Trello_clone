@@ -14,7 +14,7 @@
       </div>
       <ul>
         <li v-for="(idx) in tasks" :key="idx">
-          <task :tid="idx" @onEmitDeleteTask="onEmitDeleteTask"></task>
+          <task :tid="idx"></task>
         </li>
         <li @click="onClickAddTask">
           <el-card shadow="hover">
