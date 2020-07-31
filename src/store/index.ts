@@ -10,7 +10,7 @@ export default new Vuex.Store({
     // user info
     user: {
       uid: null,
-      id: null,
+      email: null,
       pwd: null
     },
     schedule: 0,

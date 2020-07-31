@@ -3,8 +3,8 @@
   <div class="sign-in">
     <Header />
     <el-form class="sign-in-form" label-position="top" label-width="100px" :model="signInForm" >
-      <el-form-item label="ID">
-        <el-input placeholder="Please input ID" v-model="signInForm.id"></el-input>
+      <el-form-item label="Email">
+        <el-input placeholder="Please input Email" v-model="signInForm.email"></el-input>
       </el-form-item>
       <el-form-item label="Password">
         <el-input show-password placeholder="Please input password" v-model="signInForm.pwd"></el-input>
@@ -29,7 +29,7 @@ export default {
     return {
       signInForm: {
         uid : 0,
-        id: '',
+        email: '',
         pwd: ''
       }
     }
@@ -39,7 +39,6 @@ export default {
       console.log("SignIn page, onClickSignIn method")
       console.log("No Implements Feature" + "onClickSignIn")
       this.$router.push({path : `/user/${this.signInForm.uid}/trello`})
-      alert("success sign in..!!")
     },
     onClickSignUp () {
       console.log("SignIn page, onClickSignUp method")
