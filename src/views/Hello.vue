@@ -8,15 +8,6 @@
 <script>
 export default {
   name: 'Hello',
-  data () {
-    return {
-    }
-  },
-  computed: {
-    isLoading () {
-      return this.$store.getters.isLoading
-    }
-  },
   methods: {
     onClickStart () {
       this.$router.push({ path: '/sign-in' })

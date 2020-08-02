@@ -22,7 +22,7 @@
 
 <script>
 import Header from '@/components/common/Header/Header.vue'
-import userAPI from '../../api/userAPI'
+import userAPI from '../../api/userAPI.js'
 
   export default {
     name: 'Login',
@@ -32,7 +32,7 @@ import userAPI from '../../api/userAPI'
     data () {
       return {
         signUpForm: {
-          email: 'createWMP@wemakeprice.com',
+          email: 'wmp@wemakeprice.com',
           pwd: 'q1w2e3r4',
           VerifyPwd: '',
         },
@@ -41,7 +41,6 @@ import userAPI from '../../api/userAPI'
     },
     methods: {
       onClickSignUp (){
-        console.log("SignUp page, onClickSignUp method Success...!!")
         userAPI.save(
           {email: this.signUpForm.email, pwd: this.signUpForm.pwd},
           res => {
@@ -49,10 +48,13 @@ import userAPI from '../../api/userAPI'
             if(res.status === 200 || res.status === 204){
               this.$store.commit('setUser',res.data)
               this.$router.push({path : `/user/${res.data.id}/trello`})
+            }else {
+              alert('Fail Sign up...!!')
             }
           },
           err => {
             console.log(err)
+            alert('Fail Sign up ... !')
           },
           () => console.log("finally")
         )
