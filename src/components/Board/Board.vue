@@ -1,20 +1,22 @@
 <template>
     <div class="board">
       <div>
-        <el-tag @click="onClickUpdateTagName" class="board-tag" type="primary">{{tagName}}</el-tag>
+        <el-tag @click="onClickShowUpdateTagNameDialog" class="board-tag" type="primary">{{tagName}}</el-tag>
         <el-dialog title="Update Tag Name" :visible.sync="outerVisible">
           <div class="block">
-          <el-input placeholder="Please input your update Tag Name"></el-input>
+          <el-input v-model="updateTagNameDialog.newTagName" placeholder="Please input your update Tag Name"></el-input>
           </div>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary">Update</el-button>
-            <el-button @click="outerVisible = false">Cancel</el-button>
+            <el-button @click="onClickUpdateTagName" type="primary">Update</el-button>
+            <el-button @click="outerVisible = false, updateTagNameDialog.newTagName = ''">Cancel</el-button>
           </div>
         </el-dialog>
       </div>
       <ul>
         <li v-for="(idx) in tasks" :key="idx">
-          <task :tid="idx"></task>
+          <div class="card-list">
+            <task :tid="idx"></task>
+          </div>
         </li>
         <li @click="onClickAddTask">
           <el-card shadow="hover">
@@ -27,6 +29,8 @@
 
 <script>
 import Task from './Task/Task.vue'
+import dragula from 'dragula'
+import 'dragula/dist/dragula.css'
 
 export default {
   name: 'Board',
@@ -37,13 +41,27 @@ export default {
     return {
       tagName: 'Task',
       tasks: [],
-      outerVisible: false
+      outerVisible: false,
+      updateTagNameDialog: {
+        newTagName: ''
+      },
+      dragulaCard: null
     }
   },
   computed: {
     uid () {
       return this.$store.getters.userInfo.uid
     }
+  },
+  updated () {
+    if (this.dragulaCard) this.dragulaCard.destroy()
+
+    this.dragulaCard = dragula([
+      ...Array.from(this.$el.querySelectorAll('.card-list'))
+    ]).on('drop', (el, wrap, target, siblings) => {
+      console.log('drop')
+    })
+    console.log('new instance')
   },
   methods: {
     onEmitDeleteTask () {
@@ -53,9 +71,13 @@ export default {
     onClickAddTask () {
       this.tasks++
     },
-    onClickUpdateTagName () {
+    onClickShowUpdateTagNameDialog () {
       console.log('Board component, onClickUpdateTagName method')
       this.outerVisible = true
+    },
+    onClickUpdateTagName () {
+      this.tagName = this.updateTagNameDialog.newTagName
+      this.outerVisible = false
     }
   }
 }
