@@ -25,6 +25,11 @@ const routes: Array<RouteConfig> = [
     path: '/user/:uid/trello',
     name: 'Trello',
     component: () => import('@/views/Trello/Trello.vue')
+  },
+  {
+    path: '*',
+    name: 'PageNotFound',
+    component: Hello
   }
 ]
 
@@ -36,6 +41,12 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   store.commit('showPageLoading')
+
+  // inspected login session
+  if (to.name === 'Trello' && store.getters.userInfo === null) {
+    alert('로그인이 필요합니다.')
+    next({ name: 'SignIn' })
+  }
   next()
 })
 
