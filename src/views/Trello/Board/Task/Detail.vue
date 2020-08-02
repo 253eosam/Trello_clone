@@ -1,6 +1,6 @@
 <template>
   <div class="task-detail">
-    <h1 class="task-detail-title">Title</h1>
+    <h1 class="task-detail-title">{{title}}</h1>
     <hr />
     <div class="task-detail-navigator">
       <ul>
@@ -15,7 +15,12 @@
 
 <script>
 export default {
-  name: 'TaskDetail'
+  name: 'TaskDetail',
+  props: {
+    title: {
+      type: String
+    }
+  }
 
 }
 </script>

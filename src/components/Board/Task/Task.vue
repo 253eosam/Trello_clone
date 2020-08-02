@@ -4,12 +4,12 @@
       <el-card shadow="hover">
         <div class="task-box">
           <span v-if="firstFlag">{{text}}</span>
-          <input class="task-first-title" type="text" v-else v-model="text" @keypress.enter="firstFlag = true"/>
+          <input placeholder="input task.." ref="newTaskInput" class="task-first-title" type="text" v-else v-model="text" @keypress.enter="firstFlag = true"/>
         </div>
       </el-card>
     </div>
     <el-dialog :visible.sync="dialogFormVisible">
-      <task-detail></task-detail>
+      <task-detail :title="text"></task-detail>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Cancel</el-button>
         <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
@@ -30,6 +30,9 @@ export default {
       firstFlag: false,
       dialogFormVisible: false
     }
+  },
+  mounted () {
+    this.$refs.newTaskInput.focus()
   },
   methods: {
     onClickDeleteTask () {
