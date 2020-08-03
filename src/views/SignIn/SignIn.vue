@@ -50,7 +50,7 @@ export default {
       userAPI
         .findByEmail({email: this.signInForm.email},
           res => {
-            if(res.status == 200){
+            if(res.status === 200){
               if(res.data[0].pwd === this.signInForm.pwd){
                 console.log("Login Successful...!")
                 this.$store.commit('setUser',res.data[0])
