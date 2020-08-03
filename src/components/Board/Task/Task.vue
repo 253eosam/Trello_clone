@@ -1,7 +1,7 @@
 <template>
   <div class="task">
-    <div @click="onClickShowDetailTask">
-      <el-card shadow="hover">
+    <div @click="onClickShowDetailTask" >
+      <el-card class="task-card" shadow="hover">
         <div class="task-box">
           <span v-if="firstFlag">{{text}}</span>
           <input placeholder="input task.." ref="newTaskInput" class="task-first-title" type="text" v-else v-model="text" @keypress.enter="firstFlag = true"/>
@@ -48,7 +48,13 @@ export default {
 </script>
 
 <style>
-  .task-first-title {
+  .task-card{
+    border-radius: 40px;
+    padding: 7px;
+    margin-bottom: 5px;
+    background: #EBEEF5;
+  }
+  .task-first-stitle {
     border: white;
   }
 </style>
