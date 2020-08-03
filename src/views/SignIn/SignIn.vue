@@ -9,7 +9,7 @@
       <el-form-item label="Password" prop="pwd">
         <el-input show-password placeholder="Please input password" v-model="signInForm.pwd"></el-input>
       </el-form-item>
-      <el-form-item style="text-align: right">
+      <el-form-item class="sign-in-form-footer">
         <el-button native-type="submit" round>로그인</el-button>
         <el-button @click="onClickSignUp" round>회원가입</el-button>
       </el-form-item>
@@ -83,5 +83,8 @@ export default {
   .sign-in-form{
     margin: 10vw;
     text-align: left;
+  }
+  .sign-in-form-footer{
+    text-align: right;
   }
 </style>

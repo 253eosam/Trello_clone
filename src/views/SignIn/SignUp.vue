@@ -1,8 +1,8 @@
 <script src="../../router/index.ts"></script>
 <template>
   <div class="sign-up">
-    <Header title="Join us" />
-    <el-form class="sign-up-form" label-position="top" label-width="100px" :model="signUpForm" >
+    <Header title="Join us"/>
+    <el-form class="sign-up-form" label-position="top" label-width="100px" :model="signUpForm">
       <el-form-item label="Email">
         <el-input placeholder="Please input Email" v-model="signUpForm.email"></el-input>
       </el-form-item>
@@ -12,8 +12,9 @@
       <el-form-item label="Verify">
         <el-input show-password placeholder="Please input password" v-model="signUpForm.VerifyPwd"></el-input>
       </el-form-item>
-      <el-form-item style="text-align: right">
-        <el-button type="primary" @click="onClickSignUp" class="sign-up-btn" round :disabled="!isVerifyPwd">회원가입</el-button>
+      <el-form-item class="sign-up-form-footer">
+        <el-button type="primary" @click="onClickSignUp" class="sign-up-btn" round :disabled="!isVerifyPwd">회원가입
+        </el-button>
         <el-button class="sign-up-btn" @click="onClickCancle" round>취소</el-button>
       </el-form-item>
     </el-form>
@@ -21,12 +22,12 @@
 </template>
 
 <script>
-import Header from '@/components/common/Header/Header.vue'
-import userAPI from '../../api/userAPI.js'
+  import Header from '@/components/common/Header/Header.vue'
+  import userAPI from '../../api/userAPI.js'
 
   export default {
     name: 'Login',
-    components:{
+    components: {
       Header
     },
     data () {
@@ -40,32 +41,37 @@ import userAPI from '../../api/userAPI.js'
       }
     },
     methods: {
-      onClickSignUp (){
+      onClickSignUp () {
+        const errorMsg = (msg) => {
+          alert(msg)
+        }
         userAPI.save(
-          {email: this.signUpForm.email, pwd: this.signUpForm.pwd},
+          {
+            email: this.signUpForm.email,
+            pwd: this.signUpForm.pwd
+          },
           res => {
-            console.log(res)
-            if(res.status === 200 || res.status === 204){
-              this.$store.commit('setUser',res.data)
-              this.$router.push({path : `/user/${res.data.id}/trello`})
-            }else {
-              alert('Fail Sign up...!!')
-            }
+            if (res.status === 200 || res.status === 204) {
+              this.$store.commit('setUser', res.data)
+              this.$router.push({ path: `/user/${res.data.id}/trello` })
+            } else {
+              console.log(`the expected tatus is 200 or 204, but the response is ${res.status}`)
+              errorMsg('Join failed.. wait for join')
+            } // status
           },
           err => {
             console.log(err)
-            alert('Fail Sign up ... !')
+            alert('Fail join ... !')
           },
-          () => console.log("finally")
+          () => console.log('finally')
         )
       },
       onClickCancle () {
-        console.log("SignUp page, onClickCancle method")
-        window.history.length ? this.$router.go(-1) : this.$router.psuh({path : '/'});
+        window.history.length ? this.$router.go(-1) : this.$router.psuh({ path: '/' })
       }
     },
     watch: {
-      'signUpForm.VerifyPwd'(newValue){
+      'signUpForm.VerifyPwd' (newValue) {
         this.isVerifyPwd = (this.signUpForm.pwd === newValue)
       }
     }
@@ -74,8 +80,12 @@ import userAPI from '../../api/userAPI.js'
 </script>
 
 <style>
-  .sign-up-form{
+  .sign-up-form {
     margin: 10vw;
     text-align: left;
+  }
+
+  .sign-in-form-footer {
+    text-align: right;
   }
 </style>
