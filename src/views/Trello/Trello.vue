@@ -1,20 +1,23 @@
 <template>
   <div class="trello">
     <Header :subTitle="user.email"/>
-    <div class="navigation-bar">
+    <div class="trello-navigation">
       <el-button @click="onClickAddBoard" icon="el-icon-folder-add" circle></el-button>
       <el-button @click="onClickSignOut" type="danger" plain>Logout</el-button>
     </div>
+    <div class="trello-body">
       <el-row>
         <el-col v-for="idx in boardCnt" :key="idx" :span="4">
-          <Board />
+          <Board/>
         </el-col>
       </el-row>
+    </div>
+    <div v-if="boardCnt" class="trello-footer">
       <el-row>
-        <div v-if="boardCnt" class="bottom-box">
-          <el-button style="height: 100%; width: 100%;" plain type="danger" icon="el-icon-delete" >Delete Button</el-button>
-        </div>
+        <el-button style="height: 100%; width: 100%;" plain type="danger" icon="el-icon-delete">Delete Button
+        </el-button>
       </el-row>
+    </div>
   </div>
 </template>
 
@@ -27,7 +30,8 @@ import 'dragula/dist/dragula.css'
 export default {
   name: 'Trello',
   components: {
-    Board, Header
+    Board,
+    Header
   },
   data () {
     return {
@@ -41,6 +45,8 @@ export default {
     }
   },
   updated () {
+    // feature drag & drop
+    // rendering all child component then do instance dragula object
     if (this.dragulaCard) this.dragulaCard.destroy()
 
     this.dragulaCard = dragula([
@@ -49,12 +55,18 @@ export default {
       console.log('drop')
     })
     console.log('new instance')
+    // --------------------------------------------------------------------
   },
   methods: {
     onClickAddBoard () {
-      if (this.boardCnt < this.maxBoardCnt) { this.boardCnt++ } else alert('Don\'t create board..')
+      if (this.boardCnt < this.maxBoardCnt) {
+        this.boardCnt++
+      } else {
+        alert('Don\'t create board..')
+      }
     },
     onClickSignOut () {
+      this.$store.commit('setUser')
       this.$router.push('/sign-in')
     }
   }
@@ -62,7 +74,7 @@ export default {
 </script>
 
 <style>
-  .navigation-bar {
+  .trello-navigation {
     width: 100%;
     margin-bottom: 30px;
     text-align: right;

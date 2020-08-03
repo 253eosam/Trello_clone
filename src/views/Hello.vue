@@ -18,12 +18,14 @@ export default {
 </script>
 
 <style>
-  .hello{
+  .hello {
     position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%,-70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -70%);
   }
-  .title{
+
+  .title {
     color: #F56C6C;
     font-size: 82px;
     text-align: center;
