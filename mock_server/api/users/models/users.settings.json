@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "users",
+  "info": {
+    "name": "users"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "email": {
+      "type": "string"
+    },
+    "pwd": {
+      "type": "string"
+    },
+    "boards": {
+      "via": "user",
+      "collection": "boards"
+    }
+  }
+}
