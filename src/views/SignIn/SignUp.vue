@@ -1,4 +1,4 @@
-<script src="../../router/index.ts"></script>
+<script src="src/router/index.ts"></script>
 <template>
   <div class="sign-up">
     <Header title="Join us"/>
@@ -15,7 +15,7 @@
       <el-form-item class="sign-up-form-footer">
         <el-button type="primary" @click="onClickSignUp" class="sign-up-btn" round :disabled="!isVerifyPwd">회원가입
         </el-button>
-        <el-button class="sign-up-btn" @click="onClickCancle" round>취소</el-button>
+        <el-button class="sign-up-btn" @click="onClickCancel" round>취소</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -52,8 +52,22 @@
           },
           res => {
             if (res.status === 200 || res.status === 204) {
-              this.$store.commit('setUser', res.data)
+              console.log('SignUp onClickSignUn method, Success join..!')
+
+              // bind store user info
+              const resUserInfo = res.data
+              this.$store.commit('login', {
+                user: {
+                  uid: resUserInfo.id,
+                  email: resUserInfo.email,
+                  pwd: resUserInfo.pwd
+                },
+                board: resUserInfo.boards
+              })
+
+              // go route
               this.$router.push({ path: `/user/${res.data.id}/trello` })
+
             } else {
               console.log(`the expected tatus is 200 or 204, but the response is ${res.status}`)
               errorMsg('Join failed.. wait for join')
@@ -66,8 +80,8 @@
           () => console.log('finally')
         )
       },
-      onClickCancle () {
-        window.history.length ? this.$router.go(-1) : this.$router.psuh({ path: '/' })
+      onClickCancel () {
+        window.history.length ? this.$router.go(-1) : this.$router.push({ path: '/' })
       }
     },
     watch: {
