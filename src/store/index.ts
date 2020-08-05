@@ -32,6 +32,9 @@ export default new Vuex.Store({
     isLoading: state => {
       state.loading.status = state.loading.scheduleCnt === 0
       return state.loading.status
+    },
+    boardsInfo: state => {
+      return state.boards
     }
   },
   mutations: {
@@ -59,6 +62,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
+
   },
   modules: {}
 })

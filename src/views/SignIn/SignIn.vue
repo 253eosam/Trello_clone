@@ -21,7 +21,7 @@
 <script>
   import Header from '@/components/common/Header/Header.vue'
   import userAPI from '../../api/userAPI.js'
-  import { userSessionHandler } from '@/mixins/userSessionHandler.js'
+  import userSessionHandler  from '@/mixins/userSessionHandler.js'
 
   export default {
     name: 'Login',
@@ -33,7 +33,7 @@
         signInForm: {
           uid: 0,
           email: 'wmp@wemakeprice.com',
-          pwd: ''
+          pwd: 'q1w2e3r4'
         },
         rules: {
           email: [
@@ -55,44 +55,11 @@
     },
     methods: {
       onClickSignIn () {
-        const errorMsg = (msg) => {
-          alert(msg)
-        }
-        userAPI
-          .findByEmail({ email: this.signInForm.email },
-            res => {
-              if (res.status == 200) {
-                if (res.data[0].pwd === this.signInForm.pwd) {
-                  console.log('SignIn onClickSignIn method, Success login..!')
-
-                  // bind store user info
-                  const resUserInfo = res.data[0]
-                  userSessionHandler.methods.login({
-                    user: {
-                      uid: resUserInfo.id,
-                      email: resUserInfo.email,
-                      pwd: resUserInfo.pwd
-                    },
-                    board: resUserInfo.boards
-                  })
-
-                  // go route
-                  this.$router.push({ path: `/user/${res.data[0].id}/trello` })
-
-                } else {
-                  console.log('Incorrect ID or Password')
-                  errorMsg('Login Failed.. Incorrect ID or Password')
-                } // login info
-              } // status
-              else {
-                console.log(`The expected status is 200, but the response is ${res.status}`)
-                errorMsg('Login Failed.. wait for login')
-              }
-            },
-            err => console.log(err),
-            () => {
-              console.log('finally')
-            })
+        console.log('SignIn onClickSignIn method')
+        userSessionHandler.methods.login({
+          email: this.signInForm.email,
+          pwd: this.signInForm.pwd
+        })
       },
       onClickSignUp () {
         this.$router.push({ path: '/sign-up' })
