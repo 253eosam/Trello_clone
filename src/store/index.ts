@@ -7,12 +7,20 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   // static variable
   state: {
-    // user info
-    user: null,
-    schedule: 0,
+    // user state
+    user: {
+      email: '',
+      pwd: ''
+    },
+    // board state
+    board: {
+      tag: '',
+      tasks: []
+    },
+    // loading state
     loading: {
-      service: '',
-      status: false
+      status: false,
+      scheduleCnt: 0
     }
   },
   getters: {
@@ -20,10 +28,8 @@ export default new Vuex.Store({
       return state.user
     },
     isLoading: state => {
+      state.loading.status = state.loading.scheduleCnt === 0
       return state.loading.status
-    },
-    schedule: state => {
-      return { isEmpty: state.schedule === 0 }
     }
   },
   mutations: {
@@ -32,10 +38,12 @@ export default new Vuex.Store({
     },
     // manage a schedule
     addSchedule: state => {
-      state.schedule++
+      state.loading.scheduleCnt++
     },
     deleteSchedule: state => {
-      state.schedule--
+      if (state.loading.scheduleCnt < 0) {
+        state.loading.scheduleCnt--
+      } else console.warn('Warring, loading.schedule count is under 0')
     },
     showPageLoading: () => {
     // loading switch (on/off)
@@ -43,9 +51,6 @@ export default new Vuex.Store({
       setTimeout(() => {
         loadingInstance.close()
       }, 500)
-      // if ((state.loading.status = (state.schedule > 0))) {
-      //   state.loading.service = loadingInstance
-      // } else state.loading.service.close()
     }
   },
   actions: {
