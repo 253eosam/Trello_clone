@@ -5,6 +5,8 @@ import store from '../store'
 
 Vue.use(VueRouter)
 
+const importViews = (path: string): any => { import(`@/views/${path}.vue`) }
+
 const routes: Array<RouteConfig> = [
   {
     path: '/',
@@ -20,11 +22,13 @@ const routes: Array<RouteConfig> = [
     path: '/sign-up',
     name: 'SignUp',
     component: () => import('@/views/SignIn/SignUp.vue')
+    // component: importViews('SignIn/SignUp')
   },
   {
     path: '/user/:uid/trello',
     name: 'Trello',
     component: () => import('@/views/Trello/Trello.vue')
+    // component: importViews('Trello/Trello')
   },
   {
     path: '*',
