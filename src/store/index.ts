@@ -13,10 +13,12 @@ export default new Vuex.Store({
       pwd: ''
     },
     // board state
-    board: {
-      tag: '',
-      tasks: []
-    },
+    boards: [
+      {
+        tag: '',
+        tasks: []
+      }
+    ],
     // loading state
     loading: {
       status: false,
@@ -30,13 +32,19 @@ export default new Vuex.Store({
     isLoading: state => {
       state.loading.status = state.loading.scheduleCnt === 0
       return state.loading.status
+    },
+    boardsInfo: state => {
+      return state.boards
     }
   },
   mutations: {
-    setUser: (state, payload) => {
+    setUser (state: any, payload: any): void {
       state.user = payload
     },
-    // manage a schedule
+    setBoard (state: any, payload: any): void {
+      state.boards = payload
+    },
+    // manage a loading
     addSchedule: state => {
       state.loading.scheduleCnt++
     },
@@ -46,7 +54,7 @@ export default new Vuex.Store({
       } else console.warn('Warring, loading.schedule count is under 0')
     },
     showPageLoading: () => {
-    // loading switch (on/off)
+      // loading switch (on/off)
       const loadingInstance = Loading.service({ fullscreen: true })
       setTimeout(() => {
         loadingInstance.close()
@@ -54,7 +62,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
+
   },
-  modules: {
-  }
+  modules: {}
 })

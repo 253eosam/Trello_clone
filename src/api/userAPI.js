@@ -13,6 +13,6 @@ export default {
       .post('/users', param)
       .then(res => succ(res))
       .catch(msg => err(msg))
-      .finally(() => final)
+      .finally(() => final())
   }
 }
