@@ -20,8 +20,7 @@
 
 <script>
   import Header from '@/components/common/Header/Header.vue'
-  import userAPI from '../../api/userAPI.js'
-  import userSessionHandler  from '@/mixins/userSessionHandler.js'
+  import { userSessionHandler }  from '../../mixins/userSessionHandler.js'
 
   export default {
     name: 'Login',

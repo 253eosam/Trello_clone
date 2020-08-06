@@ -7,12 +7,12 @@
     </div>
     <div class="trello-body">
       <el-row>
-        <el-col v-for="idx in boardCnt" :key="idx" :span="4">
-          <Board/>
+        <el-col v-for="(board, idx) in boards" :key="idx" :span="4">
+          <Board :bid="board.id"/>
         </el-col>
       </el-row>
     </div>
-    <div v-if="boardCnt" class="trello-footer">
+    <div v-if="boards.length" class="trello-footer">
       <el-row>
         <el-button style="height: 100%; width: 100%;" plain type="danger" icon="el-icon-delete">Delete Button
         </el-button>
@@ -35,13 +35,15 @@ export default {
   },
   data () {
     return {
-      boardCnt: 0,
       maxBoardCnt: 6
     }
   },
   computed: {
     user () {
       return this.$store.getters.userInfo
+    },
+    boards () {
+      return this.$store.getters.boardsInfo
     }
   },
   updated () {
@@ -59,8 +61,8 @@ export default {
   },
   methods: {
     onClickAddBoard () {
-      if (this.boardCnt < this.maxBoardCnt) {
-        this.boardCnt++
+      if (this.boards.length < this.maxBoardCnt) {
+        console.log('Do net service open, create board component')
       } else {
         alert('Don\'t create board..')
       }

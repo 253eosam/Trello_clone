@@ -1,21 +1,21 @@
 <template>
   <div class="board">
     <div>
-      <el-tag @click="onClickShowUpdateTagNameDialog" class="board-tag" type="primary">{{tagName}}</el-tag>
-      <el-dialog title="Update Tag Name" :visible.sync="outerVisible">
+      <el-tag @click="onClickShowDialogForUpdateTag" class="board-tag" type="primary">{{tag.name}}</el-tag>
+      <el-dialog title="Update Tag Name" :visible.sync="tag.dialogVisible">
         <div class="block">
           <el-input v-model="updateTagNameDialog.newTagName" placeholder="Please input your update Tag Name"></el-input>
         </div>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="onClickUpdateTagName" type="primary">Update</el-button>
-          <el-button @click="outerVisible = false, updateTagNameDialog.newTagName = ''">Cancel</el-button>
+          <el-button @click="onClickUpdateBtnOfTagDialog" type="primary">Update</el-button>
+          <el-button @click="tag.dialogVisible = false, updateTagNameDialog.newTagName = ''">Cancel</el-button>
         </div>
       </el-dialog>
     </div>
     <ul class="card-list">
-      <li v-for="(idx) in tasks" :key="idx">
+      <li v-for="(task, idx) in tasks" :key="idx">
         <div>
-          <task :tid="idx"></task>
+          <task :tid="task.id" :pTitle="task.title"></task>
         </div>
       </li>
     </ul>
@@ -29,29 +29,48 @@
 
 <script>
 import Task from './Task/Task.vue'
+import boardAPI from '@/api/boardAPI.js'
 
 export default {
   name: 'Board',
+  props: {
+    bid: {
+      type: Number
+    }
+  },
   components: {
     Task
   },
   data () {
     return {
-      tagName: 'Task',
+      tag: {
+        name: 'Task',
+        color: 'primary',
+        dialogVisible: false
+      },
       tasks: [],
-      outerVisible: false,
       updateTagNameDialog: {
         newTagName: ''
       },
       dragulaCard: null
     }
   },
-  computed: {
-    uid () {
-      return this.$store.getters.userInfo.uid
-    }
+  mounted () {
+    this.findBoardInfoByBid()
   },
   methods: {
+    findBoardInfoByBid () { // request api , move >> vuex action
+      boardAPI
+        .findByBid(
+          this.bid,
+          res => {
+            this.tag.name = res.data.tag
+            this.tasks = res.data.tasks
+          },
+          err => console.log(err),
+          () => console.log('final')
+        )
+    },
     onEmitDeleteTask () {
       console.log('Board component, onEmitDeleteTask')
       this.tasks--
@@ -59,13 +78,13 @@ export default {
     onClickAddTask () {
       this.tasks++
     },
-    onClickShowUpdateTagNameDialog () {
+    onClickShowDialogForUpdateTag () {
       console.log('Board component, onClickUpdateTagName method')
-      this.outerVisible = true
+      this.tag.dialogVisible = true
     },
-    onClickUpdateTagName () {
+    onClickUpdateBtnOfTagDialog () {
       this.tagName = this.updateTagNameDialog.newTagName
-      this.outerVisible = false
+      this.tag.dialogVisible = false
     }
   }
 }

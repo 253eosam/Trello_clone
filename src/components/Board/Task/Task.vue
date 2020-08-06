@@ -23,7 +23,7 @@ import TaskDetail from '../../../views/Trello/Board/Task/Detail'
 export default {
   name: 'Task',
   components: { TaskDetail },
-  props: ['tid'],
+  props: ['tid', 'pTitle'],
   data () {
     return {
       text: '',
@@ -32,7 +32,10 @@ export default {
     }
   },
   mounted () {
-    this.$refs.newTaskInput.focus()
+    if (this.pTitle === '' || this.pTitle === null) { this.$refs.newTaskInput.focus() } else {
+      this.text = this.pTitle
+      this.firstFlag = true
+    }
   },
   methods: {
     onClickDeleteTask () {
