@@ -21,6 +21,12 @@ export default {
       .then(res => succ(res))
       .catch(msg => err(msg))
       .finally(() => final)
+  },
+  findByBid: (params, succ, err, final) => {
+    boardAPI
+      .get(`/boards/${params}`)
+      .then(res => succ(res))
+      .catch(msg => err(msg))
+      .finally(() => final)
   }
-
 }
