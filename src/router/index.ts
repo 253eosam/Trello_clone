@@ -44,7 +44,22 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  // when update route, show loading
   store.commit('showPageLoading')
+
+  /*
+  // when refresh, save store data for session storage to temp data
+  if (store.getters.userInfo !== null || store.getters.userInfo !== '') {
+    store.commit('setUser', sessionStorage.getItem('user'))
+  } else {
+    sessionStorage.setItem('user', JSON.stringify(store.getters.userInfo))
+  }
+  if (store.getters.boardsInfo !== null || store.getters.userInfo !== '') {
+    store.commit('setBoard', sessionStorage.getItem('boards'))
+  } else {
+    sessionStorage.setItem('boards', JSON.stringify(store.getters.boardsInfo))
+  }
+  */
 
   // inspected login session
   if (to.name === 'Trello' && store.getters.userInfo === null) {
