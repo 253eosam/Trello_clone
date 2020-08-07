@@ -28,5 +28,12 @@ export default {
       .then(res => succ(res))
       .catch(msg => err(msg))
       .finally(() => final)
+  },
+  findByUid: (params, succ, err, final) => {
+    boardAPI
+      .get('/boards', { user: params })
+      .then(res => succ(res))
+      .catch(msg => err(msg))
+      .finally(() => final)
   }
 }
