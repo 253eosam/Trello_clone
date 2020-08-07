@@ -1,5 +1,7 @@
 import store from '../store'
+import { User } from '../model/User'
 import userAPI from '../api/userAPI.js'
+import { Board } from '../model/Board'
 import router from '../router'
 
 export const userSessionHandler = {
@@ -15,19 +17,13 @@ export const userSessionHandler = {
           res => {
             if (res.status === 200) {
               if (res.data[0].pwd === payload.pwd) {
-                console.log('mixin method login, Success login..!')
+                // bind vuex state
+                const rUser = res.data[0]
+                // const rBoards = res.data[0].boards.map(ins => new Board(ins))
+                store.commit('setUser', new User(rUser))
+                // store.commit('setBoard', new Board(rBoards))
 
-                // bind store user info
-                const resUserInfo = res.data[0]
-                const user = {
-                  email: resUserInfo.email,
-                  pwd: resUserInfo.pwd
-                }
-                const board = resUserInfo.boards
-                store.commit('setUser', user)
-                store.commit('setBoard', board)
-
-                // go route
+                // // go route
                 router.push({ path: `/user/${res.data[0].id}/trello` })
               } else {
                 console.log('Incorrect ID or Password')

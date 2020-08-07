@@ -7,18 +7,21 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   // static variable
   state: {
-    // user state
     user: {
+      id: null,
       email: '',
-      pwd: ''
+      pwd: '',
+      boards: []
     },
-    // board state
-    boards: [
-      {
-        tag: '',
-        tasks: []
-      }
-    ],
+    boards: {
+      bid: null,
+      tag: null,
+      tasks: []
+    },
+    task: {
+      tid: null,
+      content: null
+    },
     // loading state
     loading: {
       status: false,
@@ -26,14 +29,14 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    userInfo: state => {
+    user: state => {
       return state.user
     },
     isLoading: state => {
       state.loading.status = state.loading.scheduleCnt === 0
       return state.loading.status
     },
-    boardsInfo: state => {
+    boards: state => {
       return state.boards
     }
   },
@@ -43,6 +46,9 @@ export default new Vuex.Store({
     },
     setBoard (state: any, payload: any): void {
       state.boards = payload
+    },
+    addBoard (state: any, payload: any): void {
+      state.boards.push(payload)
     },
     // manage a loading
     addSchedule: state => {

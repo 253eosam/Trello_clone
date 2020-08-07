@@ -5,8 +5,6 @@ import store from '../store'
 
 Vue.use(VueRouter)
 
-const importViews = (path: string): any => { import(`@/views/${path}.vue`) }
-
 const routes: Array<RouteConfig> = [
   {
     path: '/',
@@ -22,13 +20,11 @@ const routes: Array<RouteConfig> = [
     path: '/sign-up',
     name: 'SignUp',
     component: () => import('@/views/SignIn/SignUp.vue')
-    // component: importViews('SignIn/SignUp')
   },
   {
     path: '/user/:uid/trello',
     name: 'Trello',
     component: () => import('@/views/Trello/Trello.vue')
-    // component: importViews('Trello/Trello')
   },
   {
     path: '*',
@@ -62,11 +58,14 @@ router.beforeEach((to, from, next) => {
   */
 
   // inspected login session
-  if (to.name === 'Trello' && store.getters.userInfo === null) {
-    alert('로그인이 필요합니다.')
+  if (
+    to.name === 'Trello' && (
+      store.getters.user === null ||
+      store.getters.user.id !== Number(to.params.uid)
+    )) {
+    alert('잘못된 접근 입니다. 로그인 후 다시 이용해 주세요.')
     next({ name: 'SignIn' })
-  }
-  next()
+  } else next()
 })
 
 export default router

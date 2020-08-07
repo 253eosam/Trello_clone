@@ -24,6 +24,7 @@
 <script>
 import Board from '@/components/Board/Board.vue'
 import Header from '@/components/common/Header/Header.vue'
+import boardAPI from '../../api/boardAPI'
 import dragula from 'dragula'
 import 'dragula/dist/dragula.css'
 
@@ -40,11 +41,30 @@ export default {
   },
   computed: {
     user () {
-      return this.$store.getters.userInfo
+      return this.$store.getters.user
     },
     boards () {
-      return this.$store.getters.boardsInfo
+      return this.$store.getters.boards
     }
+  },
+  mounted () {
+    // trello에서 boards api를 호출해서 아래 board components에 props로 bid를 뿌려준다.
+    const uid = this.$route.params.uid
+    console.log(`uid is ${uid}`)
+    boardAPI
+      .findByUid(
+        uid,
+        res => {
+          console.log(res)
+          const rBoards = res.data.map(o => new Board(o))
+          console.log('rBoards')
+          console.log(rBoards)
+        },
+        err => {
+          console.log(err)
+        },
+        () => console.log('finall')
+      )
   },
   updated () {
     // feature drag & drop
@@ -63,6 +83,24 @@ export default {
     onClickAddBoard () {
       if (this.boards.length < this.maxBoardCnt) {
         console.log('Do net service open, create board component')
+        boardAPI
+          .save(
+            {
+              tag: 'temp tag name',
+              user: {
+                id: this.user.id
+              }
+            },
+            res => {
+              this.$store.commit('addBoard', res.data)
+            },
+            err => {
+              console.log(err)
+            },
+            () => {
+              console.log('final')
+            }
+          )
       } else {
         alert('Don\'t create board..')
       }

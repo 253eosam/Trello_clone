@@ -30,6 +30,7 @@
 <script>
 import Task from './Task/Task.vue'
 import boardAPI from '@/api/boardAPI.js'
+import taskAPI from '../../api/taskAPI'
 
 export default {
   name: 'Board',
@@ -76,6 +77,24 @@ export default {
       this.tasks--
     },
     onClickAddTask () {
+      // request api
+      taskAPI
+        .save(
+          {
+            title: null,
+            content: null,
+            board: {
+              id: this.bid
+            }
+          },
+          res => {
+            console.log(res)
+          },
+          err => {
+            console.log(err)
+          },
+          () => console.log('finally')
+        )
       this.tasks++
     },
     onClickShowDialogForUpdateTag () {
