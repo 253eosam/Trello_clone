@@ -30,7 +30,7 @@
 <script>
 import Task from './Task/Task.vue'
 import boardAPI from '@/api/boardAPI.js'
-import taskAPI from '../../api/taskAPI'
+import taskAPI from '../../api/taskAPI.js'
 
 export default {
   name: 'Board',

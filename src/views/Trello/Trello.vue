@@ -8,7 +8,7 @@
     <div class="trello-body">
       <el-row>
         <el-col v-for="(board, idx) in boards" :key="idx" :span="4">
-          <Board :bid="board.id"/>
+          <boardComponent :bid="board.id"/>
         </el-col>
       </el-row>
     </div>
@@ -22,16 +22,18 @@
 </template>
 
 <script>
-import Board from '@/components/Board/Board.vue'
+import boardComponent from '@/components/Board/Board.vue'
 import Header from '@/components/common/Header/Header.vue'
 import boardAPI from '../../api/boardAPI'
 import dragula from 'dragula'
 import 'dragula/dist/dragula.css'
+import { Board } from '@/model/Board'
+import { userSessionHandler } from '@/mixins/userSessionHandler'
 
 export default {
   name: 'Trello',
   components: {
-    Board,
+    boardComponent,
     Header
   },
   data () {
@@ -55,28 +57,28 @@ export default {
       .findByUid(
         uid,
         res => {
-          console.log(res)
           const rBoards = res.data.map(o => new Board(o))
-          console.log('rBoards')
-          console.log(rBoards)
+          this.$store.commit('setBoard', rBoards)
         },
         err => {
           console.log(err)
         },
-        () => console.log('finall')
+        () => {
+          console.log('board api find final')
+        }
       )
   },
   updated () {
     // feature drag & drop
     // rendering all child component then do instance dragula object
-    if (this.dragulaCard) this.dragulaCard.destroy()
-
-    this.dragulaCard = dragula([
-      ...Array.from(this.$el.querySelectorAll('.card-list'))
-    ]).on('drop', (el, wrap, target, siblings) => {
-      console.log('drop')
-    })
-    console.log('new instance')
+    // if (this.dragulaCard) this.dragulaCard.destroy()
+    //
+    // this.dragulaCard = dragula([
+    //   ...Array.from(this.$el.querySelectorAll('.card-list'))
+    // ]).on('drop', (el, wrap, target, siblings) => {
+    //   console.log('drop')
+    // })
+    // console.log('new instance')
     // --------------------------------------------------------------------
   },
   methods: {
@@ -106,8 +108,7 @@ export default {
       }
     },
     onClickSignOut () {
-      this.$store.commit('setUser')
-      this.$router.push('/sign-in')
+      userSessionHandler.methods.logout()
     }
   }
 }

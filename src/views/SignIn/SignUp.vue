@@ -23,7 +23,7 @@
 
 <script>
   import Header from '@/components/common/Header/Header.vue'
-  import userAPI from '../../api/userAPI.js'
+  import {userSessionHandler} from "@/mixins/userSessionHandler";
 
   export default {
     name: 'Login',
@@ -42,43 +42,11 @@
     },
     methods: {
       onClickSignUp () {
-        const errorMsg = (msg) => {
-          alert(msg)
-        }
-        userAPI.save(
-          {
-            email: this.signUpForm.email,
-            pwd: this.signUpForm.pwd
-          },
-          res => {
-            if (res.status === 200 || res.status === 204) {
-              console.log('SignUp onClickSignUn method, Success join..!')
-
-              // bind store user info
-              const resUserInfo = res.data
-              this.$store.commit('login', {
-                user: {
-                  uid: resUserInfo.id,
-                  email: resUserInfo.email,
-                  pwd: resUserInfo.pwd
-                },
-                board: resUserInfo.boards
-              })
-
-              // go route
-              this.$router.push({ path: `/user/${res.data.id}/trello` })
-
-            } else {
-              console.log(`the expected tatus is 200 or 204, but the response is ${res.status}`)
-              errorMsg('Join failed.. wait for join')
-            } // status
-          },
-          err => {
-            console.log(err)
-            alert('Fail join ... !')
-          },
-          () => console.log('finally')
-        )
+        console.log('SignIn onClickSignIn method')
+        userSessionHandler.methods.join({
+          email: this.signUpForm.email,
+          pwd: this.signUpForm.pwd
+        })
       },
       onClickCancel () {
         window.history.length ? this.$router.go(-1) : this.$router.push({ path: '/' })

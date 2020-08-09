@@ -1,18 +1,18 @@
-import userAPI from './axiosConfig.js'
+import user from './axiosConfig.js'
 
 export default {
-  findByEmail: (param, succ, err, final) => {
-    userAPI
+  findByEmail (param, succ, err, final) {
+    user
       .get('/users', { params: param })
-      .then(res => succ(res))
-      .catch(msg => err(msg))
+      .then((res) => succ(res))
+      .catch((msg) => err(msg))
       .finally(() => final())
   },
-  save: (param, succ, err, final) => {
-    userAPI
+  save (param, succ, err, final) {
+    user
       .post('/users', param)
-      .then(res => succ(res))
-      .catch(msg => err(msg))
+      .then((res) => succ(res))
+      .catch((msg) => err(msg))
       .finally(() => final())
   }
 }

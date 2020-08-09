@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { Loading } from 'element-ui'
+import { User, UserType } from '@/model/User'
 
 Vue.use(Vuex)
 
@@ -9,8 +10,8 @@ export default new Vuex.Store({
   state: {
     user: {
       id: null,
-      email: '',
-      pwd: '',
+      email: null,
+      pwd: null,
       boards: []
     },
     boards: {
@@ -33,15 +34,14 @@ export default new Vuex.Store({
       return state.user
     },
     isLoading: state => {
-      state.loading.status = state.loading.scheduleCnt === 0
-      return state.loading.status
+      return state.loading.scheduleCnt !== 0
     },
     boards: state => {
       return state.boards
     }
   },
   mutations: {
-    setUser (state: any, payload: any): void {
+    setUser (state: any, payload: UserType): void {
       state.user = payload
     },
     setBoard (state: any, payload: any): void {
@@ -55,7 +55,7 @@ export default new Vuex.Store({
       state.loading.scheduleCnt++
     },
     deleteSchedule: state => {
-      if (state.loading.scheduleCnt < 0) {
+      if (state.loading.scheduleCnt > 0) {
         state.loading.scheduleCnt--
       } else console.warn('Warring, loading.schedule count is under 0')
     },
@@ -68,7 +68,23 @@ export default new Vuex.Store({
     }
   },
   actions: {
-
-  },
-  modules: {}
+    // findUserByEmail (context: any , { email, pwd }: UserType) {
+    //   userAPI
+    //     .findByEmail(
+    //       { email : email },
+    //       (res: any) => {
+    //         if (res.status === 200){
+    //           if (res.data[0].pwd === pwd) {
+    //             console.log('Success login auth..')
+    //
+    //             const rUser = res.data[0]
+    //             context.commit('setUser', new User(rUser))
+    //             console.log(context.getters.user)
+    //           } // equals rPwd info and pPwd
+    //         } // status
+    //       }
+    //
+    //     )
+    // }
+  }
 })

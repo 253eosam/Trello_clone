@@ -9,20 +9,14 @@
       </el-card>
     </div>
     <el-dialog :visible.sync="dialogFormVisible">
-      <task-detail :title="text"></task-detail>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
-      </span>
+      <router-view @cancel="dialogFormVisible = false"></router-view>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import TaskDetail from '../../../views/Trello/Board/Task/Detail'
 export default {
   name: 'Task',
-  components: { TaskDetail },
   props: ['tid', 'pTitle'],
   data () {
     return {
@@ -38,12 +32,9 @@ export default {
     }
   },
   methods: {
-    onClickDeleteTask () {
-      this.$emit('onEmitDeleteTask', this.tid)
-    },
     onClickShowDetailTask () {
       if (!this.firstFlag) return
-      console.log('Board component, onClickShowDetailTask method' + `, tid : ${this.tid}`)
+      this.$router.push(`/user/1/trello/task/${this.tid}`)
       this.dialogFormVisible = true
     }
   }

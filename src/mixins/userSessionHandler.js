@@ -9,7 +9,7 @@ export const userSessionHandler = {
     // request user api to email then compare to pwd data then change route trello page
     login (payload) {
       const errorMsg = (msg) => { alert(msg) }
-
+      store.commit('addSchedule')
       // request api
       userAPI
         .findByEmail(
@@ -17,14 +17,16 @@ export const userSessionHandler = {
           res => {
             if (res.status === 200) {
               if (res.data[0].pwd === payload.pwd) {
+                console.log('Correct login info')
+
                 // bind vuex state
-                const rUser = res.data[0]
+                const rUser = new User(res.data[0])
                 // const rBoards = res.data[0].boards.map(ins => new Board(ins))
-                store.commit('setUser', new User(rUser))
+                store.commit('setUser', rUser)
                 // store.commit('setBoard', new Board(rBoards))
 
                 // // go route
-                router.push({ path: `/user/${res.data[0].id}/trello` })
+                router.push({ path: `/user/${rUser.id}/trello` })
               } else {
                 console.log('Incorrect ID or Password')
                 errorMsg('Login Failed.. Incorrect ID or Password')
@@ -36,8 +38,44 @@ export const userSessionHandler = {
           },
           err => console.log(err),
           () => {
-            console.log('finally')
+            store.commit('deleteSchedule')
+            console.log('login final')
           })
+    },
+    logout () {
+      store.commit('setUser')
+      router.push('/sign-in')
+    },
+    join ({ email, pwd }) {
+      const errorMsg = (msg) => {
+        alert(msg)
+      }
+      userAPI.save(
+        {
+          email: email,
+          pwd: pwd
+        },
+        res => {
+          if (res.status === 200 || res.status === 204) {
+            console.log('SignUp onClickSignUn method, Success join..!')
+
+            // bind store user info
+            const rUser = new User(res.data)
+            store.commit('setUser', rUser)
+
+            // go route
+            router.push({ path: `/user/${rUser.id}/trello` })
+          } else {
+            console.log(`the expected tatus is 200 or 204, but the response is ${res.status}`)
+            errorMsg('Join failed.. wait for join')
+          } // status
+        },
+        err => {
+          console.log(err)
+          alert('Fail join ... !')
+        },
+        () => console.log('finally')
+      )
     }
   }
 }

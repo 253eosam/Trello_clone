@@ -24,7 +24,13 @@ const routes: Array<RouteConfig> = [
   {
     path: '/user/:uid/trello',
     name: 'Trello',
-    component: () => import('@/views/Trello/Trello.vue')
+    component: () => import('@/views/Trello/Trello.vue'),
+    children: [
+      {
+        path: 'task/:tid',
+        component: () => import('@/views/Trello/Board/Task/Detail.vue')
+      }
+    ]
   },
   {
     path: '*',
@@ -43,8 +49,7 @@ router.beforeEach((to, from, next) => {
   // when update route, show loading
   store.commit('showPageLoading')
 
-  /*
-  // when refresh, save store data for session storage to temp data
+  /* when refresh, save store data for session storage to temp data
   if (store.getters.userInfo !== null || store.getters.userInfo !== '') {
     store.commit('setUser', sessionStorage.getItem('user'))
   } else {
