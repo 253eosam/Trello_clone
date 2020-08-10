@@ -9,9 +9,9 @@ export default new Vuex.Store({
   // static variable
   state: {
     user: {
-      id: null,
-      email: null,
-      pwd: null,
+      id: 1,
+      email: 'wmp@wemakeprice.com',
+      pwd: 'q1w2e3r4',
       boards: []
     },
     boards: {

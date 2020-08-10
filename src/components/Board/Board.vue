@@ -4,18 +4,18 @@
       <el-tag @click="onClickShowDialogForUpdateTag" class="board-tag" type="primary">{{tag.name}}</el-tag>
       <el-dialog title="Update Tag Name" :visible.sync="tag.dialogVisible">
         <div class="block">
-          <el-input v-model="updateTagNameDialog.newTagName" placeholder="Please input your update Tag Name"></el-input>
+          <el-input v-model="tag.newName" placeholder="Please input your update Tag Name"></el-input>
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button @click="onClickUpdateBtnOfTagDialog" type="primary">Update</el-button>
-          <el-button @click="tag.dialogVisible = false, updateTagNameDialog.newTagName = ''">Cancel</el-button>
+          <el-button @click="tag.dialogVisible = false, tag.newName = ''">Cancel</el-button>
         </div>
       </el-dialog>
     </div>
     <ul class="card-list">
       <li v-for="(task, idx) in tasks" :key="idx">
         <div>
-          <task :tid="task.id" :pTitle="task.title"></task>
+          <TaskComponent :tid="task.id" :pTitle="task.title"></TaskComponent>
         </div>
       </li>
     </ul>
@@ -28,8 +28,9 @@
 </template>
 
 <script>
-import Task from './Task/Task.vue'
-import boardAPI from '@/api/boardAPI.js'
+import TaskComponent from './Task/Task.vue'
+import { Task } from '../../model/Task'
+import boardAPI from '../../api/boardAPI.js'
 import taskAPI from '../../api/taskAPI.js'
 
 export default {
@@ -40,23 +41,21 @@ export default {
     }
   },
   components: {
-    Task
+    TaskComponent
   },
   data () {
     return {
       tag: {
         name: 'Task',
+        newName: '',
         color: 'primary',
         dialogVisible: false
       },
-      tasks: [],
-      updateTagNameDialog: {
-        newTagName: ''
-      },
-      dragulaCard: null
+      tasks: []
     }
   },
-  mounted () {
+  created () {
+    console.log(`created board_${this.bid} component`)
     this.findBoardInfoByBid()
   },
   methods: {
@@ -65,16 +64,16 @@ export default {
         .findByBid(
           this.bid,
           res => {
-            this.tag.name = res.data.tag
+            console.log(res)
+            this.tag.name = res.data.tag + this.bid
             this.tasks = res.data.tasks
           },
           err => console.log(err),
-          () => console.log('final')
+          () => console.log('finish get board info')
         )
     },
     onEmitDeleteTask () {
       console.log('Board component, onEmitDeleteTask')
-      this.tasks--
     },
     onClickAddTask () {
       // request api
@@ -89,21 +88,38 @@ export default {
           },
           res => {
             console.log(res)
+            this.tasks.push(new Task(res.data))
           },
           err => {
             console.log(err)
           },
-          () => console.log('finally')
+          () => console.log('finish create task ')
         )
-      this.tasks++
     },
     onClickShowDialogForUpdateTag () {
       console.log('Board component, onClickUpdateTagName method')
       this.tag.dialogVisible = true
+      this.tag.newName = this.tag.name
     },
     onClickUpdateBtnOfTagDialog () {
-      this.tagName = this.updateTagNameDialog.newTagName
-      this.tag.dialogVisible = false
+      boardAPI
+        .update(
+          {
+            bid: this.bid,
+            tag: this.tag.newName
+          },
+          res => {
+            console.log(res)
+            this.tag.name = this.tag.newName
+          },
+          err => {
+            console.log(err)
+          },
+          () => {
+            console.log('onClickUpdateBtnOfTagDialog board component, finally')
+            this.tag.dialogVisible = false
+          }
+        )
     }
   }
 }
@@ -112,14 +128,16 @@ export default {
 
 <style>
   .board {
-    overflow: auto;
-    height: 400px;
     padding: 10px;
     background: white;
     margin-left: 10px;
     margin-right: 10px;
-    margin-bottom: 100px;
+    margin-bottom: 10px;
     border-radius: 10px;
+  }
+  .card-list {
+    overflow: auto;
+    height: 400px;
   }
 
   .board-tag {

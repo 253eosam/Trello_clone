@@ -1,39 +1,39 @@
-import boardAPI from './axiosConfig.js'
+import board from './axiosConfig.js'
 
 export default {
   save: (params, succ, err, final) => {
-    boardAPI
+    board
       .post('/boards', params)
       .then(res => succ(res))
       .catch(msg => err(msg))
-      .finally(() => final)
+      .finally(() => final())
   },
   update: (params, succ, err, final) => {
-    boardAPI
-      .put('/boards', params)
+    board
+      .put(`/boards/${params.bid}`, { tag: params.tag })
       .then(res => succ(res))
       .catch(msg => err(msg))
-      .finally(() => final)
+      .finally(() => final())
   },
   delete: (params, succ, err, final) => {
-    boardAPI
+    board
       .delete(`/boards/${params.bid}`)
       .then(res => succ(res))
       .catch(msg => err(msg))
-      .finally(() => final)
+      .finally(() => final())
   },
   findByBid: (params, succ, err, final) => {
-    boardAPI
+    board
       .get(`/boards/${params}`)
       .then(res => succ(res))
       .catch(msg => err(msg))
-      .finally(() => final)
+      .finally(() => final())
   },
   findByUid: (params, succ, err, final) => {
-    boardAPI
-      .get('/boards', { user: params })
+    board
+      .get('/boards', { params: { user: params } })
       .then(res => succ(res))
       .catch(msg => err(msg))
-      .finally(() => final)
+      .finally(() => final())
   }
 }

@@ -3,7 +3,7 @@ import user from './axiosConfig.js'
 export default {
   findByEmail (param, succ, err, final) {
     user
-      .get('/users', { params: param })
+      .get('/users', { params: { email: param } })
       .then((res) => succ(res))
       .catch((msg) => err(msg))
       .finally(() => final())

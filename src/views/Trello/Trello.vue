@@ -38,33 +38,32 @@ export default {
   },
   data () {
     return {
-      maxBoardCnt: 6
+      maxBoardCnt: 6,
+      boards: []
     }
   },
   computed: {
     user () {
       return this.$store.getters.user
-    },
-    boards () {
-      return this.$store.getters.boards
     }
   },
-  mounted () {
+  created () {
+    console.log('created Trello view')
     // trello에서 boards api를 호출해서 아래 board components에 props로 bid를 뿌려준다.
     const uid = this.$route.params.uid
-    console.log(`uid is ${uid}`)
     boardAPI
       .findByUid(
         uid,
         res => {
           const rBoards = res.data.map(o => new Board(o))
-          this.$store.commit('setBoard', rBoards)
+          console.log(rBoards)
+          this.boards = rBoards
         },
         err => {
           console.log(err)
         },
         () => {
-          console.log('board api find final')
+          console.log('finish get user board info')
         }
       )
   },
@@ -94,13 +93,15 @@ export default {
               }
             },
             res => {
-              this.$store.commit('addBoard', res.data)
+              const rBoard = new Board(res.data)
+              console.log(rBoard)
+              this.boards.push(rBoard)
             },
             err => {
               console.log(err)
             },
             () => {
-              console.log('final')
+              console.log('finish create board')
             }
           )
       } else {
@@ -119,5 +120,8 @@ export default {
     width: 100%;
     margin-bottom: 30px;
     text-align: right;
+  }
+  .trello-footer {
+
   }
 </style>

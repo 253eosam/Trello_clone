@@ -9,23 +9,26 @@ export const userSessionHandler = {
     // request user api to email then compare to pwd data then change route trello page
     login (payload) {
       const errorMsg = (msg) => { alert(msg) }
-      store.commit('addSchedule')
+
       // request api
       userAPI
         .findByEmail(
-          { email: payload.email },
+          payload.email,
           res => {
             if (res.status === 200) {
               if (res.data[0].pwd === payload.pwd) {
-                console.log('Correct login info')
+                console.log('success login')
+                console.log(res)
 
                 // bind vuex state
                 const rUser = new User(res.data[0])
+                console.log('show rUser data')
+                console.log(rUser)
                 // const rBoards = res.data[0].boards.map(ins => new Board(ins))
                 store.commit('setUser', rUser)
                 // store.commit('setBoard', new Board(rBoards))
 
-                // // go route
+                // go route
                 router.push({ path: `/user/${rUser.id}/trello` })
               } else {
                 console.log('Incorrect ID or Password')
@@ -38,12 +41,12 @@ export const userSessionHandler = {
           },
           err => console.log(err),
           () => {
-            store.commit('deleteSchedule')
-            console.log('login final')
+            console.log('---------------finish login---------------')
           })
     },
     logout () {
       store.commit('setUser')
+      sessionStorage.removeItem('user')
       router.push('/sign-in')
     },
     join ({ email, pwd }) {

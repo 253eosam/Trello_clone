@@ -54,11 +54,9 @@
     },
     methods: {
       onClickSignIn () {
-        console.log('SignIn onClickSignIn method')
-        userSessionHandler.methods.login({
-          email: this.signInForm.email,
-          pwd: this.signInForm.pwd
-        })
+        console.log('SignIn onClickSignIn method, sign-in form data')
+        console.log(this.signInForm)
+        userSessionHandler.methods.login(this.signInForm)
       },
       onClickSignUp () {
         this.$router.push({ path: '/sign-up' })

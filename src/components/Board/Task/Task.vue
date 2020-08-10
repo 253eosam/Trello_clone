@@ -3,6 +3,7 @@
     <div @click="onClickShowDetailTask" >
       <el-card class="task-card" shadow="hover">
         <div class="task-box">
+          <span style="color: blue;">{{tid}}</span>
           <span v-if="firstFlag">{{text}}</span>
           <input placeholder="input task.." ref="newTaskInput" class="task-first-title" type="text" v-else v-model="text" @keypress.enter="firstFlag = true"/>
         </div>
