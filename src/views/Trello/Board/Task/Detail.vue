@@ -1,20 +1,13 @@
 <script src="src/api/userAPI.js"></script>
 <template>
   <div class="task-detail">
-    <h1 class="task-detail-title" v-text="task !== null ? task.title : ''"></h1>
-    <hr />
-    <div class="task-detail-navigator">
-      <ul>
-        <li><span>STATUS</span><el-tag>TAG</el-tag></li>
-      </ul>
+    <div>
+      <h1 class="task-detail-title">{{task.title}}</h1><el-tag style="display: inline;">{{task.board.tag}}</el-tag>
     </div>
-    <div class="task-detail-content">
-      <p>text-area</p>
-    </div>
-    <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
-      </span>
+    <textarea class="task-detail-content" v-model="task.content"></textarea>
+    <div class="task-detail-footer">
+        <el-button type="primary" @click="onClickUpdateBtn">Close</el-button>
+      </div>
   </div>
 </template>
 
@@ -24,23 +17,69 @@ import { Task } from '@/model/Task'
 
 export default {
   name: 'TaskDetail',
+  props: {
+    tid: {
+      type: String
+    }
+  },
   data () {
     return {
-      task: null
+      task: {
+        title: '',
+        content: '',
+        board: {
+          id: 0,
+          tag: ''
+        }
+      },
+      updateTask: {
+        content: '',
+      }
     }
   },
   created () {
-    console.log(this.$route.params.tid)
-    taskAPI
-      .findByTid(
-        { tid: this.$route.params.tid },
-        res => {
-          this.task = new Task(res.data)
-          console.log(this.task)
-        },
-        err => console.log(err),
-        () => console.log('final')
-      )
+    this.getTaskInfo()
+  },
+  methods: {
+    getTaskInfo () {
+      taskAPI
+        .findByTid(
+          { tid: this.tid },
+          res => {
+            console.log(res)
+            this.task = new Task(res.data)
+            this.updateTask.content = this.task.content
+          },
+          err => console.log(err),
+          () => console.log('finish created detail page')
+        )
+    },
+    onClickUpdateBtn () {
+      console.log('update btn detail view')
+      if (this.updateTask.content !== this.task.content) {
+        const isApply = confirm('수정한 내용을 적용하시겠습니까?')
+        if (isApply){
+          taskAPI
+            .update(
+              {
+                tid: this.tid,
+                title: this.task.title,
+                content: this.task.content
+              },
+              res => {
+                console.log(res)
+              },
+              err => {
+                console.log(err)
+              },
+              () => {
+                console.log('finish on click update btn of detail task page')
+              }
+            )
+        }
+      }
+      this.$emit('closeDialog')
+    }
   }
 }
 </script>
@@ -50,15 +89,19 @@ export default {
     text-align: left;
   }
   .task-detail-title{
-    margin-left: 10px;
+    font-size: 40px;
   }
   .task-detail-navigator {
     margin-left: 10px;
   }
   .task-detail-content{
-    margin-left: 5px;
-    padding: 10px;
-    border: black solid 1px;
+    display: block;
+    margin: 10px;
+    width: 90%;
+    height: 100px;
+  }
+  .task-detail-footer {
+    text-align: right;
   }
 
 </style>

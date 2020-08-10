@@ -18,6 +18,9 @@
         </el-button>
       </el-row>
     </div>
+    <el-dialog :visible.sync="isDialogOfDetailTask">
+      <router-view @closeDialog="isDialogOfDetailTask = false"></router-view>
+    </el-dialog>
   </div>
 </template>
 
@@ -29,6 +32,7 @@ import dragula from 'dragula'
 import 'dragula/dist/dragula.css'
 import { Board } from '@/model/Board'
 import { userSessionHandler } from '@/mixins/userSessionHandler'
+import taskAPI from '@/api/taskAPI'
 
 export default {
   name: 'Trello',
@@ -39,12 +43,23 @@ export default {
   data () {
     return {
       maxBoardCnt: 6,
-      boards: []
+      boards: [],
+      isDialogOfDetailTask: false,
+      dragula: null
     }
   },
   computed: {
     user () {
       return this.$store.getters.user
+    }
+  },
+  watch: {
+    '$route.params.tid' (tid) {
+      console.log(`route change ${tid}`)
+      this.isDialogOfDetailTask = (tid !== undefined)
+    },
+    isDialogOfDetailTask (value) {
+      if (!value) this.$router.push({ name: 'Trello' })
     }
   },
   created () {
@@ -66,21 +81,47 @@ export default {
           console.log('finish get user board info')
         }
       )
+    if (this.$route.params.tid) this.isDialogOfDetailTask = true
   },
   updated () {
     // feature drag & drop
     // rendering all child component then do instance dragula object
-    // if (this.dragulaCard) this.dragulaCard.destroy()
-    //
-    // this.dragulaCard = dragula([
-    //   ...Array.from(this.$el.querySelectorAll('.card-list'))
-    // ]).on('drop', (el, wrap, target, siblings) => {
-    //   console.log('drop')
-    // })
-    // console.log('new instance')
+    if (this.dragulaCard) this.dragulaCard.destroy()
+
+    this.dragulaCard = dragula([
+      ...Array.from(this.$el.querySelectorAll('.card-list'))
+    ]).on('drop', (el, wrap, target, siblings) => {
+      console.log('drop')
+      const dragTaskId = el.querySelector('.task>input').value
+      const dropBoardId = wrap.querySelector('.card-list>input').value
+      console.log(`drag : ${dragTaskId}, drop : ${dropBoardId}`)
+      this.onDragAndDropTask(dragTaskId, dropBoardId)
+    })
+    console.log('new instance')
     // --------------------------------------------------------------------
   },
   methods: {
+    onDragAndDropTask (dragTaskId, dropBoardId) {
+      taskAPI
+        .updateBid(
+          {
+            tid: dragTaskId,
+            bid: dropBoardId
+          },
+          res => {
+            console.log(res)
+          },
+          err => {
+            console.log(err)
+          },
+          () => {
+            console.log('finish onDragAndDropTask')
+          }
+        )
+    },
+    onClickShowDetailTask () {
+      this.isDialogOfDetailTask = true
+    },
     onClickAddBoard () {
       if (this.boards.length < this.maxBoardCnt) {
         console.log('Do net service open, create board component')

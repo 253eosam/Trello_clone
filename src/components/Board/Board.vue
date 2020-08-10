@@ -13,14 +13,13 @@
       </el-dialog>
     </div>
     <ul class="card-list">
+      <input type="hidden" :value="bid" />
       <li v-for="(task, idx) in tasks" :key="idx">
-        <div>
           <TaskComponent :tid="task.id" :pTitle="task.title"></TaskComponent>
-        </div>
       </li>
     </ul>
-    <div class="add-task-card" @click="onClickAddTask">
-      <el-card shadow="hover">
+    <div @click="onClickAddTask">
+      <el-card shadow="hover" style="cursor: pointer;">
         <span>+</span>
       </el-card>
     </div>
@@ -65,7 +64,7 @@ export default {
           this.bid,
           res => {
             console.log(res)
-            this.tag.name = res.data.tag + this.bid
+            this.tag.name = res.data.tag
             this.tasks = res.data.tasks
           },
           err => console.log(err),
@@ -80,8 +79,8 @@ export default {
       taskAPI
         .save(
           {
-            title: null,
-            content: null,
+            title: '',
+            content: '',
             board: {
               id: this.bid
             }
@@ -128,11 +127,11 @@ export default {
 
 <style>
   .board {
-    padding: 10px;
+    padding: 5px;
     background: white;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
     border-radius: 10px;
   }
   .card-list {

@@ -16,8 +16,17 @@ export default {
       .finally(() => final())
   },
   update: (params, succ, err, final) => {
+    console.log(params)
     taskAPI
-      .put('/tasks', params)
+      .put(`/tasks/${params.tid}`, { title: params.title, content: params.content })
+      .then(res => succ(res))
+      .catch(msg => err(msg))
+      .finally(() => final())
+  },
+  updateBid: (params, succ, err, final) => {
+    console.log(params)
+    taskAPI
+      .put(`/tasks/${params.tid}`, { board: { id: params.bid } })
       .then(res => succ(res))
       .catch(msg => err(msg))
       .finally(() => final())

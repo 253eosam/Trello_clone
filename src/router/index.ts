@@ -29,6 +29,8 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: 'task/:tid',
+        name: 'Task',
+        props: true,
         component: () => import('@/views/Trello/Board/Task/Detail.vue')
       }
     ]
@@ -48,7 +50,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // when update route, show loading
-  store.commit('showPageLoading')
+  // store.commit('showPageLoading')
 
   const session = store.getters.user
   console.log('session is -------')

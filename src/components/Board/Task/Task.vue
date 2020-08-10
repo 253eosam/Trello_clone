@@ -1,55 +1,75 @@
 <template>
-  <div class="task">
-    <div @click="onClickShowDetailTask" >
-      <el-card class="task-card" shadow="hover">
-        <div class="task-box">
-          <span style="color: blue;">{{tid}}</span>
-          <span v-if="firstFlag">{{text}}</span>
-          <input placeholder="input task.." ref="newTaskInput" class="task-first-title" type="text" v-else v-model="text" @keypress.enter="firstFlag = true"/>
-        </div>
+  <div class="task" @click="onClickShowDetailTask" >
+    <input type="hidden" :value="tid"/>
+      <el-card class="task-card" >
+          <span v-if="title.length">{{title}}</span>
+          <input v-else style="width: 100%;" placeholder="input task.." ref="newTaskInput" class="task-first-title" type="text" v-model="newTitle" @keypress.enter="onEnterTitleOfInputTag"/>
       </el-card>
-    </div>
-    <el-dialog :visible.sync="dialogFormVisible">
-      <router-view @cancel="dialogFormVisible = false"></router-view>
-    </el-dialog>
   </div>
 </template>
 
 <script>
+import taskAPI from '../../../api/taskAPI'
+
 export default {
   name: 'Task',
   props: ['tid', 'pTitle'],
   data () {
     return {
-      text: '',
-      firstFlag: false,
-      dialogFormVisible: false
+      title: '',
+      newTitle: ''
+
     }
   },
   mounted () {
-    if (this.pTitle === '' || this.pTitle === null) { this.$refs.newTaskInput.focus() } else {
-      this.text = this.pTitle
-      this.firstFlag = true
+    if (this.pTitle === '' || this.pTitle === null) {
+      this.$refs.newTaskInput.focus()
+    } else {
+      this.title = this.pTitle
     }
   },
   methods: {
+    onEnterTitleOfInputTag () {
+      if (this.newTitle === '' || this.newTitle === null) {
+        alert('title is Empty, Please full input...')
+        return
+      }
+      taskAPI
+        .update(
+          {
+            tid: this.tid,
+            title: this.newTitle
+          },
+          res => {
+            console.log(res)
+            this.title = res.data.title
+          },
+          err => {
+            console.log(err)
+          },
+          () => {
+            console.log('update task title, finish')
+          }
+        )
+    },
     onClickShowDetailTask () {
-      if (!this.firstFlag) return
-      this.$router.push(`/user/1/trello/task/${this.tid}`)
-      this.dialogFormVisible = true
+      if (!this.title.length) return
+      this.$router.push({ path: `/user/1/trello/task/${this.tid}` })
     }
   }
 }
 </script>
 
 <style>
+  .task-card:hover {
+    background: #F56C6C;
+    transform: rotate(10deg);
+  }
   .task-card{
     border-radius: 40px;
-    padding: 7px;
     margin-bottom: 5px;
+    margin-right: 10px;
+    margin-left: 10px;
     background: #EBEEF5;
-  }
-  .task-first-stitle {
-    border: white;
   }
 </style>
