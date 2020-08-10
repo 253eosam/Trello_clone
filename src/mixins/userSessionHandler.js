@@ -1,5 +1,7 @@
 import store from '../store'
+import { User } from '../model/User'
 import userAPI from '../api/userAPI.js'
+import { Board } from '../model/Board'
 import router from '../router'
 
 export const userSessionHandler = {
@@ -11,24 +13,23 @@ export const userSessionHandler = {
       // request api
       userAPI
         .findByEmail(
-          { email: payload.email },
+          payload.email,
           res => {
             if (res.status === 200) {
               if (res.data[0].pwd === payload.pwd) {
-                console.log('mixin method login, Success login..!')
+                console.log('success login')
+                console.log(res)
 
-                // bind store user info
-                const resUserInfo = res.data[0]
-                const user = {
-                  email: resUserInfo.email,
-                  pwd: resUserInfo.pwd
-                }
-                const board = resUserInfo.boards
-                store.commit('setUser', user)
-                store.commit('setBoard', board)
+                // bind vuex state
+                const rUser = new User(res.data[0])
+                console.log('show rUser data')
+                console.log(rUser)
+                // const rBoards = res.data[0].boards.map(ins => new Board(ins))
+                store.commit('setUser', rUser)
+                // store.commit('setBoard', new Board(rBoards))
 
                 // go route
-                router.push({ path: `/user/${res.data[0].id}/trello` })
+                router.push({ path: `/user/${rUser.id}/trello` })
               } else {
                 console.log('Incorrect ID or Password')
                 errorMsg('Login Failed.. Incorrect ID or Password')
@@ -40,8 +41,44 @@ export const userSessionHandler = {
           },
           err => console.log(err),
           () => {
-            console.log('finally')
+            console.log('---------------finish login---------------')
           })
+    },
+    logout () {
+      store.commit('setUser')
+      sessionStorage.removeItem('user')
+      router.push('/sign-in')
+    },
+    join ({ email, pwd }) {
+      const errorMsg = (msg) => {
+        alert(msg)
+      }
+      userAPI.save(
+        {
+          email: email,
+          pwd: pwd
+        },
+        res => {
+          if (res.status === 200 || res.status === 204) {
+            console.log('SignUp onClickSignUn method, Success join..!')
+
+            // bind store user info
+            const rUser = new User(res.data)
+            store.commit('setUser', rUser)
+
+            // go route
+            router.push({ path: `/user/${rUser.id}/trello` })
+          } else {
+            console.log(`the expected tatus is 200 or 204, but the response is ${res.status}`)
+            errorMsg('Join failed.. wait for join')
+          } // status
+        },
+        err => {
+          console.log(err)
+          alert('Fail join ... !')
+        },
+        () => console.log('finally')
+      )
     }
   }
 }

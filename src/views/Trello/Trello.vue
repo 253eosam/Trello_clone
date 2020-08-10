@@ -7,12 +7,12 @@
     </div>
     <div class="trello-body">
       <el-row>
-        <el-col v-for="idx in boardCnt" :key="idx" :span="4">
-          <Board/>
+        <el-col v-for="(board, idx) in boards" :key="idx" :span="4">
+          <boardComponent :bid="board.id"/>
         </el-col>
       </el-row>
     </div>
-    <div v-if="boardCnt" class="trello-footer">
+    <div v-if="boards.length" class="trello-footer">
       <el-row>
         <el-button style="height: 100%; width: 100%;" plain type="danger" icon="el-icon-delete">Delete Button
         </el-button>
@@ -22,52 +22,94 @@
 </template>
 
 <script>
-import Board from '@/components/Board/Board.vue'
+import boardComponent from '@/components/Board/Board.vue'
 import Header from '@/components/common/Header/Header.vue'
+import boardAPI from '../../api/boardAPI'
 import dragula from 'dragula'
 import 'dragula/dist/dragula.css'
+import { Board } from '@/model/Board'
+import { userSessionHandler } from '@/mixins/userSessionHandler'
 
 export default {
   name: 'Trello',
   components: {
-    Board,
+    boardComponent,
     Header
   },
   data () {
     return {
-      boardCnt: 0,
-      maxBoardCnt: 6
+      maxBoardCnt: 6,
+      boards: []
     }
   },
   computed: {
     user () {
-      return this.$store.getters.userInfo
+      return this.$store.getters.user
     }
+  },
+  created () {
+    console.log('created Trello view')
+    // trello에서 boards api를 호출해서 아래 board components에 props로 bid를 뿌려준다.
+    const uid = this.$route.params.uid
+    boardAPI
+      .findByUid(
+        uid,
+        res => {
+          const rBoards = res.data.map(o => new Board(o))
+          console.log(rBoards)
+          this.boards = rBoards
+        },
+        err => {
+          console.log(err)
+        },
+        () => {
+          console.log('finish get user board info')
+        }
+      )
   },
   updated () {
     // feature drag & drop
     // rendering all child component then do instance dragula object
-    if (this.dragulaCard) this.dragulaCard.destroy()
-
-    this.dragulaCard = dragula([
-      ...Array.from(this.$el.querySelectorAll('.card-list'))
-    ]).on('drop', (el, wrap, target, siblings) => {
-      console.log('drop')
-    })
-    console.log('new instance')
+    // if (this.dragulaCard) this.dragulaCard.destroy()
+    //
+    // this.dragulaCard = dragula([
+    //   ...Array.from(this.$el.querySelectorAll('.card-list'))
+    // ]).on('drop', (el, wrap, target, siblings) => {
+    //   console.log('drop')
+    // })
+    // console.log('new instance')
     // --------------------------------------------------------------------
   },
   methods: {
     onClickAddBoard () {
-      if (this.boardCnt < this.maxBoardCnt) {
-        this.boardCnt++
+      if (this.boards.length < this.maxBoardCnt) {
+        console.log('Do net service open, create board component')
+        boardAPI
+          .save(
+            {
+              tag: 'temp tag name',
+              user: {
+                id: this.user.id
+              }
+            },
+            res => {
+              const rBoard = new Board(res.data)
+              console.log(rBoard)
+              this.boards.push(rBoard)
+            },
+            err => {
+              console.log(err)
+            },
+            () => {
+              console.log('finish create board')
+            }
+          )
       } else {
         alert('Don\'t create board..')
       }
     },
     onClickSignOut () {
-      this.$store.commit('setUser')
-      this.$router.push('/sign-in')
+      userSessionHandler.methods.logout()
     }
   }
 }
@@ -78,5 +120,8 @@ export default {
     width: 100%;
     margin-bottom: 30px;
     text-align: right;
+  }
+  .trello-footer {
+
   }
 </style>

@@ -1,21 +1,21 @@
 <template>
   <div class="board">
     <div>
-      <el-tag @click="onClickShowUpdateTagNameDialog" class="board-tag" type="primary">{{tagName}}</el-tag>
-      <el-dialog title="Update Tag Name" :visible.sync="outerVisible">
+      <el-tag @click="onClickShowDialogForUpdateTag" class="board-tag" type="primary">{{tag.name}}</el-tag>
+      <el-dialog title="Update Tag Name" :visible.sync="tag.dialogVisible">
         <div class="block">
-          <el-input v-model="updateTagNameDialog.newTagName" placeholder="Please input your update Tag Name"></el-input>
+          <el-input v-model="tag.newName" placeholder="Please input your update Tag Name"></el-input>
         </div>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="onClickUpdateTagName" type="primary">Update</el-button>
-          <el-button @click="outerVisible = false, updateTagNameDialog.newTagName = ''">Cancel</el-button>
+          <el-button @click="onClickUpdateBtnOfTagDialog" type="primary">Update</el-button>
+          <el-button @click="tag.dialogVisible = false, tag.newName = ''">Cancel</el-button>
         </div>
       </el-dialog>
     </div>
     <ul class="card-list">
-      <li v-for="(idx) in tasks" :key="idx">
+      <li v-for="(task, idx) in tasks" :key="idx">
         <div>
-          <task :tid="idx"></task>
+          <TaskComponent :tid="task.id" :pTitle="task.title"></TaskComponent>
         </div>
       </li>
     </ul>
@@ -28,44 +28,98 @@
 </template>
 
 <script>
-import Task from './Task/Task.vue'
+import TaskComponent from './Task/Task.vue'
+import { Task } from '../../model/Task'
+import boardAPI from '../../api/boardAPI.js'
+import taskAPI from '../../api/taskAPI.js'
 
 export default {
   name: 'Board',
+  props: {
+    bid: {
+      type: Number
+    }
+  },
   components: {
-    Task
+    TaskComponent
   },
   data () {
     return {
-      tagName: 'Task',
-      tasks: [],
-      outerVisible: false,
-      updateTagNameDialog: {
-        newTagName: ''
+      tag: {
+        name: 'Task',
+        newName: '',
+        color: 'primary',
+        dialogVisible: false
       },
-      dragulaCard: null
+      tasks: []
     }
   },
-  computed: {
-    uid () {
-      return this.$store.getters.userInfo.uid
-    }
+  created () {
+    console.log(`created board_${this.bid} component`)
+    this.findBoardInfoByBid()
   },
   methods: {
+    findBoardInfoByBid () { // request api , move >> vuex action
+      boardAPI
+        .findByBid(
+          this.bid,
+          res => {
+            console.log(res)
+            this.tag.name = res.data.tag + this.bid
+            this.tasks = res.data.tasks
+          },
+          err => console.log(err),
+          () => console.log('finish get board info')
+        )
+    },
     onEmitDeleteTask () {
       console.log('Board component, onEmitDeleteTask')
-      this.tasks--
     },
     onClickAddTask () {
-      this.tasks++
+      // request api
+      taskAPI
+        .save(
+          {
+            title: null,
+            content: null,
+            board: {
+              id: this.bid
+            }
+          },
+          res => {
+            console.log(res)
+            this.tasks.push(new Task(res.data))
+          },
+          err => {
+            console.log(err)
+          },
+          () => console.log('finish create task ')
+        )
     },
-    onClickShowUpdateTagNameDialog () {
+    onClickShowDialogForUpdateTag () {
       console.log('Board component, onClickUpdateTagName method')
-      this.outerVisible = true
+      this.tag.dialogVisible = true
+      this.tag.newName = this.tag.name
     },
-    onClickUpdateTagName () {
-      this.tagName = this.updateTagNameDialog.newTagName
-      this.outerVisible = false
+    onClickUpdateBtnOfTagDialog () {
+      boardAPI
+        .update(
+          {
+            bid: this.bid,
+            tag: this.tag.newName
+          },
+          res => {
+            console.log(res)
+            this.tag.name = this.tag.newName
+          },
+          err => {
+            console.log(err)
+          },
+          () => {
+            console.log('onClickUpdateBtnOfTagDialog board component, finally')
+            this.tag.dialogVisible = false
+          }
+        )
     }
   }
 }
@@ -74,14 +128,16 @@ export default {
 
 <style>
   .board {
-    overflow: auto;
-    height: 400px;
     padding: 10px;
     background: white;
     margin-left: 10px;
     margin-right: 10px;
-    margin-bottom: 100px;
+    margin-bottom: 10px;
     border-radius: 10px;
+  }
+  .card-list {
+    overflow: auto;
+    height: 400px;
   }
 
   .board-tag {
