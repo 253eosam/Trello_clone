@@ -34,4 +34,12 @@ export class User {
     set pwd (value: string) {
       this._pwd = value
     }
+
+    toJSON () {
+      return JSON.stringify({
+        id: this.id,
+        pwd: this.pwd,
+        email: this.email
+      })
+    }
 }
