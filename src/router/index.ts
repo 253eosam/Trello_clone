@@ -36,6 +36,11 @@ const routes: Array<RouteConfig> = [
     ]
   },
   {
+    path: '/test',
+    name: 'test',
+    component: () => import('@/views/Test.vue')
+  },
+  {
     path: '*',
     name: 'PageNotFound',
     component: Hello
@@ -51,11 +56,11 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   // when update route, show loading
   // store.commit('showPageLoading')
-
-  const session = store.getters.user
   console.log('session is -------')
-  console.log(session)
-
+  if ((to.name === 'Trello' || to.name === 'Task') && store.getters.user.id === 0) {
+    store.commit('setUser', new User(JSON.parse(String(sessionStorage.getItem('user')))))
+    console.log(store.getters.user)
+  }
   // inspected login session
   if (
     to.name === 'Trello' && (

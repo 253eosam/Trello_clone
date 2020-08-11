@@ -1,4 +1,3 @@
-<script src="src/api/userAPI.js"></script>
 <template>
   <div class="task-detail">
     <div>
@@ -6,6 +5,7 @@
     </div>
     <textarea class="task-detail-content" v-model="task.content"></textarea>
     <div class="task-detail-footer">
+        <el-button type="danger" @click="onClickDeleteBtn">Delete</el-button>
         <el-button type="primary" @click="onClickUpdateBtn">Close</el-button>
       </div>
   </div>
@@ -33,7 +33,7 @@ export default {
         }
       },
       updateTask: {
-        content: '',
+        content: ''
       }
     }
   },
@@ -54,11 +54,27 @@ export default {
           () => console.log('finish created detail page')
         )
     },
+    onClickDeleteBtn () {
+      taskAPI
+        .delegate(
+          { tid: this.tid },
+          res => {
+            console.log(res)
+            this.$emit('closeDialog')
+          },
+          err => {
+            console.log(err)
+          },
+          () => {
+            console.log('finish onClick delete btn ')
+          }
+        )
+    },
     onClickUpdateBtn () {
       console.log('update btn detail view')
       if (this.updateTask.content !== this.task.content) {
         const isApply = confirm('수정한 내용을 적용하시겠습니까?')
-        if (isApply){
+        if (isApply) {
           taskAPI
             .update(
               {

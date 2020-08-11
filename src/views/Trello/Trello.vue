@@ -33,6 +33,7 @@ import 'dragula/dist/dragula.css'
 import { Board } from '@/model/Board'
 import { userSessionHandler } from '@/mixins/userSessionHandler'
 import taskAPI from '@/api/taskAPI'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Trello',
@@ -49,9 +50,9 @@ export default {
     }
   },
   computed: {
-    user () {
-      return this.$store.getters.user
-    }
+    ...mapGetters([
+      'user'
+    ])
   },
   watch: {
     '$route.params.tid' (tid) {

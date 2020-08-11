@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { Loading } from 'element-ui'
 import { User, UserType } from '@/model/User'
+// import userAPI from '../api/userAPI.js'
 
 Vue.use(Vuex)
 
@@ -9,9 +10,9 @@ export default new Vuex.Store({
   // static variable
   state: {
     user: {
-      id: 1,
-      email: 'wmp@wemakeprice.com',
-      pwd: 'q1w2e3r4',
+      id: 0,
+      email: '',
+      pwd: '',
       boards: []
     },
     boards: {
@@ -73,15 +74,13 @@ export default new Vuex.Store({
     //     .findByEmail(
     //       { email : email },
     //       (res: any) => {
-    //         if (res.status === 200){
-    //           if (res.data[0].pwd === pwd) {
-    //             console.log('Success login auth..')
-    //
-    //             const rUser = res.data[0]
-    //             context.commit('setUser', new User(rUser))
-    //             console.log(context.getters.user)
-    //           } // equals rPwd info and pPwd
-    //         } // status
+    //         console.log(res)
+    //       },
+    //       (err: any) => {
+    //         console.log(err)
+    //       },
+    //       () => {
+    //         console.log('finally')
     //       }
     //
     //     )

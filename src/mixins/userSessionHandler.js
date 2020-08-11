@@ -8,8 +8,9 @@ export const userSessionHandler = {
   methods: {
     // request user api to email then compare to pwd data then change route trello page
     login (payload) {
-      const errorMsg = (msg) => { alert(msg) }
-
+      const errorMsg = (msg) => {
+        alert(msg)
+      }
       // request api
       userAPI
         .findByEmail(
@@ -27,7 +28,7 @@ export const userSessionHandler = {
                 // const rBoards = res.data[0].boards.map(ins => new Board(ins))
                 store.commit('setUser', rUser)
                 // store.commit('setBoard', new Board(rBoards))
-
+                sessionStorage.setItem('user', rUser.toJSON())
                 // go route
                 router.push({ path: `/user/${rUser.id}/trello` })
               } else {

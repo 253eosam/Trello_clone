@@ -33,7 +33,7 @@ export default {
   },
   delete: (params, succ, err, final) => {
     taskAPI
-      .delete(`/tasks/${params.bid}`)
+      .delete(`/tasks/${params.tid}`)
       .then(res => succ(res))
       .catch(msg => err(msg))
       .finally(() => final())

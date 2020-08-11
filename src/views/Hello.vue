@@ -2,7 +2,7 @@
   <div class="hello">
     <h1 class="title">Hello Trello</h1>
     <el-button @click="onClickStart" round>시작하기</el-button>
-    <el-button round>연구실</el-button>
+    <el-button round @click="$router.push({ name: 'test'})">연구실</el-button>
   </div>
 </template>
 
