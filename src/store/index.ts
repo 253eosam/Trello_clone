@@ -2,8 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { Loading } from 'element-ui'
 import { User, UserType } from '@/model/User'
-// import userAPI from '../api/userAPI.js'
-
+import { userAPI } from '../api'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -69,21 +68,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    // findUserByEmail (context: any , { email, pwd }: UserType) {
-    //   userAPI
-    //     .findByEmail(
-    //       { email : email },
-    //       (res: any) => {
-    //         console.log(res)
-    //       },
-    //       (err: any) => {
-    //         console.log(err)
-    //       },
-    //       () => {
-    //         console.log('finally')
-    //       }
-    //
-    //     )
-    // }
+    async findUserByEmail (context, { email, pwd }) {
+      console.log('find user by email, vuex action')
+      return await userAPI.findByEmail(email)
+    }
+  },
+  modules: {
+
   }
 })

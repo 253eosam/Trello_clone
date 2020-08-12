@@ -1,9 +1,8 @@
 <script src="src/router/index.ts"></script>
 <template>
   <div class="sign-in">
-    <Header/>
-    <el-form class="sign-in-form" label-position="top" label-width="100px" @submit.native.prevent="onClickSignIn"
-             :rules="rules" :model="signInForm" ref="signInForm">
+    <Header title="Login" />
+    <el-form class="sign-in-form" label-position="top" label-width="100px" :rules="rules" :model="signInForm" ref="signInForm">
       <el-form-item label="Email" prop="email">
         <el-input placeholder="Please input Email" v-model="signInForm.email"></el-input>
       </el-form-item>
@@ -11,7 +10,7 @@
         <el-input show-password placeholder="Please input password" v-model="signInForm.pwd"></el-input>
       </el-form-item>
       <el-form-item class="sign-in-form-footer">
-        <el-button native-type="submit" round>로그인</el-button>
+        <el-button @click="onClickSignIn" round>로그인</el-button>
         <el-button @click="onClickSignUp" round>회원가입</el-button>
       </el-form-item>
     </el-form>
@@ -21,7 +20,7 @@
 <script>
   import Header from '@/components/common/Header/Header.vue'
   import { userSessionHandler }  from '../../mixins/userSessionHandler.js'
-
+  import { mapActions } from 'vuex'
   export default {
     name: 'Login',
     components: {
@@ -53,10 +52,13 @@
       }
     },
     methods: {
-      onClickSignIn () {
-        console.log('SignIn onClickSignIn method, sign-in form data')
-        console.log(this.signInForm)
-        userSessionHandler.methods.login(this.signInForm)
+      ...mapActions([
+        'findUserByEmail'
+      ]),
+      async onClickSignIn () {
+        console.log('sign in view, sign in btn')
+        const res = await this.findUserByEmail(this.signInForm)
+        console.log('sign in view, sign in btn', res)
       },
       onClickSignUp () {
         this.$router.push({ path: '/sign-up' })

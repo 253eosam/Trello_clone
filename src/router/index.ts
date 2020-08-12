@@ -40,6 +40,12 @@ const routes: Array<RouteConfig> = [
     name: 'test',
     component: () => import('@/views/Test.vue')
   },
+  // dialog
+  {
+    path: 'global-dialog',
+    name: 'globalDialog',
+    component: () => import('@/components/common/Dialog/globalDialog.vue')
+  },
   {
     path: '*',
     name: 'PageNotFound',
