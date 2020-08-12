@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <h1 class="title">{{title}}</h1>
-    <h5 class="subtitle">{{subTitle}}</h5>
-  </div>
+  <header>
+    <h1 class="title">{{ title }}</h1>
+    <h5 class="subtitle">{{ subTitle }}</h5>
+  </header>
 </template>
 
 <script>
@@ -21,10 +21,13 @@ export default {
 }
 </script>
 
-<style>
-.title{
-  color: #F56C6C;
-  font-size: 82px;
+<style lang="scss">
+header {
   text-align: center;
+
+  .title {
+    color: #F56C6C;
+    font-size: 82px;
+  }
 }
 </style>
