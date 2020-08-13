@@ -1,8 +1,12 @@
 <template>
-  <header>
-    <h1 class="title">{{ title }}</h1>
-    <h5 class="subtitle">{{ subTitle }}</h5>
-  </header>
+  <div class="header">
+    <header>
+      <h1>{{ title }}</h1>
+    </header>
+    <footer>
+      <strong>We Make Price</strong>
+    </footer>
+  </div>
 </template>
 
 <script>
@@ -12,22 +16,20 @@ export default {
     title: {
       type: String,
       default: 'Trello'
-    },
-    subTitle: {
-      type: String,
-      default: 'We Make Price'
     }
   }
 }
 </script>
 
 <style lang="scss">
-header {
+.header {
   text-align: center;
-
-  .title {
+  h1 {
     color: #F56C6C;
     font-size: 82px;
+  }
+  strong {
+    font-size: 13px;
   }
 }
 </style>
