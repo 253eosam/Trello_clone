@@ -1,9 +1,9 @@
-import userAPI from './userAPI'
-import boardAPI from './boardAPI'
-import taskAPI from './taskAPI'
+import user from '@/api/userAPI'
+import board from './boardAPI'
+import task from './taskAPI'
 
 export default {
-  userAPI: userAPI,
-  boardAPI: boardAPI,
-  taskAPI: taskAPI
+  user: user,
+  board: board,
+  task: task
 }

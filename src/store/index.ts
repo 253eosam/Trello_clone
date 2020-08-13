@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { Loading } from 'element-ui'
 import { User, UserType } from '@/model/User'
-import { userAPI } from '../api'
+import apis from '../api'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -68,9 +68,15 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async findUserByEmail (context, { email, pwd }) {
-      console.log('find user by email, vuex action')
-      return await userAPI.findByEmail(email)
+    async findUserByEmail ({ commit }, payload) {
+      const res = await apis.user.findByEmail(payload)
+      console.log(res)
+      if (res.status === 200) {
+        const fetchData = res.data
+        if (fetchData.pwd === payload.pwd) {
+          commit('setUser', fetchData)
+        } // equals password
+      } // status
     }
   },
   modules: {
