@@ -42,7 +42,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setUser (state: any, payload: UserType): void {
-      state.user = payload
+      state.user = new User(payload)
     },
     setBoard (state: any, payload: any): void {
       state.boards = payload
@@ -69,13 +69,27 @@ export default new Vuex.Store({
   },
   actions: {
     async findUserByEmail ({ commit }, payload) {
-      const res = await apis.user.findByEmail(payload)
-      console.log(res)
+      const fetchData = await apis.user.findByEmail(payload)
+      const res = {
+        status: fetchData.status,
+        isOk: false,
+        content: ''
+      }
+      console.log(fetchData)
+      if (fetchData.status === 200) {
+        if (fetchData.data[0].pwd === payload.pwd) {
+          commit('setUser', fetchData.data[0])
+          res.content = '로그인 성공..!!'
+          res.isOk = true
+        } else res.content = '아이디 또는 비밀번호가 일치하지 않습니다. \n다시 시도해주세요...' // equals password
+      } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
+      return res
+    },
+    async saveUser ({ commit }, pUser: UserType) {
+      const res = await apis.user.save(pUser)
       if (res.status === 200) {
         const fetchData = res.data
-        if (fetchData.pwd === payload.pwd) {
-          commit('setUser', fetchData)
-        } // equals password
+        commit('setUser', fetchData)
       } // status
     }
   },

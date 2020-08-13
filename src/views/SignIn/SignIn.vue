@@ -53,8 +53,10 @@ export default {
       'findUserByEmail'
     ]),
     async onClickSignInBtn () {
-      await this.findUserByEmail(this.signInForm)
-      this.router.push({ name: 'Hello' })
+      const res = await this.findUserByEmail(this.signInForm)
+      if (res.status === 200 && res.isOk) {
+        this.$router.push({ name: 'Hello' })
+      } else alert(res.content)
     },
     onClickSignUpBtn () {
       this.$router.push({ name: 'SignUp' })
