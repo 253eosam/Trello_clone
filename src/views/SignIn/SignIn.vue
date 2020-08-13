@@ -1,15 +1,15 @@
 <template>
   <div class="sign-in">
     <t-header title="Login"/>
-    <el-form class="sign-in__form" label-position="top" label-width="100px" :rules="rules" :model="signInForm" ref="signInForm">
+    <el-form class="sign-in__form" label-position="top" label-width="100px" :rules="rules" :model="signInForm" @submit.native.prevent="onClickSignInBtn">
       <el-form-item label="Email" prop="email">
         <el-input placeholder="Please input Email" v-model="signInForm.email"></el-input>
       </el-form-item>
       <el-form-item label="Password" prop="pwd">
         <el-input show-password placeholder="Please input password" v-model="signInForm.pwd"></el-input>
       </el-form-item>
-      <el-form-item class="sign-in__form__footer">
-        <el-button @click="onClickSignInBtn" round>로그인</el-button>
+      <el-form-item class="sign-in__form__btns">
+        <el-button native-type="submit" round>로그인</el-button>
         <el-button @click="onClickSignUpBtn" round>회원가입</el-button>
       </el-form-item>
     </el-form>
@@ -54,9 +54,8 @@ export default {
     ]),
     async onClickSignInBtn () {
       const res = await this.findUserByEmail(this.signInForm)
-      if (res.status === 200 && res.isOk) {
-        this.$router.push({ name: 'Hello' })
-      } else alert(res.content)
+      this.$message(res.content)
+      if (res.isOk) this.$router.push({ name: 'Hello' })
     },
     onClickSignUpBtn () {
       this.$router.push({ name: 'SignUp' })
@@ -73,7 +72,7 @@ export default {
       text-align: left;
     }
 
-    .sign-in__form__footer {
+    .sign-in__form__btns {
       text-align: right;
     }
   }

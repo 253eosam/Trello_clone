@@ -15,5 +15,6 @@ export default {
   //     .catch((msg) => err(msg))
   //     .finally(() => final())
   // }
-  findByEmail: ({ email }) => api.get(`/users?email=${email}`)
+  findByEmail: ({ email }) => api.get(`/users?email=${email}`),
+  save: (user) => api.post('/users', user)
 }

@@ -1,23 +1,19 @@
 <template>
   <div class="hello">
     <h1 class="hello__title">Hello</h1>
-    <div class="hello__header">
-      <el-button @click="onClickSignInBtn" icon="el-icon-user" :type="session ? 'primary' : 'danger'" circle></el-button>
-    </div>
-    <div v-if="session" class="hello__nav">
-      <ul>
-        <li>
-          <el-button @click="onClickStartTrello" round>Start Trello</el-button>
-        </li>
-        <li>
-          <el-button round @click="$router.push({ name: 'test'})">연구실</el-button>
-        </li>
-      </ul>
-    </div>
+    <el-dropdown @command="handleCommand">
+      <el-button @click="onClickSessionBtn" icon="el-icon-user" :type="session ? 'primary' : 'danger'" circle></el-button>
+      <el-dropdown-menu v-if="session" slot="dropdown">
+        <el-dropdown-item command="Trello">Start Trello</el-dropdown-item>
+        <el-dropdown-item command="Test">연구실</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   name: 'Hello',
   computed: {
@@ -25,14 +21,18 @@ export default {
       return this.$store.getters.user
     }
   },
-  watch: {
-    session (to, from) {
-      console.log(`${to} , ${from}`)
-    }
-  },
   methods: {
-    onClickSignInBtn () {
-      this.$router.push('/sign-in')
+    ...mapMutations([
+      'setUser'
+    ]),
+    onClickSessionBtn () {
+      if (this.session) {
+        this.setUser()
+        this.$message('로그아웃 성공..!!')
+      } else this.$router.push('/sign-in')
+    },
+    handleCommand (command) {
+      this.$router.push({ name: command })
     },
     onClickStartTrello () {
       this.$router.push({ path: '/sign-in' })

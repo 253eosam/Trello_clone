@@ -8,12 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   // static variable
   state: {
-    user: {
-      id: 0,
-      email: '',
-      pwd: '',
-      boards: []
-    },
+    user: null,
     boards: {
       bid: null,
       tag: null,
@@ -41,8 +36,17 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    setUser (state: any, payload: UserType): void {
-      state.user = new User(payload)
+    setUser (state: any, pUser: UserType): void {
+      // login & logout
+      if (!pUser) {
+        localStorage.removeItem('user')
+        state.user = null
+      } else {
+        const user = new User(pUser)
+        console.log(user)
+        localStorage.setItem('user', user.toJSON())
+        state.user = user
+      }
     },
     setBoard (state: any, payload: any): void {
       state.boards = payload
@@ -70,12 +74,12 @@ export default new Vuex.Store({
   actions: {
     async findUserByEmail ({ commit }, payload) {
       const fetchData = await apis.user.findByEmail(payload)
+      console.log(fetchData)
       const res = {
         status: fetchData.status,
         isOk: false,
         content: ''
       }
-      console.log(fetchData)
       if (fetchData.status === 200) {
         if (fetchData.data[0].pwd === payload.pwd) {
           commit('setUser', fetchData.data[0])
@@ -86,11 +90,19 @@ export default new Vuex.Store({
       return res
     },
     async saveUser ({ commit }, pUser: UserType) {
-      const res = await apis.user.save(pUser)
-      if (res.status === 200) {
-        const fetchData = res.data
-        commit('setUser', fetchData)
-      } // status
+      const fetchData = await apis.user.save(pUser)
+      console.log(fetchData)
+      const res = {
+        status: fetchData.status,
+        isOk: false,
+        content: ''
+      }
+      if (fetchData.status === 200) {
+        commit('setUser', fetchData.data)
+        res.isOk = true
+        res.content = '회원가입 성공..!!'
+      } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
+      return res
     }
   },
   modules: {

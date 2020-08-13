@@ -32,7 +32,7 @@ export const routes: Array<RouteConfig> = [
   },
   {
     path: '/test',
-    name: 'test',
+    name: 'Test',
     component: () => import('@/views/Test.vue')
   },
   // dialog
