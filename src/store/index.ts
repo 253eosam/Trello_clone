@@ -40,12 +40,12 @@ export default new Vuex.Store({
     setUser (state: any, pUser: UserType): void {
       // login & logout
       if (!pUser) {
-        localStorage.removeItem('user')
+        sessionStorage.removeItem('user')
         state.user = null
       } else {
         const user = new User(pUser)
         console.log(user)
-        localStorage.setItem('user', user.toJSON())
+        sessionStorage.setItem('user', user.toJSON())
         state.user = user
       }
     },
@@ -147,6 +147,19 @@ export default new Vuex.Store({
         res.isOk = true
         res.content = 'Task 수정 성공..!!'
       } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
+      return res
+    },
+    async findBoardByUid ({ commit }, uid: number) {
+      const fetchData = await apis.board.findByUid({ user: uid })
+      const res = {
+        status: fetchData.status,
+        isOk: false,
+        content: '',
+        fetchData: fetchData.data
+      }
+      if (fetchData.status === 200) {
+        res.content = 'board 리스트 조회 성공...!!'
+      } else res.content = '서버 상태 에러, 잠시 후 다시 이용해주세요.' // status
       return res
     }
   },

@@ -1,6 +1,6 @@
 import { RouteConfig } from 'vue-router'
 import Hello from '@/views/Hello.vue'
-
+import store from '@/store'
 export const routes: Array<RouteConfig> = [
   {
     path: '/',
@@ -21,6 +21,12 @@ export const routes: Array<RouteConfig> = [
     path: '/trello',
     name: 'Trello',
     component: () => import('@/views/Trello/Trello.vue'),
+    beforeEnter: (to, from, next) => {
+      if (store.getters.user === null) {
+        alert('잘못된 접근 방법입니다. 로그인 후 다시 이용해주세요.')
+        next({ name: 'SignIn' })
+      } else next()
+    },
     children: [
       {
         path: 'task/:tid',

@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
-import store from '@/store'
+import VueRouter from 'vue-router'
 import { routes } from './path'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -12,10 +12,10 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if ((to.name === 'Trello' || to.name === 'Task') && store.getters.user === null) {
-    alert('잘못된 접근 입니다. 로그인 후 다시 이용해 주세요.')
-    next({ name: 'SignIn' })
-    return
+  const session = JSON.parse(String(sessionStorage.getItem('user')))
+  console.log('session--------')
+  if (session && !store.getters.user) {
+    store.commit('setUser', session)
   }
   next()
 })

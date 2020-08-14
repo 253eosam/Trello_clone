@@ -1,27 +1,18 @@
 <template>
-  <section class="trello">
+  <div class="container">
     <t-header title="Trello"/>
-    <div class="trello__navigation">
+    <div class="con_util_wrap">
       <el-button @click="onClickAddBoard" icon="el-icon-folder-add" circle></el-button>
       <el-button @click="onClickSignOut" type="danger" plain>Logout</el-button>
     </div>
-    <div class="trello__body">
+    <section class="content">
       <el-row>
         <el-col v-for="(board, idx) in boards" :key="idx" :span="4">
           <boardComponent :bid="board.id"/>
         </el-col>
       </el-row>
-    </div>
-    <div v-if="boards.length" class="trello__footer">
-      <el-row>
-        <el-button style="height: 100%; width: 100%;" plain type="danger" icon="el-icon-delete">Delete Button
-        </el-button>
-      </el-row>
-    </div>
-    <el-dialog :visible.sync="isDialogOfDetailTask">
-      <router-view @closeDialog="isDialogOfDetailTask = false"></router-view>
-    </el-dialog>
-  </section>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -33,7 +24,7 @@ import 'dragula/dist/dragula.css'
 import { Board } from '@/model/Board'
 import { userSessionHandler } from '@/mixins/userSessionHandler'
 import taskAPI from '@/api/taskAPI'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Trello',
@@ -55,25 +46,7 @@ export default {
     ])
   },
   created () {
-    console.log('created Trello view')
-    // trello에서 boards api를 호출해서 아래 board components에 props로 bid를 뿌려준다.
-    const uid = this.$route.params.uid
-    boardAPI
-      .findByUid(
-        uid,
-        res => {
-          const rBoards = res.data.map(o => new Board(o))
-          console.log(rBoards)
-          this.boards = rBoards
-        },
-        err => {
-          console.log(err)
-        },
-        () => {
-          console.log('finish get user board info')
-        }
-      )
-    if (this.$route.params.tid) this.isDialogOfDetailTask = true
+    this.getBoardListByUid()
   },
   updated () {
     // feature drag & drop
@@ -93,6 +66,12 @@ export default {
     // --------------------------------------------------------------------
   },
   methods: {
+    ...mapActions(['findBoardByUid']),
+    async getBoardListByUid () {
+      const res = await this.findBoardByUid(this.user.id)
+      console.log(res)
+      this.boards = res.fetchData
+    },
     onDragAndDropTask (dragTaskId, dropBoardId) {
       taskAPI
         .updateBid(
@@ -149,7 +128,7 @@ export default {
 </script>
 
 <style>
-  .trello__navigation {
+  .con_util_wrap {
     width: 100%;
     margin-bottom: 30px;
     text-align: right;

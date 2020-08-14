@@ -1,7 +1,7 @@
 <template>
   <div class="board">
     <div>
-      <el-tag @click="onClickShowDialogForUpdateTag" class="board-tag" type="primary">{{tag.name}}</el-tag>
+      <el-tag @click="onClickShowDialogForUpdateTag" class="board-tag" type="primary">{{board.tag}}</el-tag>
       <el-dialog title="Update Tag Name" :visible.sync="tag.dialogVisible">
         <div class="block">
           <el-input v-model="tag.newName" placeholder="Please input your update Tag Name"></el-input>
@@ -12,10 +12,9 @@
         </div>
       </el-dialog>
     </div>
-    <ul class="card-list">
-      <input type="hidden" :value="bid" />
-      <li v-for="(task, idx) in tasks" :key="idx">
-          <TaskComponent :tid="task.id" :pTitle="task.title"></TaskComponent>
+    <ul class="card-list" :data-bid="bid">
+      <li v-for="(task, idx) in board.tasks" :key="idx">
+          <TaskComponent :tid="task.id"></TaskComponent>
       </li>
     </ul>
     <div @click="onClickAddTask">
@@ -31,6 +30,7 @@ import TaskComponent from './Task/Task.vue'
 import { Task } from '../../model/Task'
 import boardAPI from '../../api/boardAPI.js'
 import taskAPI from '../../api/taskAPI.js'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Board',
@@ -50,14 +50,20 @@ export default {
         color: 'primary',
         dialogVisible: false
       },
-      tasks: []
+      board: {
+        tag: '',
+        tasks: []
+      }
     }
   },
+  computed: {
+    ...mapGetters(['user'])
+  },
   created () {
-    console.log(`created board_${this.bid} component`)
-    this.findBoardInfoByBid()
+    // get board info by bid
   },
   methods: {
+
     findBoardInfoByBid () { // request api , move >> vuex action
       boardAPI
         .findByBid(
