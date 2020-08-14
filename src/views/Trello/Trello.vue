@@ -1,18 +1,18 @@
 <template>
-  <div class="trello">
-    <Header :subTitle="user.email"/>
-    <div class="trello-navigation">
+  <section class="trello">
+    <t-header title="Trello"/>
+    <div class="trello__navigation">
       <el-button @click="onClickAddBoard" icon="el-icon-folder-add" circle></el-button>
       <el-button @click="onClickSignOut" type="danger" plain>Logout</el-button>
     </div>
-    <div class="trello-body">
+    <div class="trello__body">
       <el-row>
         <el-col v-for="(board, idx) in boards" :key="idx" :span="4">
           <boardComponent :bid="board.id"/>
         </el-col>
       </el-row>
     </div>
-    <div v-if="boards.length" class="trello-footer">
+    <div v-if="boards.length" class="trello__footer">
       <el-row>
         <el-button style="height: 100%; width: 100%;" plain type="danger" icon="el-icon-delete">Delete Button
         </el-button>
@@ -21,12 +21,12 @@
     <el-dialog :visible.sync="isDialogOfDetailTask">
       <router-view @closeDialog="isDialogOfDetailTask = false"></router-view>
     </el-dialog>
-  </div>
+  </section>
 </template>
 
 <script>
 import boardComponent from '@/components/Board/Board.vue'
-import Header from '@/components/common/Header/Header.vue'
+import tHeader from '@/components/common/Header/Header.vue'
 import boardAPI from '../../api/boardAPI'
 import dragula from 'dragula'
 import 'dragula/dist/dragula.css'
@@ -39,7 +39,7 @@ export default {
   name: 'Trello',
   components: {
     boardComponent,
-    Header
+    tHeader
   },
   data () {
     return {
@@ -53,15 +53,6 @@ export default {
     ...mapGetters([
       'user'
     ])
-  },
-  watch: {
-    '$route.params.tid' (tid) {
-      console.log(`route change ${tid}`)
-      this.isDialogOfDetailTask = (tid !== undefined)
-    },
-    isDialogOfDetailTask (value) {
-      if (!value) this.$router.push({ name: 'Trello' })
-    }
   },
   created () {
     console.log('created Trello view')
@@ -87,18 +78,18 @@ export default {
   updated () {
     // feature drag & drop
     // rendering all child component then do instance dragula object
-    if (this.dragulaCard) this.dragulaCard.destroy()
-
-    this.dragulaCard = dragula([
-      ...Array.from(this.$el.querySelectorAll('.card-list'))
-    ]).on('drop', (el, wrap, target, siblings) => {
-      console.log('drop')
-      const dragTaskId = el.querySelector('.task>input').value
-      const dropBoardId = wrap.querySelector('.card-list>input').value
-      console.log(`drag : ${dragTaskId}, drop : ${dropBoardId}`)
-      this.onDragAndDropTask(dragTaskId, dropBoardId)
-    })
-    console.log('new instance')
+    // if (this.dragulaCard) this.dragulaCard.destroy()
+    //
+    // this.dragulaCard = dragula([
+    //   ...Array.from(this.$el.querySelectorAll('.card-list'))
+    // ]).on('drop', (el, wrap, target, siblings) => {
+    //   console.log('drop')
+    //   const dragTaskId = el.querySelector('.task>input').value
+    //   const dropBoardId = wrap.querySelector('.card-list>input').value
+    //   console.log(`drag : ${dragTaskId}, drop : ${dropBoardId}`)
+    //   this.onDragAndDropTask(dragTaskId, dropBoardId)
+    // })
+    // console.log('new instance')
     // --------------------------------------------------------------------
   },
   methods: {
@@ -158,12 +149,12 @@ export default {
 </script>
 
 <style>
-  .trello-navigation {
+  .trello__navigation {
     width: 100%;
     margin-bottom: 30px;
     text-align: right;
   }
-  .trello-footer {
+  .trello__footer {
 
   }
 </style>

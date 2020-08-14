@@ -18,7 +18,7 @@ export const routes: Array<RouteConfig> = [
     component: () => import('@/views/SignIn/SignUp.vue')
   },
   {
-    path: '/user/:uid/trello',
+    path: '/trello',
     name: 'Trello',
     component: () => import('@/views/Trello/Trello.vue'),
     children: [
@@ -34,12 +34,6 @@ export const routes: Array<RouteConfig> = [
     path: '/test',
     name: 'Test',
     component: () => import('@/views/Test.vue')
-  },
-  // dialog
-  {
-    path: 'global-dialog',
-    name: 'globalDialog',
-    component: () => import('@/components/common/Dialog/globalDialog.vue')
   },
   {
     path: '*',

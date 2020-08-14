@@ -1,75 +1,96 @@
 <template>
-  <div class="task" @click="onClickShowDetailTask" >
-    <input type="hidden" :value="tid"/>
-      <el-card class="task-card" >
-          <span v-if="title.length">{{title}}</span>
-          <input v-else style="width: 100%;" placeholder="input task.." ref="newTaskInput" class="task-first-title" type="text" v-model="newTitle" @keypress.enter="onEnterTitleOfInputTag"/>
-      </el-card>
+  <div class="task" :data-tid="tid" @click="isShowDialog = true">
+    <input
+      v-if="isShowInput"
+           placeholder="input task title.."
+           ref="newTaskInput"
+           class="task__title-input"
+           type="text"
+           v-model="newTaskTitle"
+           @keypress.enter="updateTitle"
+    />
+    <h3 v-else>{{task.title}}</h3>
+    <el-dialog
+      :visible.sync="isShowDialog"
+      center
+    >
+      <detail-task-view></detail-task-view>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="isShowDialog = false">Cancel</el-button>
+        <el-button type="primary" @click="isShowDialog = false">Confirm</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import taskAPI from '../../../api/taskAPI'
+import { mapActions } from 'vuex'
+import detailTaskView from './Detail'
 
 export default {
   name: 'Task',
-  props: ['tid', 'pTitle'],
+  props: ['tid'],
+  components: {
+    detailTaskView
+  },
   data () {
     return {
-      title: '',
-      newTitle: ''
-
+      task: {
+        title: ''
+      },
+      newTaskTitle: '',
+      isShowDialog: false
     }
   },
+  computed: {
+    isShowInput () {
+      return this.task.title.length === 0
+    }
+  },
+  created () {
+    this.fetchTaskInfo()
+  },
   mounted () {
-    if (this.pTitle === '' || this.pTitle === null) {
+    if (this.task.title === '') {
       this.$refs.newTaskInput.focus()
-    } else {
-      this.title = this.pTitle
     }
   },
   methods: {
-    onEnterTitleOfInputTag () {
-      if (this.newTitle === '' || this.newTitle === null) {
-        alert('title is Empty, Please full input...')
-        return
-      }
-      taskAPI
-        .update(
-          {
-            tid: this.tid,
-            title: this.newTitle
-          },
-          res => {
-            console.log(res)
-            this.title = res.data.title
-          },
-          err => {
-            console.log(err)
-          },
-          () => {
-            console.log('update task title, finish')
-          }
-        )
+    ...mapActions([
+      'findTaskByTid', 'updateTask'
+    ]),
+    async updateTitle () {
+      console.log('api handler update')
+      this.task.title = this.newTaskTitle
+      const res = await this.updateTask(this.task)
+      this.task = res.fetchData
     },
-    onClickShowDetailTask () {
-      if (!this.title.length) return
-      this.$router.push({ path: `/user/1/trello/task/${this.tid}` })
+    async fetchTaskInfo () {
+      console.log('api handler find')
+      const res = await this.findTaskByTid({
+        id: this.tid
+      })
+      console.log(res)
+      this.task = res.fetchData
     }
   }
 }
 </script>
 
-<style>
-  .task-card:hover {
+<style lang="scss">
+  .task{
+    border-radius: 40px;
+    background: #a6b9e5;
+    width: 130px;
+    height: 60px;
+    display: flex;
+    transition: transform 0.2s;
+    h3 input {
+      margin: auto;
+    }
+  }
+  .task:hover {
     background: #F56C6C;
     transform: rotate(10deg);
-  }
-  .task-card{
-    border-radius: 40px;
-    margin-bottom: 5px;
-    margin-right: 10px;
-    margin-left: 10px;
-    background: #EBEEF5;
   }
 </style>
