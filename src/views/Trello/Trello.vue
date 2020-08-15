@@ -2,8 +2,8 @@
   <div class="container">
     <t-header title="Trello"/>
     <div class="con_util_wrap">
-      <el-button @click="onClickAddBoard" icon="el-icon-folder-add" circle></el-button>
-      <el-button @click="onClickSignOut" type="danger" plain>Logout</el-button>
+      <el-button @click="onClickCreateBoardBtn" icon="el-icon-folder-add" circle></el-button>
+      <el-button @click="onClickSignOutBtn" type="danger" plain>Logout</el-button>
     </div>
     <section class="content">
       <el-row>
@@ -66,7 +66,7 @@ export default {
     // --------------------------------------------------------------------
   },
   methods: {
-    ...mapActions(['findBoardByUid']),
+    ...mapActions(['findBoardByUid', 'createBoard']),
     async getBoardListByUid () {
       const res = await this.findBoardByUid(this.user.id)
       console.log(res)
@@ -93,47 +93,28 @@ export default {
     onClickShowDetailTask () {
       this.isDialogOfDetailTask = true
     },
-    onClickAddBoard () {
+    async onClickCreateBoardBtn () {
       if (this.boards.length < this.maxBoardCnt) {
-        console.log('Do net service open, create board component')
-        boardAPI
-          .save(
-            {
-              tag: 'temp tag name',
-              user: {
-                id: this.user.id
-              }
-            },
-            res => {
-              const rBoard = new Board(res.data)
-              console.log(rBoard)
-              this.boards.push(rBoard)
-            },
-            err => {
-              console.log(err)
-            },
-            () => {
-              console.log('finish create board')
-            }
-          )
+        const res = await this.createBoard()
+        console.log(res)
+        this.$message(res.content)
+        this.boards.push(res.fetchData)
       } else {
-        alert('Don\'t create board..')
+        this.$message('Don\'t create board..')
       }
     },
-    onClickSignOut () {
-      userSessionHandler.methods.logout()
+    onClickSignOutBtn () {
+      this.$store.commit('setUser')
+      this.$router.push('/')
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
   .con_util_wrap {
     width: 100%;
     margin-bottom: 30px;
     text-align: right;
-  }
-  .trello__footer {
-
   }
 </style>

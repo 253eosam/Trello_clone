@@ -4,6 +4,7 @@ import { Loading } from 'element-ui'
 import { User, UserType } from '@/model/User'
 import apis from '../api'
 import { Task, TaskType } from '@/model/Task'
+import { BoardType } from '@/model/Board'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -105,13 +106,14 @@ export default new Vuex.Store({
       } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
       return res
     },
-    async saveTask ({ commit }, pTask: TaskType) {
+    async saveTask (_, pTask: TaskType) {
       const fetchData = await apis.task.save(pTask)
       console.log(fetchData)
       const res = {
         status: fetchData.status,
         isOk: false,
-        content: ''
+        content: '',
+        fetchData: fetchData.data
       }
       if (fetchData.status === 200) {
         res.isOk = true
@@ -119,7 +121,7 @@ export default new Vuex.Store({
       } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
       return res
     },
-    async findTaskByTid ({ commit }, payload: TaskType) {
+    async findTaskByTid (_, payload: TaskType) {
       const fetchData = await apis.task.findByTid(new Task(payload))
       console.log(fetchData)
       const res = {
@@ -130,11 +132,11 @@ export default new Vuex.Store({
       }
       if (fetchData.status === 200) {
         res.isOk = true
-        res.content = 'Task 찾기 성공..!!'
+        res.content = 'Task 조회 성공..!!'
       } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
       return res
     },
-    async updateTask ({ commit }, pTask: TaskType) {
+    async updateTask (_, pTask: TaskType) {
       const fetchData = await apis.task.update(pTask)
       console.log(fetchData)
       const res = {
@@ -149,7 +151,7 @@ export default new Vuex.Store({
       } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
       return res
     },
-    async findBoardByUid ({ commit }, uid: number) {
+    async findBoardByUid (_, uid: number) {
       const fetchData = await apis.board.findByUid({ user: uid })
       const res = {
         status: fetchData.status,
@@ -158,8 +160,66 @@ export default new Vuex.Store({
         fetchData: fetchData.data
       }
       if (fetchData.status === 200) {
+        res.isOk = true
         res.content = 'board 리스트 조회 성공...!!'
       } else res.content = '서버 상태 에러, 잠시 후 다시 이용해주세요.' // status
+      return res
+    },
+    async findBoardByBid (_, bid: number) {
+      const fetchData = await apis.board.findByBid({ id: bid })
+      const res = {
+        status: fetchData.status,
+        isOk: false,
+        content: '',
+        fetchData: fetchData.data
+      }
+      if (fetchData.status === 200) {
+        res.isOk = true
+        res.content = 'board 조회 성공..!!'
+      } else res.content = '서버 상태 에러, 잠시 후 다시 이용해주세요.' // status
+      return res
+    },
+    async createBoard (context, payload: BoardType) {
+      const fetchData = await apis.board.save({ tag: 'tag name', user: context.getters.user.id })
+      const res = {
+        status: fetchData.status,
+        isOk: false,
+        content: '',
+        fetchData: fetchData.data
+      }
+      if (fetchData.status === 200) {
+        res.isOk = true
+        res.content = 'baord 만들기 성공..!!'
+      } else res.content = '서버 상태 에러, 잠시 후 다시 이용해주세요.' // status
+      return res
+    },
+    async updateBoard (context, payload: BoardType) {
+      payload.user = context.getters.user.id
+      const fetchData = await apis.board.update(payload)
+      const res = {
+        status: fetchData.status,
+        isOk: false,
+        content: '',
+        fetchData: fetchData.data
+      }
+      if (fetchData.status === 200) {
+        res.isOk = true
+        res.content = 'board 수정 성공..!!'
+      } else res.content = '서버 상태 에러, 잠시 후 다시 이용해주세요' // status
+      return res
+    },
+    async deleteBoard (context, bid: number) {
+      const fetchData = await apis.board.delete({ id: bid })
+      const res = {
+        status: fetchData.status,
+        isOk: false,
+        content: '',
+        fetchData: fetchData.data
+      }
+      if (fetchData.status === 200) {
+        res.isOk = true
+        res.content = 'board 삭제 성공..!!'
+      } else res.content = '서버 상태 에러, 잠시 후 다시 이용해주세요' // status
       return res
     }
   },

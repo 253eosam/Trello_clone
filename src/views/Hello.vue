@@ -1,13 +1,18 @@
 <template>
   <div class="hello">
     <h1 class="hello__title">Hello</h1>
-    <el-dropdown @command="handleCommand">
-      <el-button @click="onClickSessionBtn" icon="el-icon-user" :type="session ? 'primary' : 'danger'" circle></el-button>
-      <el-dropdown-menu v-if="session" slot="dropdown">
-        <el-dropdown-item command="Trello">Start Trello</el-dropdown-item>
-        <el-dropdown-item command="Test">연구실</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+      <span v-if="session" class="hello__nav">
+        <ul>
+          <li>
+            <el-button @click="$router.push({ name: 'Trello' })" :type="session ? 'primary' : 'danger'" plain>Trello</el-button>
+          </li>
+          <li>
+            <el-button @click="$router.push({ name: 'Test' })" :type="session ? 'primary' : 'danger'" plain>연구실</el-button>
+          </li>
+        </ul>
+      </span>
+      <br>
+      <el-button @click="onClickSessionBtn" icon="el-icon-user" :type="session ? 'danger' : 'primary'" plain>{{session ? '로그아웃' : '로그인'}}</el-button>
   </div>
 </template>
 
@@ -54,7 +59,7 @@ export default {
       font-size: 82px;
       text-align: center;
     }
-    .hello__nav ul{
+    ul{
       list-style: none;
     }
   }

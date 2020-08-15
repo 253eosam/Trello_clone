@@ -1,5 +1,5 @@
 <template>
-  <div class="task" :data-tid="tid" @click="isShowDialog = true">
+  <div class="task" :data-tid="tid" @click="onClickShowDetailDialog">
     <input
       v-if="isShowInput"
            placeholder="input task title.."
@@ -11,13 +11,13 @@
     />
     <h3 v-else>{{task.title}}</h3>
     <el-dialog
-      :visible.sync="isShowDialog"
+      :visible.sync="detailDialog.isShowDialog"
       center
     >
       <detail-task-view></detail-task-view>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="isShowDialog = false">Cancel</el-button>
-        <el-button type="primary" @click="isShowDialog = false">Confirm</el-button>
+        <el-button @click="detailDialog.isShowDialog = false">Cancel</el-button>
+        <el-button type="primary" @click="detailDialog.isShowDialog = false">Confirm</el-button>
       </span>
     </el-dialog>
   </div>
@@ -39,12 +39,14 @@ export default {
         title: ''
       },
       newTaskTitle: '',
-      isShowDialog: false
+      detailDialog: {
+        isShowDialog: false
+      }
     }
   },
   computed: {
     isShowInput () {
-      return this.task.title.length === 0
+      return this.task.title === null || this.task.title.length === 0
     }
   },
   created () {
@@ -59,6 +61,10 @@ export default {
     ...mapActions([
       'findTaskByTid', 'updateTask'
     ]),
+    onClickShowDetailDialog () {
+      if (this.isShowInput) return
+      this.detailDialog.isShowDialog = true
+    },
     async updateTitle () {
       console.log('api handler update')
       this.task.title = this.newTaskTitle
@@ -79,18 +85,19 @@ export default {
 
 <style lang="scss">
   .task{
+    cursor: pointer;
     border-radius: 40px;
     background: #a6b9e5;
     width: 130px;
     height: 60px;
     display: flex;
     transition: transform 0.2s;
+    &:hover {
+      background: #F56C6C;
+      transform: rotate(10deg);
+    }
     h3 input {
       margin: auto;
     }
-  }
-  .task:hover {
-    background: #F56C6C;
-    transform: rotate(10deg);
   }
 </style>

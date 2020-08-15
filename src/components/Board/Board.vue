@@ -1,14 +1,14 @@
 <template>
   <div class="board">
-    <div>
-      <el-tag @click="onClickShowDialogForUpdateTag" class="board-tag" type="primary">{{board.tag}}</el-tag>
-      <el-dialog title="Update Tag Name" :visible.sync="tag.dialogVisible">
+    <div class="board-title">
+      <el-tag @click="onClickShowTagDialog" class="board-tag" type="primary">{{board.tag}}</el-tag>
+      <el-dialog title="Update Tag Name" :visible.sync="tagDialog.isShow">
         <div class="block">
-          <el-input v-model="tag.newName" placeholder="Please input your update Tag Name"></el-input>
+          <el-input v-model="tagDialog.tag" placeholder="Please input your update Tag Name"></el-input>
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button @click="onClickUpdateBtnOfTagDialog" type="primary">Update</el-button>
-          <el-button @click="tag.dialogVisible = false, tag.newName = ''">Cancel</el-button>
+          <el-button @click="onClickDeleteBtnOfTagDialog" type="danger">Delete</el-button>
         </div>
       </el-dialog>
     </div>
@@ -17,9 +17,9 @@
           <TaskComponent :tid="task.id"></TaskComponent>
       </li>
     </ul>
-    <div @click="onClickAddTask">
-      <el-card shadow="hover" style="cursor: pointer;">
-        <span>+</span>
+    <div class="card-util__btn" @click="onClickCreateTaskBtn">
+      <el-card shadow="hover">
+        <p>+</p>
       </el-card>
     </div>
   </div>
@@ -44,11 +44,9 @@ export default {
   },
   data () {
     return {
-      tag: {
-        name: 'Task',
-        newName: '',
-        color: 'primary',
-        dialogVisible: false
+      tagDialog: {
+        tag: 'Task',
+        isShow: false
       },
       board: {
         tag: '',
@@ -61,101 +59,68 @@ export default {
   },
   created () {
     // get board info by bid
+    this.getBoardInfoByBid()
   },
   methods: {
-
-    findBoardInfoByBid () { // request api , move >> vuex action
-      boardAPI
-        .findByBid(
-          this.bid,
-          res => {
-            console.log(res)
-            this.tag.name = res.data.tag
-            this.tasks = res.data.tasks
-          },
-          err => console.log(err),
-          () => console.log('finish get board info')
-        )
+    ...mapActions(['findBoardByBid', 'updateBoard', 'deleteBoard', 'saveTask']),
+    async getBoardInfoByBid () { // props bid
+      const res = await this.findBoardByBid(this.bid)
+      console.log(res)
+      this.board = res.fetchData
     },
-    onEmitDeleteTask () {
-      console.log('Board component, onEmitDeleteTask')
+    async onClickCreateTaskBtn () {
+      const res = await this.saveTask({ board: this.bid })
+      console.log(res)
+      this.$message(res.content)
+      if (res.isOk) {
+        this.board.tasks.push(res.fetchData)
+      }
     },
-    onClickAddTask () {
-      // request api
-      taskAPI
-        .save(
-          {
-            title: '',
-            content: '',
-            board: {
-              id: this.bid
-            }
-          },
-          res => {
-            console.log(res)
-            this.tasks.push(new Task(res.data))
-          },
-          err => {
-            console.log(err)
-          },
-          () => console.log('finish create task ')
-        )
+    onClickShowTagDialog () {
+      this.tagDialog.isShow = true
+      this.tagDialog.tag = this.board.tag
     },
-    onClickShowDialogForUpdateTag () {
-      console.log('Board component, onClickUpdateTagName method')
-      this.tag.dialogVisible = true
-      this.tag.newName = this.tag.name
+    async onClickUpdateBtnOfTagDialog () {
+      this.board.tag = this.tagDialog.tag
+      const res = await this.updateBoard(this.board)
+      console.log(res)
+      this.$message(res.content)
+      if (res.isOk) {
+        this.board = res.fetchData
+        this.tagDialog.isShow = false
+      }
     },
-    onClickUpdateBtnOfTagDialog () {
-      boardAPI
-        .update(
-          {
-            bid: this.bid,
-            tag: this.tag.newName
-          },
-          res => {
-            console.log(res)
-            this.tag.name = this.tag.newName
-          },
-          err => {
-            console.log(err)
-          },
-          () => {
-            console.log('onClickUpdateBtnOfTagDialog board component, finally')
-            this.tag.dialogVisible = false
-          }
-        )
+    async onClickDeleteBtnOfTagDialog () {
+      this.$message('서비스 준비중')
+      const res = await this.deleteBoard(this.bid)
+      console.log(res)
+      this.$message(res.content)
+      if (res.isOk) {
+        this.$destroy(this)
+      }
     }
   }
 }
 
 </script>
 
-<style>
-  .board {
-    padding: 5px;
-    background: white;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    border-radius: 10px;
+<style lang="scss">
+.board {
+  margin: 5px;
+  .board-title>span {
+    cursor: pointer;
   }
   .card-list {
-    overflow: auto;
-    height: 400px;
-  }
-
-  .board-tag {
-    cursor: pointer;
-  }
-
-  ul {
-    padding-inline-start: 0px;
+    height: 450px;
     list-style: none;
+    padding-inline-start: 0px;
+    overflow: auto;
+    li {
+      padding: 4px;
+    }
   }
-
-  li {
-    padding-bottom: 4px;
+  .card-util__btn>.el-card {
     cursor: pointer;
   }
+}
 </style>
