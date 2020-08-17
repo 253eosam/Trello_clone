@@ -1,5 +1,5 @@
 <template>
-  <div  class="task" :data-tid="tid">
+  <div draggable @dragstart="onDragStart" class="task" :data-tid="tid">
     <div class="task__content" @click="onClickShowDetailDialog" >
       <input
         v-if="isShowInput"
@@ -60,6 +60,9 @@ export default {
     ...mapActions([
       'findTaskByTid', 'updateTask'
     ]),
+    onDragStart (event) {
+      console.log(event)
+    },
     onClickShowDetailDialog () {
       if (this.isShowInput) return
       this.detailDialog.isShowDialog = true

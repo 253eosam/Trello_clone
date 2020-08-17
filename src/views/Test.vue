@@ -1,28 +1,68 @@
 <template>
   <section class="test">
     <h1>연구실</h1>
-    <hr>
+    <hr />
     <div class="test__body">
-      <el-row>
-        <el-col span='12'>
-          <board-component bid="20"></board-component>
-        </el-col>
-        <el-col span='12'>
-          <board-component bid="31"></board-component>
-        </el-col>
-      </el-row>
-    </div>
-    <div class="test__footer">
+      <div id="space1" class="space" @drop="onDrop" @dragover="onDragOver">
+        <div
+          class="block"
+          v-for="(color, idx) in colors"
+          :key="idx"
+          :id="idx"
+          draggable
+          @dragstart="onDragStart"
+          :style="`background: ${color};`"
+        ></div>
+      </div>
+      <div id="space2" @drop="onDrop" @dragover="onDragOver" style="background: slategrey;" class="space"></div>
     </div>
   </section>
 </template>
 
 <script>
-import BoardComponent from './../components/Board/Board'
 export default {
   name: 'Test',
-  components: {
-    BoardComponent
+  data () {
+    return {
+      colors: ['red', 'blue', 'green']
+    }
+  },
+  methods: {
+    onDragStart (event) {
+      console.log('start')
+      console.log(event)
+      // Add this element's id to the drag payload so the drop handler will
+      // know which element to add to its tree
+      event.dataTransfer.setData('text', event.target.id)
+      event.dataTransfer.effectAllowed = 'move'
+    },
+    onDragEnd (event) {
+      console.log('end')
+      console.log(event)
+    },
+    onDragOver (event) {
+      console.log('over')
+      console.log(event)
+      event.preventDefault()
+      // Set the dropEffect to move
+      event.dataTransfer.dropEffect = 'move'
+    },
+    onDragEnter (event) {
+      console.log('enter')
+      console.log(event)
+    },
+    onDrag (event) {
+      console.log('drag')
+      console.log(event)
+    },
+    onDrop (event) {
+      console.log('drop')
+      console.log(event)
+      event.preventDefault()
+      // Get the id of the target and add the moved element to the target's DOM
+      const data = event.dataTransfer.getData('text')
+      event.target.appendChild(document.getElementById(data))
+    }
   }
 }
 </script>
@@ -36,9 +76,21 @@ export default {
   .form__button--disabled {}
 -->
 <style lang="scss" scoped>
-.task {
-  .task__body {
+.test {
+  height: 860px;
+  .test__body {
     padding: 0.01em 16px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    .space {
+      width: 50%;
+    }
+    .block {
+      margin: 10px;
+      width: 50px;
+      height: 50px;
+    }
   }
 }
 </style>
