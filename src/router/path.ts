@@ -26,15 +26,15 @@ export const routes: Array<RouteConfig> = [
         alert('잘못된 접근 방법입니다. 로그인 후 다시 이용해주세요.')
         next({ name: 'SignIn' })
       } else next()
-    },
-    children: [
-      {
-        path: 'task/:tid',
-        name: 'Task',
-        props: true,
-        component: () => import('@/views/Trello/Board/Task/Detail.vue')
-      }
-    ]
+    }
+    // children: [
+    //   {
+    //     path: 'task/:tid',
+    //     name: 'Task',
+    //     props: true,
+    //     component: () => import('@/views/Trello/Board/Task/Detail.vue')
+    //   }
+    // ]
   },
   {
     path: '/test',

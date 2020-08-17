@@ -4,7 +4,7 @@
       <el-tag @click="onClickShowTagDialog" class="board-tag" type="primary">{{board.tag}}</el-tag>
       <el-dialog title="Update Tag Name" :visible.sync="tagDialog.isShow">
         <div class="block">
-          <el-input v-model="tagDialog.tag" placeholder="Please input your update Tag Name"></el-input>
+          <el-input v-model="tagDialog.tag" placeholder="Please input your update Tag Name"/>
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button @click="onClickUpdateBtnOfTagDialog" type="primary">Update</el-button>
@@ -28,8 +28,6 @@
 <script>
 import TaskComponent from './Task/Task.vue'
 import { Task } from '../../model/Task'
-import boardAPI from '../../api/boardAPI.js'
-import taskAPI from '../../api/taskAPI.js'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -96,7 +94,11 @@ export default {
       console.log(res)
       this.$message(res.content)
       if (res.isOk) {
-        this.$destroy(this)
+        // destroy the vue listeners, etc
+        this.$destroy()
+
+        // remove the element from the DOM
+        this.$el.parentNode.removeChild(this.$el)
       }
     }
   }
@@ -112,15 +114,26 @@ export default {
   }
   .card-list {
     height: 450px;
+    padding-bottom: 10px;
+    padding-top: 10px;
     list-style: none;
     padding-inline-start: 0px;
     overflow: auto;
     li {
       padding: 4px;
     }
+    li>div {
+      margin: auto;
+    }
   }
   .card-util__btn>.el-card {
     cursor: pointer;
+    .el-card__body {
+      height: 25px;
+      p {
+        margin: auto;
+      }
+    }
   }
 }
 </style>

@@ -1,31 +1,30 @@
 <template>
-  <div class="task" :data-tid="tid" @click="onClickShowDetailDialog">
-    <input
-      v-if="isShowInput"
-           placeholder="input task title.."
-           ref="newTaskInput"
-           class="task__title-input"
-           type="text"
-           v-model="newTaskTitle"
-           @keypress.enter="updateTitle"
-    />
-    <h3 v-else>{{task.title}}</h3>
+  <div  class="task" :data-tid="tid">
+    <div class="task__content" @click="onClickShowDetailDialog" >
+      <input
+        v-if="isShowInput"
+        placeholder="input task title.."
+        ref="newTaskInput"
+        class="task__title-input"
+        type="text"
+        v-model="newTaskTitle"
+        @keypress.enter="updateTitle"
+      />
+      <h3 v-else>{{task.title}}</h3>
+    </div>
     <el-dialog
+      destroy-on-close
       :visible.sync="detailDialog.isShowDialog"
-      center
+      :title="task.title"
     >
-      <detail-task-view></detail-task-view>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="detailDialog.isShowDialog = false">Cancel</el-button>
-        <el-button type="primary" @click="detailDialog.isShowDialog = false">Confirm</el-button>
-      </span>
+      <detail-task-view @emitClose="onEmitCloseDialog" :task="task"/>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import detailTaskView from './Detail'
+import detailTaskView from '@/views/Trello/Board/Task/Detail'
 
 export default {
   name: 'Task',
@@ -65,8 +64,15 @@ export default {
       if (this.isShowInput) return
       this.detailDialog.isShowDialog = true
     },
+    async onEmitCloseDialog (payload) {
+      if (payload !== undefined) await this.updateTaskInfo(payload)
+      this.detailDialog.isShowDialog = false
+    },
+    async onClickUpdateTaskBtn () {
+      await this.updateTitle()
+      this.detailDialog.isShowDialog = false
+    },
     async updateTitle () {
-      console.log('api handler update')
       this.task.title = this.newTaskTitle
       const res = await this.updateTask(this.task)
       this.task = res.fetchData
@@ -78,6 +84,13 @@ export default {
       })
       console.log(res)
       this.task = res.fetchData
+    },
+    async updateTaskInfo (task) {
+      console.log(task)
+      const res = await this.updateTask(task)
+      console.log(res)
+      this.$message(res.content)
+      this.task = res.fetchData
     }
   }
 }
@@ -85,19 +98,26 @@ export default {
 
 <style lang="scss">
   .task{
-    cursor: pointer;
     border-radius: 40px;
     background: #a6b9e5;
     width: 130px;
     height: 60px;
     display: flex;
-    transition: transform 0.2s;
-    &:hover {
-      background: #F56C6C;
-      transform: rotate(10deg);
-    }
-    h3 input {
-      margin: auto;
+    // &:hover {
+    //   transition: transform 0.2s;
+    //   transform: rotate(10deg);
+    // }
+    .task__content {
+      width: 100%;
+      height: 100%;
+      &:hover {
+        cursor: pointer;
+        border-radius: 40px;
+        background: #F56C6C;
+      }
+      h3 input {
+        margin: auto;
+      }
     }
   }
 </style>

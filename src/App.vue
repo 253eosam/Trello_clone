@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import { Loading } from 'element-ui'
-
 export default {
   name: 'App',
   data () {
@@ -18,17 +16,6 @@ export default {
     isLoading () {
       return this.$store.getters.isLoading
     }
-  },
-  watch: {
-    isLoading (newValue) {
-      if (newValue) {
-        this.loadingInstance = Loading.service({ fullscreen: true })
-      } else {
-        this.loadingInstance.close()
-      }
-    }
-  },
-  methods: {
   }
 }
 </script>

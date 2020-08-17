@@ -3,7 +3,7 @@
     <t-header title="Trello"/>
     <div class="con_util_wrap">
       <el-button @click="onClickCreateBoardBtn" icon="el-icon-folder-add" circle></el-button>
-      <el-button @click="onClickSignOutBtn" type="danger" plain>Logout</el-button>
+      <el-button @click="onClickGoHome" icon="el-icon-s-home" circle></el-button>
     </div>
     <section class="content">
       <el-row>
@@ -18,12 +18,9 @@
 <script>
 import boardComponent from '@/components/Board/Board.vue'
 import tHeader from '@/components/common/Header/Header.vue'
-import boardAPI from '../../api/boardAPI'
 import dragula from 'dragula'
 import 'dragula/dist/dragula.css'
 import { Board } from '@/model/Board'
-import { userSessionHandler } from '@/mixins/userSessionHandler'
-import taskAPI from '@/api/taskAPI'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -72,23 +69,8 @@ export default {
       console.log(res)
       this.boards = res.fetchData
     },
-    onDragAndDropTask (dragTaskId, dropBoardId) {
-      taskAPI
-        .updateBid(
-          {
-            tid: dragTaskId,
-            bid: dropBoardId
-          },
-          res => {
-            console.log(res)
-          },
-          err => {
-            console.log(err)
-          },
-          () => {
-            console.log('finish onDragAndDropTask')
-          }
-        )
+    onDragAndDropTask () {
+      this.$message('서비스 준비중...')
     },
     onClickShowDetailTask () {
       this.isDialogOfDetailTask = true
@@ -103,8 +85,7 @@ export default {
         this.$message('Don\'t create board..')
       }
     },
-    onClickSignOutBtn () {
-      this.$store.commit('setUser')
+    onClickGoHome () {
       this.$router.push('/')
     }
   }

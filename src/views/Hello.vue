@@ -61,6 +61,10 @@ export default {
     }
     ul{
       list-style: none;
+      padding-inline-start: 0px;
+      li {
+        padding: 2px;
+      }
     }
   }
 
