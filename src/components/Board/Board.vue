@@ -1,5 +1,5 @@
 <template>
-  <div class="board">
+  <article class="board">
     <div class="board-title">
       <el-tag @click="onClickShowTagDialog" class="board-tag" type="primary">{{board.tag}}</el-tag>
       <el-dialog title="Update Tag Name" :visible.sync="tagDialog.isShow">
@@ -22,7 +22,7 @@
         <p>+</p>
       </el-card>
     </div>
-  </div>
+  </article>
 </template>
 
 <script>

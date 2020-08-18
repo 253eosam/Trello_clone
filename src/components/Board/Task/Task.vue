@@ -1,5 +1,5 @@
 <template>
-  <div draggable @dragstart="onDragStart" class="task" :data-tid="tid">
+  <article draggable @dragstart="onDragStart" class="task" :data-tid="tid">
     <div class="task__content" @click="onClickShowDetailDialog" >
       <input
         v-if="isShowInput"
@@ -12,14 +12,16 @@
       />
       <h3 v-else>{{task.title}}</h3>
     </div>
-    <el-dialog
-      destroy-on-close
-      :visible.sync="detailDialog.isShowDialog"
-      :title="task.title"
-    >
-      <detail-task-view @emitClose="onEmitCloseDialog" :task="task"/>
-    </el-dialog>
-  </div>
+    <article>
+      <el-dialog
+        destroy-on-close
+        :visible.sync="detailDialog.isShowDialog"
+        :title="task.title"
+      >
+        <detail-task-view @emitClose="onEmitCloseDialog" :task="task"/>
+      </el-dialog>
+    </article>
+  </article>
 </template>
 
 <script>

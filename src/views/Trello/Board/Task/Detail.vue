@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <div>
     <el-tag>{{ task.board.tag }}</el-tag>
     <hr />
     <textarea v-model="updateTask.content"></textarea>
@@ -9,7 +9,7 @@
       >
       <el-button @click="onClickCancelBtn">Cancel</el-button>
     </span>
-  </section>
+  </div>
 </template>
 
 <script>

@@ -16,6 +16,15 @@
       </div>
       <div id="space2" @drop="onDrop" @dragover="onDragOver" style="background: slategrey;" class="space"></div>
     </div>
+    <hr />
+    <div class="box-model">
+      <img src="http://homejjang.cdn1.cafe24.com/imgmap.gif" alt="" usemap="#001" border="0">
+      <map name="001">
+        <area shape="rect" coords="42,41,154,66" href="https://www.naver.com" target="_blank">
+        <area shape="rect" coords="42,76,152,100" href="https://www.daum.net" target="_blank">
+        <area shape="rect" coords="40,113,150,138" href="https://www.google.com" target="_blank">
+      </map>
+    </div>
   </section>
 </template>
 
@@ -93,4 +102,20 @@ export default {
     }
   }
 }
+  .box-model {
+    background: red;
+    width: 100px;
+    min-height: 50px;
+    max-height: 150px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: blue;
+    padding: 10px;
+    margin: 10px;
+    p {
+      display: inline;
+      color: deepskyblue;
+      background: yellow;
+    }
+  }
 </style>
