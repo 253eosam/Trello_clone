@@ -14,16 +14,59 @@
           :style="`background: ${color};`"
         ></div>
       </div>
-      <div id="space2" @drop="onDrop" @dragover="onDragOver" style="background: slategrey;" class="space"></div>
+      <div
+        id="space2"
+        @drop="onDrop"
+        @dragover="onDragOver"
+        style="background: slategrey;"
+        class="space"
+      ></div>
+    </div>
+    <hr />
+    <div class="image-map">
+      <img
+        src="http://homejjang.cdn1.cafe24.com/imgmap.gif"
+        alt=""
+        usemap="#001"
+        border="0"
+      />
+      <map name="001">
+        <area
+          shape="rect"
+          coords="42,41,154,66"
+          href="https://www.naver.com"
+          target="_blank"
+        />
+        <area
+          shape="rect"
+          coords="42,76,152,100"
+          href="https://www.daum.net"
+          target="_blank"
+        />
+        <area
+          shape="rect"
+          coords="40,113,150,138"
+          href="https://www.google.com"
+          target="_blank"
+        />
+      </map>
     </div>
     <hr />
     <div class="box-model">
-      <img src="http://homejjang.cdn1.cafe24.com/imgmap.gif" alt="" usemap="#001" border="0">
-      <map name="001">
-        <area shape="rect" coords="42,41,154,66" href="https://www.naver.com" target="_blank">
-        <area shape="rect" coords="42,76,152,100" href="https://www.daum.net" target="_blank">
-        <area shape="rect" coords="40,113,150,138" href="https://www.google.com" target="_blank">
-      </map>
+      <div class="box1" />
+      <div class="box1">
+        <div class="box2"></div>
+      </div>
+    </div>
+    <hr />
+    <div style="height: 300px; width: 200px;">
+    <img
+      src="https://images.unsplash.com/photo-1597614456709-fda746f1a2d6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+      alt="대머리"
+      width="200"
+      height="300"
+    />
+    <div style="height: 150px; width:200px; background: white;"></div>
     </div>
   </section>
 </template>
@@ -85,8 +128,10 @@ export default {
   .form__button--disabled {}
 -->
 <style lang="scss" scoped>
+
 .test {
-  height: 860px;
+  text-align: initial;
+  height: 250px;
   .test__body {
     padding: 0.01em 16px;
     width: 100%;
@@ -102,20 +147,44 @@ export default {
     }
   }
 }
-  .box-model {
-    background: red;
-    width: 100px;
-    min-height: 50px;
-    max-height: 150px;
-    border-style: solid;
-    border-width: 5px;
-    border-color: blue;
-    padding: 10px;
-    margin: 10px;
-    p {
-      display: inline;
-      color: deepskyblue;
-      background: yellow;
-    }
+.image-map {
+  background: red;
+  width: 100px;
+  min-height: 50px;
+  max-height: 150px;
+  border-style: solid;
+  border-width: 5px;
+  border-color: blue;
+  padding: 10px;
+  margin: 10px;
+  p {
+    display: inline;
+    color: deepskyblue;
+    background: yellow;
   }
+}
+.box-model {
+  box-sizing: content-box;
+  // content
+  width: 300px;
+  height: 100px;
+  background: red;
+  // border
+  border-color: blue;
+  border-width: 5px;
+  border-style: solid;
+  .box1 {
+    display: inline-block;
+    width: 100px;
+    height: 80px;
+    border: 10px solid green;
+    background: aqua;
+  }
+  .box2 {
+    width: 50px;
+    height: 50px;
+    border: 5px solid greenyellow;
+    background: violet;
+  }
+}
 </style>
