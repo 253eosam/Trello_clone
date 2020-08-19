@@ -56,27 +56,25 @@ export default {
     ...mapGetters(['user'])
   },
   created () {
-    this.getBoardInfoByBid()
+    this.getBoardInfoByBid(this.bid)
   },
   methods: {
     ...mapActions(['findBoardByBid', 'updateBoard', 'deleteBoard', 'saveTask', 'updateTask']),
-    onDrop (event) {
+    async onDrop (event) {
       /*
           Note that each handler calls preventDefault() to prevent additional event processing for this event
           (such as touch events or pointer events).
          */
       event.preventDefault()
-      console.log(event.dataTransfer)
-      const dropTid = event.dataTransfer.getData('text')
-      console.log(dropTid)
+      console.log(event)
+      const dropData = {
+        tid: event.dataTransfer.getData('tid'),
+        bid: event.dataTransfer.getData('bid')
+      }
       const dropZoneBid = event.target.dataset.bid
-      console.log(`drop tid : ${dropTid}`)
-      console.log(`drop zone bid : ${dropZoneBid}`)
-      this.updateTaskInfo(dropTid, dropZoneBid).then(() => {
-        // event.target.appendChild()
-        console.log('drop here')
-        console.log(event.dataTransfer.getData('text'))
-      })
+      const res = await this.updateTaskInfo(dropData.tid, dropZoneBid)
+      console.log(res.fetchData)
+      this.board.tasks.push(res.fetchData)
     },
     onDragOver (event) {
       event.preventDefault()
@@ -88,9 +86,10 @@ export default {
       })
       console.log(res)
       this.$message(res.content)
+      return res
     },
-    async getBoardInfoByBid () { // props bid
-      const res = await this.findBoardByBid(this.bid)
+    async getBoardInfoByBid (bid) { // props bid
+      const res = await this.findBoardByBid(bid)
       console.log(res)
       this.board = res.fetchData
     },

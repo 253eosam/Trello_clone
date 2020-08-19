@@ -62,11 +62,15 @@ export default {
     ...mapActions([
       'findTaskByTid', 'updateTask'
     ]),
-    onDragEnd (event) {
-      console.log(event)
-    },
     onDragStart (event) {
-      event.dataTransfer.setData('text', event.target.dataset.tid)
+      console.info('drag start')
+      event.dataTransfer.setData('tid', event.target.dataset.tid)
+      event.dataTransfer.setData('bid', this.task.board.id)
+    },
+    onDragEnd (event) {
+      console.log('drag end')
+      console.log(event)
+      console.log(event.target.parentNode.parentNode.removeChild(this.$el.parentNode))
     },
     onClickShowDetailDialog () {
       if (this.isShowInput) return
