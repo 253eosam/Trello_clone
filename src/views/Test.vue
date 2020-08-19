@@ -1,9 +1,11 @@
 <template>
   <section class="test">
     <h1>연구실</h1>
-    <hr />
+    <hr/>
     <div class="test__body">
-      <div id="space1" class="space">
+      <div id="space1"
+           @drop="onDrop"
+           @dragover="onDragOver" class="space">
         <div
           class="block"
           v-for="(color, idx) in colors"
@@ -13,7 +15,10 @@
           :data-tempId="idx"
           @dragstart="onDragStart"
           :style="`background: ${color};`"
-        ></div>
+        >
+          <p draggable
+             @dragstart="onDragStartEl">테스트 </p>
+        </div>
       </div>
       <div
         id="space2"
@@ -23,7 +28,7 @@
         class="space"
       ></div>
     </div>
-    <hr />
+    <hr/>
     <div class="image-map">
       <img
         src="http://homejjang.cdn1.cafe24.com/imgmap.gif"
@@ -52,22 +57,22 @@
         />
       </map>
     </div>
-    <hr />
+    <hr/>
     <div class="box-model">
-      <div class="box1" />
+      <div class="box1"/>
       <div class="box1">
         <div class="box2"></div>
       </div>
     </div>
-    <hr />
+    <hr/>
     <div style="height: 300px; width: 200px;">
-    <img
-      src="https://images.unsplash.com/photo-1597614456709-fda746f1a2d6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-      alt="대머리"
-      width="200"
-      height="300"
-    />
-    <div style="height: 150px; width:200px; background: white;"></div>
+      <img
+        src="https://images.unsplash.com/photo-1597614456709-fda746f1a2d6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+        alt="대머리"
+        width="200"
+        height="300"
+      />
+      <div style="height: 150px; width:200px; background: white;"></div>
     </div>
   </section>
 </template>
@@ -87,6 +92,15 @@ export default {
       // Add this element's id to the drag payload so the drop handler will
       // know which element to add to its tree
       const getDatasetTempId = event.target.dataset.tempid
+      event.dataTransfer.setData('text', getDatasetTempId)
+    },
+    onDragStartEl (event) {
+      console.log('start')
+      console.log(event)
+      // Add this element's id to the drag payload so the drop handler will
+      // know which element to add to its tree
+      const getDatasetTempId = event.target.dataset.pid
+      console.log(getDatasetTempId)
       event.dataTransfer.setData('text', getDatasetTempId)
     },
     onDragEnd (event) {
@@ -114,6 +128,7 @@ export default {
       event.preventDefault()
       // Get the id of the target and add the moved element to the target's DOM
       const data = event.dataTransfer.getData('text')
+      console.log(data)
       event.target.appendChild(document.getElementById(data))
     }
   }
@@ -130,62 +145,70 @@ export default {
 -->
 <style lang="scss" scoped>
 
-.test {
-  text-align: initial;
-  height: 250px;
-  .test__body {
-    padding: 0.01em 16px;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    .space {
-      width: 50%;
+  .test {
+    text-align: initial;
+    height: 250px;
+
+    .test__body {
+      padding: 0.01em 16px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+
+      .space {
+        width: 50%;
+      }
+
+      .block {
+        margin: 10px;
+        width: 50px;
+        height: 50px;
+      }
     }
-    .block {
-      margin: 10px;
+  }
+
+  .image-map {
+    background: red;
+    width: 100px;
+    min-height: 50px;
+    max-height: 150px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: blue;
+    padding: 10px;
+    margin: 10px;
+
+    p {
+      display: inline;
+      color: deepskyblue;
+      background: yellow;
+    }
+  }
+
+  .box-model {
+    box-sizing: content-box;
+    // content
+    width: 300px;
+    height: 100px;
+    background: red;
+    // border
+    border-color: blue;
+    border-width: 5px;
+    border-style: solid;
+
+    .box1 {
+      display: inline-block;
+      width: 100px;
+      height: 80px;
+      border: 10px solid green;
+      background: aqua;
+    }
+
+    .box2 {
       width: 50px;
       height: 50px;
+      border: 5px solid greenyellow;
+      background: violet;
     }
   }
-}
-.image-map {
-  background: red;
-  width: 100px;
-  min-height: 50px;
-  max-height: 150px;
-  border-style: solid;
-  border-width: 5px;
-  border-color: blue;
-  padding: 10px;
-  margin: 10px;
-  p {
-    display: inline;
-    color: deepskyblue;
-    background: yellow;
-  }
-}
-.box-model {
-  box-sizing: content-box;
-  // content
-  width: 300px;
-  height: 100px;
-  background: red;
-  // border
-  border-color: blue;
-  border-width: 5px;
-  border-style: solid;
-  .box1 {
-    display: inline-block;
-    width: 100px;
-    height: 80px;
-    border: 10px solid green;
-    background: aqua;
-  }
-  .box2 {
-    width: 50px;
-    height: 50px;
-    border: 5px solid greenyellow;
-    background: violet;
-  }
-}
 </style>
