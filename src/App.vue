@@ -1,12 +1,17 @@
 <template>
   <div id="app">
-    <router-view/>
+    <header-component></header-component>
+    <router-view />
   </div>
 </template>
 
 <script>
+import HeaderComponent from '@/components/common/Header/Header'
 export default {
   name: 'App',
+  components: {
+    HeaderComponent
+  },
   data () {
     return {
       loadingInstance: null
@@ -21,10 +26,15 @@ export default {
 </script>
 
 <style lang="scss">
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-  }
+body {
+  margin: 0px;
+  padding: 0px;
+}
+// macbook pro
+#app {
+  height: 900px;
+}
+.blind {
+  display: none;
+}
 </style>

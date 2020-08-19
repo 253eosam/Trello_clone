@@ -1,6 +1,5 @@
 <template>
   <div class="sign-in">
-    <t-header title="Login"/>
     <el-form class="sign-in__form" label-position="top" label-width="100px" :rules="rules" :model="signInForm" @submit.native.prevent="onClickSignInBtn">
       <el-form-item label="Email" prop="email">
         <el-input placeholder="Please input Email" v-model="signInForm.email"></el-input>
@@ -17,13 +16,9 @@
 </template>
 
 <script>
-import tHeader from '@/components/common/Header/Header.vue'
 import { mapActions } from 'vuex'
 export default {
   name: 'SignIn',
-  components: {
-    tHeader
-  },
   data () {
     return {
       signInForm: {

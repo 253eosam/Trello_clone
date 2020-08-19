@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <t-header title="Trello"/>
     <div class="con_util_wrap">
       <el-button @click="onClickCreateBoardBtn" icon="el-icon-folder-add" circle></el-button>
       <el-button @click="onClickGoHome" icon="el-icon-s-home" circle></el-button>
@@ -17,17 +16,12 @@
 
 <script>
 import boardComponent from '@/components/Board/Board.vue'
-import tHeader from '@/components/common/Header/Header.vue'
-import dragula from 'dragula'
-import 'dragula/dist/dragula.css'
-import { Board } from '@/model/Board'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Trello',
   components: {
-    boardComponent,
-    tHeader
+    boardComponent
   },
   data () {
     return {
