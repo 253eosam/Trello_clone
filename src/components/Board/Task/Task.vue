@@ -1,8 +1,9 @@
 <template>
   <article draggable @dragstart="onDragStart" class="task" :data-tid="tid">
     <div class="task__content" @click="onClickShowDetailDialog" >
+      <h3 v-if="!isShowInput">{{task.title}}</h3>
       <input
-        v-if="isShowInput"
+        v-else
         placeholder="input task title.."
         ref="newTaskInput"
         class="task__title-input"
@@ -10,7 +11,6 @@
         v-model="newTaskTitle"
         @keypress.enter="updateTitle"
       />
-      <h3 v-else>{{task.title}}</h3>
     </div>
     <article>
       <el-dialog
@@ -63,7 +63,7 @@ export default {
       'findTaskByTid', 'updateTask'
     ]),
     onDragStart (event) {
-      console.log(event)
+      event.dataTransfer.setData('text', event.target.dataset.tid)
     },
     onClickShowDetailDialog () {
       if (this.isShowInput) return

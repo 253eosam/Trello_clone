@@ -3,13 +3,14 @@
     <h1>연구실</h1>
     <hr />
     <div class="test__body">
-      <div id="space1" class="space" @drop="onDrop" @dragover="onDragOver">
+      <div id="space1" class="space">
         <div
           class="block"
           v-for="(color, idx) in colors"
           :key="idx"
           :id="idx"
           draggable
+          :data-tempId="idx"
           @dragstart="onDragStart"
           :style="`background: ${color};`"
         ></div>
@@ -85,8 +86,8 @@ export default {
       console.log(event)
       // Add this element's id to the drag payload so the drop handler will
       // know which element to add to its tree
-      event.dataTransfer.setData('text', event.target.id)
-      event.dataTransfer.effectAllowed = 'move'
+      const getDatasetTempId = event.target.dataset.tempid
+      event.dataTransfer.setData('text', getDatasetTempId)
     },
     onDragEnd (event) {
       console.log('end')

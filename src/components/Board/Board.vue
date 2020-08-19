@@ -12,9 +12,9 @@
         </div>
       </el-dialog>
     </div>
-    <ul class="card-list" :data-bid="bid">
+    <ul class="card-list" :data-bid="bid" @drop="onDrop" @dragover="onDragOver">
       <li v-for="(task, idx) in board.tasks" :key="idx">
-          <TaskComponent :tid="task.id"></TaskComponent>
+        <TaskComponent :tid="task.id"></TaskComponent>
       </li>
     </ul>
     <div class="card-util__btn" @click="onClickCreateTaskBtn">
@@ -56,11 +56,37 @@ export default {
     ...mapGetters(['user'])
   },
   created () {
-    // get board info by bid
     this.getBoardInfoByBid()
   },
   methods: {
-    ...mapActions(['findBoardByBid', 'updateBoard', 'deleteBoard', 'saveTask']),
+    ...mapActions(['findBoardByBid', 'updateBoard', 'deleteBoard', 'saveTask', 'updateTask']),
+    onDrop (event) {
+      /*
+          Note that each handler calls preventDefault() to prevent additional event processing for this event
+          (such as touch events or pointer events).
+         */
+      event.preventDefault()
+      const dropTid = event.dataTransfer.getData('text')
+      const dropZoneBid = event.target.dataset.bid
+      console.log(`drop tid : ${dropTid}`)
+      console.log(`drop zone bid : ${dropZoneBid}`)
+      this.updateTaskInfo(dropTid, dropZoneBid).then(
+        () => {
+          console.log('completed')
+        }
+      )
+    },
+    onDragOver (event) {
+      event.preventDefault()
+    },
+    async updateTaskInfo (tid, bid) {
+      const res = await this.updateTask({
+        id: tid,
+        board: bid
+      })
+      console.log(res)
+      this.$message(res.content)
+    },
     async getBoardInfoByBid () { // props bid
       const res = await this.findBoardByBid(this.bid)
       console.log(res)
@@ -107,33 +133,40 @@ export default {
 </script>
 
 <style lang="scss">
-.board {
-  margin: 5px;
-  .board-title>span {
-    cursor: pointer;
-  }
-  .card-list {
-    height: 450px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    list-style: none;
-    padding-inline-start: 0px;
-    overflow: auto;
-    li {
-      padding: 4px;
+  .board {
+    margin: 5px;
+
+    .board-title > span {
+      cursor: pointer;
     }
-    li>div {
-      margin: auto;
-    }
-  }
-  .card-util__btn>.el-card {
-    cursor: pointer;
-    .el-card__body {
-      height: 25px;
-      p {
+
+    .card-list {
+      height: 450px;
+      padding-bottom: 10px;
+      padding-top: 10px;
+      list-style: none;
+      padding-inline-start: 0px;
+      overflow: auto;
+
+      li {
+        padding: 4px;
+      }
+
+      li > div {
         margin: auto;
       }
     }
+
+    .card-util__btn > .el-card {
+      cursor: pointer;
+
+      .el-card__body {
+        height: 25px;
+
+        p {
+          margin: auto;
+        }
+      }
+    }
   }
-}
 </style>
