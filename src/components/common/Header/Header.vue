@@ -20,6 +20,9 @@
             <li v-if="service === 'Trello'" class="gnb_create_board_li">
               <button type="button" class="create_board_btn" @click="onClickCreateBoardBtn">Create</button>
             </li>
+            <li>
+              <button @click="$router.push({ name: 'Test' })">연구실</button>
+            </li>
           </ul>
         </div>
         <div class="gnb_title">
@@ -76,21 +79,21 @@ header {
     z-index: 1001;
     .gnb_area {
       background: #1a71a2;
+      .gnb {
+        .gnb_list {
+          list-style: none;
+          float: right;
+        }
+        li {
+          float: right;
+        }
+      }
       .gnb_title {
         height: 100%;
         text-align: center;
         .service {
           display: inline;
           color: whitesmoke;
-        }
-      }
-      .gnb {
-        ul {
-          list-style: none;
-          float: right;
-        }
-        li {
-          float: right;
         }
       }
     }

@@ -1,71 +1,56 @@
 <template>
-  <div class="hello">
-    <h1 class="hello__title">Hello</h1>
-      <span v-if="session" class="hello__nav">
-        <ul>
-          <li>
-            <el-button @click="$router.push({ name: 'Trello' })" :type="session ? 'primary' : 'danger'" plain>Trello</el-button>
-          </li>
-          <li>
-            <el-button @click="$router.push({ name: 'Test' })" :type="session ? 'primary' : 'danger'" plain>연구실</el-button>
-          </li>
-        </ul>
-      </span>
-      <br>
-      <el-button @click="onClickSessionBtn" icon="el-icon-user" :type="session ? 'danger' : 'primary'" plain>{{session ? '로그아웃' : '로그인'}}</el-button>
+  <div class="hello_wrap">
+    <section class="container">
+      <article class="content">
+        <img
+          class="content_img"
+          src="https://images.unsplash.com/photo-1593642634367-d91a135587b5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+          alt="노트북 타이핑하는 이미지"
+          height="300"
+        >
+        <address class="introduce">
+          <p class="name">이성준</p>
+          <p class="birth">1994.05.27</p>
+          <p class="address_1">서울 관악구 봉천동</p>
+          <a href="mailto:dhzm2aud@naver.com" class="email">dhzm2aud@naver.com</a><br>
+          <a href="tel:+821082623777" class="phone">010-8262-3777</a>
+        </address>
+      </article>
+    </section>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
-
 export default {
-  name: 'Hello',
-  computed: {
-    session () {
-      return this.$store.getters.user
-    }
-  },
-  methods: {
-    ...mapMutations([
-      'setUser'
-    ]),
-    onClickSessionBtn () {
-      if (this.session) {
-        this.setUser()
-        this.$message('로그아웃 성공..!!')
-      } else this.$router.push('/sign-in')
-    },
-    handleCommand (command) {
-      this.$router.push({ name: command })
-    },
-    onClickStartTrello () {
-      this.$router.push({ path: '/sign-in' })
-    }
-  }
+  name: 'Hello'
 }
 
 </script>
 
-<style lang="scss">
-  .hello {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -70%);
-
-    .hello__title {
-      color: #F56C6C;
-      font-size: 82px;
-      text-align: center;
-    }
-    ul{
-      list-style: none;
-      padding-inline-start: 0px;
-      li {
-        padding: 2px;
+<style lang="scss" scoped>
+.hello_wrap {
+  width: 100%;
+  .container {
+    height: 820px;
+    .content {
+      padding: 0 10%;
+      height: 300px;
+      img {
+        float: left;
+        margin-right: 50px;
+      }
+      address {
+        height: inherit;
+        display: inline-block;
+        text-align: center;
+        * {
+          position: relative;
+          display: block;
+          top: 20%;
+          left: 100%
+        }
       }
     }
   }
-
+}
 </style>
