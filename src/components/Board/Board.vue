@@ -66,15 +66,17 @@ export default {
           (such as touch events or pointer events).
          */
       event.preventDefault()
+      console.log(event.dataTransfer)
       const dropTid = event.dataTransfer.getData('text')
+      console.log(dropTid)
       const dropZoneBid = event.target.dataset.bid
       console.log(`drop tid : ${dropTid}`)
       console.log(`drop zone bid : ${dropZoneBid}`)
-      this.updateTaskInfo(dropTid, dropZoneBid).then(
-        () => {
-          console.log('completed')
-        }
-      )
+      this.updateTaskInfo(dropTid, dropZoneBid).then(() => {
+        // event.target.appendChild()
+        console.log('drop here')
+        console.log(event.dataTransfer.getData('text'))
+      })
     },
     onDragOver (event) {
       event.preventDefault()

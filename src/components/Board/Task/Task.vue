@@ -1,7 +1,7 @@
 <template>
-  <article draggable @dragstart="onDragStart" class="task" :data-tid="tid">
+  <article draggable @dragend="onDragEnd" @dragstart="onDragStart" class="task" :data-tid="tid">
     <div class="task__content" @click="onClickShowDetailDialog" >
-      <h3 v-if="!isShowInput">{{task.title}}</h3>
+      <h3 v-if="!isShowInput">{{task.id}}</h3>
       <input
         v-else
         placeholder="input task title.."
@@ -62,6 +62,9 @@ export default {
     ...mapActions([
       'findTaskByTid', 'updateTask'
     ]),
+    onDragEnd (event) {
+      console.log(event)
+    },
     onDragStart (event) {
       event.dataTransfer.setData('text', event.target.dataset.tid)
     },
