@@ -1,27 +1,34 @@
 <template>
   <article class="board">
-    <div class="board-title">
-      <el-tag @click="onClickShowTagDialog" class="board-tag" type="primary">{{board.tag}}</el-tag>
-      <el-dialog title="Update Tag Name" :visible.sync="tagDialog.isShow">
-        <div class="block">
-          <el-input v-model="tagDialog.tag" placeholder="Please input your update Tag Name"/>
-        </div>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="onClickUpdateBtnOfTagDialog" type="primary">Update</el-button>
-          <el-button @click="onClickDeleteBtnOfTagDialog" type="danger">Delete</el-button>
-        </div>
-      </el-dialog>
-    </div>
-    <ul class="card-list" :data-bid="bid" @drop="onDrop" @dragover="onDragOver">
-      <li v-for="(task, idx) in board.tasks" :key="idx">
-        <TaskComponent :tid="task.id"></TaskComponent>
-      </li>
-    </ul>
-    <div class="card-util__btn" @click="onClickCreateTaskBtn">
-      <el-card shadow="hover">
-        <p>+</p>
-      </el-card>
-    </div>
+    <dl class="board_wrap">
+      <dt class="board_term">
+        <h3 class="blind">
+          {{board.tag}}
+        </h3>
+        <button @click="onClickShowTagDialog" class="board_tag" type="button">
+          {{board.tag}}
+        </button>
+        <el-dialog title="Update Tag Name" :visible.sync="tagDialog.isShow">
+          <div class="block">
+            <el-input v-model="tagDialog.tag" placeholder="Please input your update Tag Name"/>
+          </div>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="onClickUpdateBtnOfTagDialog" type="primary">Update</el-button>
+            <el-button @click="onClickDeleteBtnOfTagDialog" type="danger">Delete</el-button>
+          </div>
+        </el-dialog>
+      </dt>
+      <dd class="task_util_btns_wrap">
+        <button class="task_create_btn" type="button" @click="onClickCreateTaskBtn">
+          추가하기
+        </button>
+      </dd>
+      <div class="task_list_wrap" :data-bid="bid" @drop="onDrop" @dragover="onDragOver">
+        <dd class="task_list" v-for="(task, idx) in board.tasks" :key="idx">
+          <task-component :tid="task.id"></task-component>
+        </dd>
+      </div>
+    </dl>
   </article>
 </template>
 
@@ -138,42 +145,51 @@ export default class Board extends Vue {
 }
 
 </script>
-
-<style lang="scss">
-  .board {
-    margin: 5px;
-
-    .board-title > span {
-      cursor: pointer;
+<style lang="scss" scoped>
+.board {
+  height: 600px;
+  width: 150px;
+  .board_wrap {
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 0 4px 0 #4385ff;;
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    .task_util_btns_wrap {
+      margin: 0;
+      height: 25px;
+      .task_create_btn {
+        display: block;
+        width: 100%;
+        height: 22.5px;
+        padding: 1px 0;
+      }
     }
-
-    .card-list {
-      height: 450px;
-      padding-bottom: 10px;
+    .task_list_wrap {
+      height: 530px;
+      .task_list {
+        margin: 0;
+      }
+    }
+    .board_term {
+      text-align: center;
       padding-top: 10px;
-      list-style: none;
-      padding-inline-start: 0px;
-      overflow: auto;
-
-      li {
-        padding: 4px;
-      }
-
-      li > div {
-        margin: auto;
-      }
-    }
-
-    .card-util__btn > .el-card {
-      cursor: pointer;
-
-      .el-card__body {
-        height: 25px;
-
-        p {
-          margin: auto;
+      margin-bottom: 10px;
+      .board_tag {
+        display: inline-block;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background: inherit;
+        font-size: 20px;
+        cursor: pointer;
+        &:hover {
+          color: #f56c6c;
         }
       }
     }
   }
+}
 </style>

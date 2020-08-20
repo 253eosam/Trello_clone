@@ -1,33 +1,31 @@
 <template>
-  <article draggable @dragend="onDragEnd" @dragstart="onDragStart" class="task" :data-tid="tid">
-    <div class="task__content" @click="onClickShowDetailDialog" >
-      <h3 v-if="!isShowInput">{{task.id}}</h3>
+  <article class="task" draggable @dragend="onDragEnd" @dragstart="onDragStart"  :data-tid="tid">
+    <div class="task_content" @click="onClickShowDetailDialog" >
+      <h3 class="task_title" v-if="!isShowInput">{{task.title}}</h3>
       <input
+        class="task_title_input"
         v-else
         placeholder="input task title.."
         ref="newTaskInput"
-        class="task__title-input"
         type="text"
         v-model="newTaskTitle"
         @keypress.enter="updateTitle"
       />
     </div>
-    <article>
-      <el-dialog
-        destroy-on-close
-        :visible.sync="detailDialog.isShowDialog"
-        :title="task.title"
-      >
-        <detail-task-view @emitClose="onEmitCloseDialog" :task="task"/>
-      </el-dialog>
-    </article>
+    <el-dialog
+      destroy-on-close
+      :visible.sync="detailDialog.isShowDialog"
+      :title="task.title"
+    >
+      <detail-task-view @emitClose="onEmitCloseDialog" :task="task"/>
+    </el-dialog>
   </article>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 import { Action } from 'vuex-class'
-import detailTaskView from '@/views/Trello/Board/Task/Detail.vue'
+import detailTaskView from './Detail.vue'
 import { TaskType } from '@/model/Task'
 @Component({
   components: {
@@ -44,7 +42,10 @@ export default class Task extends Vue {
 
   // data
   task = {
-    title: ''
+    title: '',
+    board: {
+      id: ''
+    }
   }
 
   newTaskTitle = ''
@@ -122,28 +123,36 @@ export default class Task extends Vue {
 }
 </script>
 
-<style lang="scss">
-  .task{
-    border-radius: 40px;
-    background: #a6b9e5;
+<style lang="scss" scoped>
+.task {
+  height: 50px;
+  width: 140px;
+  margin:5px;
+  background: #4385ff;
+  border: 1px solid black;
+  border-radius: 10px;
+  box-shadow: 0 0 2px 0 black;
+  overflow: hidden;
+  &:hover {
+    box-shadow: 0 0 4px 0 black;
+    background: #f56c6c;
+  }
+  & {
+    transform: rotate(10px);
+    border-radius: 50px;
+  }
+  cursor: pointer;
+  .task_content {
+    text-align: center;
     width: 130px;
-    height: 60px;
-    display: flex;
-    // &:hover {
-    //   transition: transform 0.2s;
-    //   transform: rotate(10deg);
-    // }
-    .task__content {
+    .task_title {
+      display: inline-block;
       width: 100%;
-      height: 100%;
-      &:hover {
-        cursor: pointer;
-        border-radius: 40px;
-        background: #F56C6C;
-      }
-      h3 input {
-        margin: auto;
-      }
+    }
+    .task_title_input {
+      display: inline-block;
+      width: 100%;
     }
   }
+}
 </style>
