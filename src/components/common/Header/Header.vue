@@ -1,40 +1,38 @@
 <template>
   <header>
     <div class="gnb_wrap">
-      <div class="gnb_area">
-        <div class="gnb">
-          <ul class="gnb_list">
-            <strong class="blind">트렐로 서비스 컨트롤러</strong>
-            <li v-if="user === null" class="gnb_login_li">
-              <button :disabled="service === 'SignIn'" type="button" class="login_btn" @click="onClickLoginBtn">Login</button>
-            </li>
-            <li v-else class="gnb_logout_li">
-              <button type="button" class="logout_btn" @click="onClickLogoutBtn">Logout</button>
-            </li>
-            <li v-if="user && service === 'Hello'" class="gnb_trello_li">
-              <button type="button" class="trello_btn" @click="onClickTrelloBtn">Trello</button>
-            </li>
-            <li v-if="service !== 'Hello'" class="gnb_home_li">
-              <button type="button" class="home_btn" @click="onClickHomeBtn">Home</button>
-            </li>
-            <li v-if="service === 'Trello'" class="gnb_create_board_li">
-              <button type="button" class="create_board_btn" @click="onClickCreateBoardBtn">Create</button>
-            </li>
-            <li>
-              <button @click="$router.push({ name: 'Test' })">연구실</button>
-            </li>
-          </ul>
-        </div>
-        <div class="gnb_title">
-          <h1 class="service">Trello</h1>
-        </div>
+      <div class="gnb_title">
+        <h1 class="service">Trello</h1>
       </div>
+      <ul class="gnb_list">
+        <strong class="blind">트렐로 서비스 컨트롤러</strong>
+        <li v-if="user === null" class="gnb_login_li">
+          <button :disabled="service === 'SignIn'" type="button" class="login_btn" @click="onClickLoginBtn">Login
+          </button>
+        </li>
+        <li v-else class="gnb_logout_li">
+          <button type="button" class="logout_btn" @click="onClickLogoutBtn">Logout</button>
+        </li>
+        <li v-if="user && service === 'Hello'" class="gnb_trello_li">
+          <button type="button" class="trello_btn" @click="onClickTrelloBtn">Trello</button>
+        </li>
+        <li v-if="service !== 'Hello'" class="gnb_home_li">
+          <button type="button" class="home_btn" @click="onClickHomeBtn">Home</button>
+        </li>
+        <li v-if="service === 'Trello'" class="gnb_create_board_li">
+          <button type="button" class="create_board_btn" @click="onClickCreateBoardBtn">Create</button>
+        </li>
+        <li>
+          <button @click="$router.push({ name: 'Test' })">연구실</button>
+        </li>
+      </ul>
     </div>
   </header>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+
 export default {
   name: 'Header',
   data () {
@@ -71,31 +69,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-header {
-  height: 80px;
-  .gnb_wrap {
-    position: fixed;
-    width: 100%;
-    z-index: 1001;
-    .gnb_area {
-      background: #1a71a2;
-      .gnb {
-        .gnb_list {
-          list-style: none;
-          float: right;
-        }
-        li {
-          float: right;
-        }
-      }
-      .gnb_title {
-        height: 100%;
-        text-align: center;
-        .service {
-          display: inline;
-          color: whitesmoke;
-        }
-      }
+.gnb_wrap {
+  height: 65px;
+  margin-bottom: 30px;
+  .gnb_title {
+    background: #1a71a2;
+    height: 40px;
+    text-align: center;
+    .service {
+      display: inline;
+      color: whitesmoke;
+    }
+  }
+  .gnb_list {
+    list-style: none;
+    overflow: hidden;
+    height: 25px;
+    background: #4385ff;
+    margin: 0 0;
+    li {
+      float: right;
+    }
+  }
+  button {
+    height: 25px;
+    border: 1px solid black;
+    margin: 0 0.5px;
+    &:hover {
+      background: red;
+      color: white;
     }
   }
 }

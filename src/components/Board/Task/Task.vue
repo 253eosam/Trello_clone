@@ -24,85 +24,99 @@
   </article>
 </template>
 
-<script>
-import { mapActions } from 'vuex'
-import detailTaskView from '@/views/Trello/Board/Task/Detail'
-
-export default {
-  name: 'Task',
-  props: ['tid'],
+<script lang="ts">
+import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
+import { Action } from 'vuex-class'
+import detailTaskView from '@/views/Trello/Board/Task/Detail.vue'
+import { TaskType } from '@/model/Task'
+@Component({
   components: {
     detailTaskView
-  },
-  data () {
-    return {
-      task: {
-        title: ''
-      },
-      newTaskTitle: '',
-      detailDialog: {
-        isShowDialog: false
-      }
-    }
-  },
-  computed: {
-    isShowInput () {
-      return this.task.title === null || this.task.title.length === 0
-    }
-  },
+  }
+})
+export default class Task extends Vue {
+  @Prop(Number) tid!: number
+
+  @Action('findTaskByTid') findTaskByTid!: Promise<any> | any
+  @Action('updateTask') updateTask!: Promise<any> | any
+
+  @Ref('newTaskInput') newTaskInput!: HTMLInputElement
+
+  // data
+  task = {
+    title: ''
+  }
+
+  newTaskTitle = ''
+  detailDialog = {
+    isShowDialog: false
+  }
+
+  // method
+  onDragStart (event: any) {
+    console.info('drag start')
+    event.dataTransfer.setData('tid', event.target.dataset.tid)
+    event.dataTransfer.setData('bid', this.task.board.id)
+  }
+
+  onDragEnd (event: any) {
+    console.log('drag end')
+    console.log(event)
+    console.log(event.target.parentNode.parentNode.removeChild(this.$el.parentNode))
+  }
+
+  onClickShowDetailDialog () {
+    if (this.isShowInput) return
+    this.detailDialog.isShowDialog = true
+  }
+
+  async onEmitCloseDialog (payload: TaskType | undefined) {
+    if (payload !== undefined) await this.updateTaskInfo(payload)
+    this.detailDialog.isShowDialog = false
+  }
+
+  async onClickUpdateTaskBtn () {
+    await this.updateTitle()
+    this.detailDialog.isShowDialog = false
+  }
+
+  async updateTitle () {
+    this.task.title = this.newTaskTitle
+    const res = await this.updateTask(this.task)
+    this.task = res.fetchData
+  }
+
+  async fetchTaskInfo () {
+    console.log('api handler find')
+    const res = await this.findTaskByTid({
+      id: this.tid
+    })
+    console.log(res)
+    this.task = res.fetchData
+  }
+
+  async updateTaskInfo (task: number) {
+    console.log(task)
+    const res = await this.updateTask(task)
+    console.log(res)
+    this.$message(res.content)
+    this.task = res.fetchData
+  }
+
+  // computed
+  get isShowInput () {
+    return this.task.title === null || this.task.title.length === 0
+  }
+
+  // created
   created () {
     this.fetchTaskInfo()
-  },
+  }
+
+  // mounted
   mounted () {
     if (this.task.title === '') {
-      this.$refs.newTaskInput.focus()
-    }
-  },
-  methods: {
-    ...mapActions([
-      'findTaskByTid', 'updateTask'
-    ]),
-    onDragStart (event) {
-      console.info('drag start')
-      event.dataTransfer.setData('tid', event.target.dataset.tid)
-      event.dataTransfer.setData('bid', this.task.board.id)
-    },
-    onDragEnd (event) {
-      console.log('drag end')
-      console.log(event)
-      console.log(event.target.parentNode.parentNode.removeChild(this.$el.parentNode))
-    },
-    onClickShowDetailDialog () {
-      if (this.isShowInput) return
-      this.detailDialog.isShowDialog = true
-    },
-    async onEmitCloseDialog (payload) {
-      if (payload !== undefined) await this.updateTaskInfo(payload)
-      this.detailDialog.isShowDialog = false
-    },
-    async onClickUpdateTaskBtn () {
-      await this.updateTitle()
-      this.detailDialog.isShowDialog = false
-    },
-    async updateTitle () {
-      this.task.title = this.newTaskTitle
-      const res = await this.updateTask(this.task)
-      this.task = res.fetchData
-    },
-    async fetchTaskInfo () {
-      console.log('api handler find')
-      const res = await this.findTaskByTid({
-        id: this.tid
-      })
-      console.log(res)
-      this.task = res.fetchData
-    },
-    async updateTaskInfo (task) {
-      console.log(task)
-      const res = await this.updateTask(task)
-      console.log(res)
-      this.$message(res.content)
-      this.task = res.fetchData
+      this.newTaskInput.focus()
     }
   }
 }
