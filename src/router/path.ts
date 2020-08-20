@@ -20,7 +20,7 @@ export const routes: Array<RouteConfig> = [
   {
     path: '/trello',
     name: 'Trello',
-    component: () => import('@/views/Trello/Trello.vue'),
+    component: () => import('@/views/Trello/TrelloView.vue'),
     beforeEnter: (to, from, next) => {
       if (store.getters.user === null) {
         alert('잘못된 접근 방법입니다. 로그인 후 다시 이용해주세요.')
