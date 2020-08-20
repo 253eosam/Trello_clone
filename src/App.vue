@@ -1,16 +1,20 @@
 <template>
   <div id="app">
     <header-component></header-component>
-    <router-view />
+    <router-view class="container" />
+    <footer-component></footer-component>
   </div>
 </template>
 
 <script>
 import HeaderComponent from '@/components/common/Header/Header'
+import FooterComponent from '@/components/common/Footer/Footer'
+
 export default {
   name: 'App',
   components: {
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
   },
   data () {
     return {
@@ -26,13 +30,20 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  margin: 0px;
-  padding: 0px;
-}
-// macbook pro
-#app {
-  height: 900px;
+html {
+  height: 100%;
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    #app {
+      position: relative;
+      height: 100%;
+      .container {
+        padding: 0 20px;
+      }
+    }
+  }
 }
 .blind {
   display: none;
