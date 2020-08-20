@@ -1,7 +1,8 @@
 import { User, UserType } from '@/model/User'
+import { StateType } from './stateType'
 
 export default {
-  setUser (state: any, pUser: UserType): void {
+  setUser (state: StateType, pUser: UserType): void {
     // login & logout
     if (!pUser) {
       sessionStorage.removeItem('user')
@@ -12,5 +13,11 @@ export default {
       sessionStorage.setItem('user', tmpUser.toJSON())
       state.user = new User(pUser)
     }
+  },
+  pushSchedule (state: StateType): void {
+    state.scheduleCnt++
+  },
+  popSchedule (state: StateType): void {
+    if (state.scheduleCnt > 0) state.scheduleCnt--
   }
 }

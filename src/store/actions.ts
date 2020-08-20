@@ -1,10 +1,12 @@
 import { UserType } from '@/model/User'
 import { Task, TaskType } from '@/model/Task'
 import { BoardType } from '@/model/Board'
+import { StateType } from './stateType'
 import apis from '../api'
+import { ActionContext } from 'vuex'
 
 export default {
-  async findUserByEmail ({ commit }, payload: any) {
+  async findUserByEmail ({ commit }: ActionContext<StateType, StateType>, payload: UserType) {
     const fetchData = await apis.user.findByEmail(payload)
     console.log(fetchData)
     const res = {
@@ -21,7 +23,7 @@ export default {
     } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
     return res
   },
-  async saveUser ({ commit }, pUser: UserType) {
+  async saveUser ({ commit }: ActionContext<StateType, StateType>, pUser: UserType) {
     const fetchData = await apis.user.save(pUser)
     console.log(fetchData)
     const res = {
@@ -36,7 +38,7 @@ export default {
     } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
     return res
   },
-  async saveTask (_: any, pTask: TaskType) {
+  async saveTask (_: ActionContext<StateType, StateType>, pTask: TaskType) {
     const fetchData = await apis.task.save(pTask)
     console.log(fetchData)
     const res = {
@@ -51,7 +53,7 @@ export default {
     } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
     return res
   },
-  async findTaskByTid (_: any, payload: TaskType) {
+  async findTaskByTid (_: ActionContext<StateType, StateType>, payload: TaskType) {
     const fetchData = await apis.task.findByTid(new Task(payload))
     console.log(fetchData)
     const res = {
@@ -66,7 +68,7 @@ export default {
     } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
     return res
   },
-  async updateTask (_: any, pTask: TaskType) {
+  async updateTask (_: ActionContext<StateType, StateType>, pTask: TaskType) {
     const fetchData = await apis.task.update(pTask)
     console.log(fetchData)
     const res = {
@@ -81,7 +83,7 @@ export default {
     } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
     return res
   },
-  async findBoardByUid (_: any, uid: number) {
+  async findBoardByUid (_: ActionContext<StateType, StateType>, uid: number) {
     const fetchData = await apis.board.findByUid({ user: uid })
     const res = {
       status: fetchData.status,
@@ -95,7 +97,7 @@ export default {
     } else res.content = '서버 상태 에러, 잠시 후 다시 이용해주세요.' // status
     return res
   },
-  async findBoardByBid (_: any, bid: number) {
+  async findBoardByBid (_: ActionContext<StateType, StateType>, bid: number) {
     const fetchData = await apis.board.findByBid({ id: bid })
     const res = {
       status: fetchData.status,
@@ -109,7 +111,7 @@ export default {
     } else res.content = '서버 상태 에러, 잠시 후 다시 이용해주세요.' // status
     return res
   },
-  async createBoard (context: any) {
+  async createBoard (context: ActionContext<StateType, StateType>) {
     const fetchData = await apis.board.save({ tag: 'tag name', user: context.getters.user.id })
     const res = {
       status: fetchData.status,
@@ -123,7 +125,7 @@ export default {
     } else res.content = '서버 상태 에러, 잠시 후 다시 이용해주세요.' // status
     return res
   },
-  async updateBoard (context: any, payload: BoardType) {
+  async updateBoard (context: ActionContext<StateType, StateType>, payload: BoardType) {
     payload.user = context.getters.user.id
     const fetchData = await apis.board.update(payload)
     const res = {
@@ -138,7 +140,7 @@ export default {
     } else res.content = '서버 상태 에러, 잠시 후 다시 이용해주세요' // status
     return res
   },
-  async deleteBoard (context: any, bid: number) {
+  async deleteBoard (context: ActionContext<StateType, StateType>, bid: number) {
     const fetchData = await apis.board.delete({ id: bid })
     const res = {
       status: fetchData.status,

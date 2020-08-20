@@ -14,10 +14,9 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import boardComponent from '@/components/Board/Board.vue'
-import { Action, Getter } from 'vuex-class'
+import { Action, Getter, Mutation } from 'vuex-class'
 import { UserType } from '../../model/User'
 import EventBus from '@/utils/EventBus'
-import { TaskType } from '@/model/Task'
 
 @Component({
   components: {

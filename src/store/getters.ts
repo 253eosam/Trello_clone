@@ -1,8 +1,10 @@
+import { StateType } from './stateType'
+
 export default {
-  user: (state: any) => {
+  user: (state: StateType) => {
     return state.user
   },
-  isLoading: (state: any) => {
-    return state.loading.scheduleCnt !== 0
+  isLoading: (state: StateType) => {
+    return state.scheduleCnt > 0
   }
 }

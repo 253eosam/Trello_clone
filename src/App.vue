@@ -3,18 +3,21 @@
     <header-component></header-component>
     <router-view class="container" />
     <footer-component></footer-component>
+    <loading></loading>
   </div>
 </template>
 
 <script>
 import HeaderComponent from '@/components/common/Header/Header'
 import FooterComponent from '@/components/common/Footer/Footer'
+import Loading from '@/components/common/Loading'
 
 export default {
   name: 'App',
   components: {
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    Loading
   },
   data () {
     return {
