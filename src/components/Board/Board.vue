@@ -47,7 +47,7 @@ import { UserType } from '@/model/User'
 export default class Board extends Vue {
   @Prop(Number) bid!: number
   @Getter('user') user!: UserType
-  @Action('findBoardByBid') findBoardByBid!: Promise<any> | any
+  @Action('findBoardByBid') findBoardByBid!: (bid: number) => Promise<any>
   @Action('updateBoard') updateBoard!: Promise<any> | any
   @Action('deleteBoard') deleteBoard!: Promise<any> | any
   @Action('saveTask') saveTask!: Promise<any> | any

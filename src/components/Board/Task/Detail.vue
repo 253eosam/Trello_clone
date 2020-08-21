@@ -44,6 +44,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 textarea {
+  display: block;
   width: 100%;
 }
 </style>

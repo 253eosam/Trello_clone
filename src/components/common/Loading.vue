@@ -1,16 +1,21 @@
 <template>
-  <div v-if="true" class="wrap">
-      <p>Loading...</p>
+  <div>
   </div>
 </template>
-
 <script>
+import { Loading } from 'element-ui'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'Loading',
   computed: {
     ...mapGetters(['isLoading'])
+  },
+  watch: {
+    'isloading' () {
+      const loadingIns = () => Loading.service({ fullscreen: true })
+      this.isLoading ? loadingIns() : loadingIns.close()
+    }
   }
 }
 </script>
@@ -24,7 +29,6 @@ export default {
   z-index: 1003;
   background: white;
   p {
-
     font-size: 100px;
   }
 }

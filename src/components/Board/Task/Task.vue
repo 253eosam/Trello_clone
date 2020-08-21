@@ -130,16 +130,12 @@ export default class Task extends Vue {
   margin:5px;
   background: #4385ff;
   border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 50px;
   box-shadow: 0 0 2px 0 black;
   overflow: hidden;
   &:hover {
     box-shadow: 0 0 4px 0 black;
     background: #f56c6c;
-  }
-  & {
-    transform: rotate(10px);
-    border-radius: 50px;
   }
   cursor: pointer;
   .task_content {

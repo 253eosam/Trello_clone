@@ -53,7 +53,8 @@ export default {
     } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
     return res
   },
-  async findTaskByTid (_: ActionContext<StateType, StateType>, payload: TaskType) {
+  async findTaskByTid (context: ActionContext<StateType, StateType>, payload: TaskType) {
+    context.commit('pushSchedule')
     const fetchData = await apis.task.findByTid(new Task(payload))
     console.log(fetchData)
     const res = {
@@ -66,6 +67,7 @@ export default {
       res.isOk = true
       res.content = 'Task 조회 성공..!!'
     } else res.content = '서버 상태 에러, 잠시 후 다시 시도해주세요.' // status
+    context.commit('popSchedule')
     return res
   },
   async updateTask (_: ActionContext<StateType, StateType>, pTask: TaskType) {
