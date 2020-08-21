@@ -1,13 +1,23 @@
 # trello
+> Toy project using Vue.js  
+
 
 ## Project setup
 ```
+npm install
+
+// mock server
+cd mock_server
 npm install
 ```
 
 ### Compiles and hot-reloads for development
 ```
 npm run serve
+
+// mock server
+cd mock_server
+npm start
 ```
 
 ### Compiles and minifies for production

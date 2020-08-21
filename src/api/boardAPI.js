@@ -1,12 +1,11 @@
-import boardAPI from './axiosConfig.js'
+import api from './axiosConfig'
+
+const path = '/boards'
 
 export default {
-  save: (params, succ, err, final) => {
-    boardAPI
-      .post('boards', params)
-      .then(res => succ(res))
-      .catch(msg => err(msg))
-      .finally(() => final)
-  }
-
+  save: (board) => api.post(`${path}/`, board),
+  findByBid: ({ id }) => api.get(`${path}/${id}`),
+  findByUid: ({ user }) => api.get(`${path}?user=${user}`),
+  update: (board) => api.put(`${path}/${board.id}`, board),
+  delete: ({ id }) => api.delete(`${path}/${id}`)
 }

@@ -1,24 +1,54 @@
 <template>
   <div id="app">
-    <router-view/>
+    <header-component></header-component>
+    <router-view class="container" />
+    <footer-component></footer-component>
+    <loading></loading>
   </div>
 </template>
 
 <script>
+import HeaderComponent from '@/components/common/Header/Header'
+import FooterComponent from '@/components/common/Footer/Footer'
+import Loading from '@/components/common/Loading'
+
 export default {
   name: 'App',
+  components: {
+    HeaderComponent,
+    FooterComponent,
+    Loading
+  },
   data () {
-    return {}
+    return {
+      loadingInstance: null
+    }
+  },
+  computed: {
+    isLoading () {
+      return this.$store.getters.isLoading
+    }
   }
 }
 </script>
 
 <style lang="scss">
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+html {
+  height: 100%;
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    #app {
+      position: relative;
+      height: 100%;
+      .container {
+        padding: 0 20px;
+      }
+    }
   }
+}
+.blind {
+  display: none;
+}
 </style>
