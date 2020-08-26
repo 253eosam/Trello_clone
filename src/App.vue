@@ -1,22 +1,16 @@
 <template>
   <div id="app">
-    <header-component></header-component>
-    <router-view class="container" />
-    <footer-component></footer-component>
+    <router-view/>
     <loading></loading>
   </div>
 </template>
 
 <script>
-import HeaderComponent from '@/components/common/Header/Header'
-import FooterComponent from '@/components/common/Footer/Footer'
 import Loading from '@/components/common/Loading'
 
 export default {
   name: 'App',
   components: {
-    HeaderComponent,
-    FooterComponent,
     Loading
   },
   data () {
@@ -33,18 +27,17 @@ export default {
 </script>
 
 <style lang="scss">
+* {
+  margin: 0;
+  padding: 0;
+}
 html {
   height: 100%;
   body {
-    margin: 0;
-    padding: 0;
     height: 100%;
     #app {
       position: relative;
       height: 100%;
-      .container {
-        padding: 0 20px;
-      }
     }
   }
 }

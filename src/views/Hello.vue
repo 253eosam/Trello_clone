@@ -1,53 +1,73 @@
 <template>
-  <div class="hello_wrap">
-    <section class="container">
-      <article class="content">
-        <img
-          class="content_img"
-          src="https://images.unsplash.com/photo-1593642634367-d91a135587b5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-          alt="노트북 타이핑하는 이미지"
-          height="300"
-        >
-        <address class="introduce">
-          <p class="name">이성준</p>
-          <p class="birth">1994.05.27</p>
-          <p class="address_1">서울 관악구 봉천동</p>
-          <a href="mailto:dhzm2aud@naver.com" class="email">dhzm2aud@naver.com</a><br>
-          <a href="tel:+821082623777" class="phone">010-8262-3777</a>
-        </address>
-      </article>
-    </section>
+  <div class="container">
+    <div class="content">
+      <div class="title_wrap">
+        <h1 class="title">DDD's Life</h1>
+      </div>
+      <div class="service_list_wrap">
+        <ul class="service_list">
+          <li>
+            <strong class="blind">Trello</strong>
+            <service-box class="service_box"></service-box>
+          </li>
+          <li>
+            <strong class="blind">Ledger</strong>
+            <service-box class="service_box"></service-box>
+          </li>
+          <li>
+            <strong class="blind">Bunchang company</strong>
+            <service-box class="service_box"></service-box>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import ServiceBox from '@/components/common/ServiceBox'
+
 export default {
-  name: 'Hello'
+  name: 'Hello',
+  components: {
+    ServiceBox
+  }
 }
-
 </script>
-
 <style lang="scss" scoped>
-.hello_wrap {
+.container {
+  height: 100%;
   width: 100%;
-  .container {
-    height: 820px;
-    .content {
-      padding: 0 10%;
-      height: 300px;
-      img {
-        float: left;
-        margin-right: 50px;
+  display: flex;
+  .content {
+    margin: auto;
+    height: 600px;
+    width: 600px;
+    .title_wrap {
+      width: 600px;
+      height: 150px;
+      text-align: center;
+      .title {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 70px;
+        text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
       }
-      address {
-        height: inherit;
-        display: inline-block;
+    }
+    .service_list_wrap {
+      width: 600px;
+      height: 460px;
+      .service_list {
+        list-style: none;
+        width: 100%;
+        height: 100%;
+        padding: 10px 15px;
+        line-height: 10px;
+      }
+      .service_list>li {
         text-align: center;
-        * {
-          position: relative;
-          display: block;
-          top: 20%;
-          left: 100%
+        .service_box {
+          display: inline-block;
+          margin: 10px 0;
         }
       }
     }
