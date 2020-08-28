@@ -96,6 +96,7 @@ export default {
     },
     onDragStartEl (event) {
       console.log('start')
+      // hello
       console.log(event)
       // Add this element's id to the drag payload so the drop handler will
       // know which element to add to its tree
