@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "groups",
+  "info": {
+    "name": "groups"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "tasks": {
+      "collection": "task",
+      "via": "group"
+    },
+    "boards": {
+      "model": "boards"
+    }
+  }
+}

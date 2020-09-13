@@ -11,13 +11,4 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  const session = JSON.parse(String(sessionStorage.getItem('user')))
-  console.log('session--------')
-  if (session && !store.getters.user) {
-    store.commit('setUser', session)
-  }
-  next()
-})
-
 export default router

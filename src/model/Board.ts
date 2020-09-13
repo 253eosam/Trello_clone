@@ -1,10 +1,42 @@
 import { TaskType } from './Task'
+import { UserType } from './User';
 
 export interface BoardType {
   id: number; // unique
   tag: string;
   tasks: Array<TaskType>;
   user: number; // user id
+}
+
+export interface BoardsType {
+  readonly id: number;
+  boardTag: string;
+  name: string;
+  readonly user: number;
+}
+export interface fetchBoardsType {
+  readonly id: number;
+  boardTag: string;
+  name: string;
+  readonly user: UserType;
+}
+
+export class Boards {
+  readonly id: number;
+  boardTag: string;
+  name: string;
+  user: number;
+
+  constructor (boards: fetchBoardsType) {
+    this.id = boards.id
+    this.boardTag = boards.boardTag
+    this.name = boards.name
+    this.user = boards.user.id
+  }
+
+  static toValueList (values: any[]) {
+    return values.map(item => new Board(item))
+  }
 }
 
 export class Board {

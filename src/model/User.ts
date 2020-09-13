@@ -1,45 +1,19 @@
 export interface UserType {
-    id: number; // unique
-    email: string;
-    pwd: string;
+  readonly id: number;
+  email: string;
+  name: string;
+  password: string;
 }
-
 export class User {
-    private readonly _id: number
-    private _email: string
-    private _pwd: string
+  readonly id: number
+  email: string
+  password: string
+  name: string
 
-    constructor (user: UserType) {
-      this._id = user.id
-      this._email = user.email
-      this._pwd = user.pwd
-    }
-
-    get id (): number {
-      return this._id
-    }
-
-    get email (): string {
-      return this._email
-    }
-
-    set email (value: string) {
-      this._email = value
-    }
-
-    get pwd (): string {
-      return this._pwd
-    }
-
-    set pwd (value: string) {
-      this._pwd = value
-    }
-
-    toJSON () {
-      return JSON.stringify({
-        id: this.id,
-        pwd: this.pwd,
-        email: this.email
-      })
-    }
+  constructor (user: UserType) {
+    this.id = user.id
+    this.email = user.email
+    this.password = user.password
+    this.name = user.name
+  }
 }

@@ -5,13 +5,15 @@ import getters from '@/store/getters'
 import mutations from '@/store/mutations'
 import actions from '@/store/actions'
 import { StateType } from './stateType'
+import modules from './modules'
 Vue.use(Vuex)
 
 const store: StoreOptions<StateType> = {
   state,
   getters,
   mutations,
-  actions
+  actions,
+  modules
 }
 
 export default new Vuex.Store(store)

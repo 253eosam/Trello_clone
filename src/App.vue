@@ -31,15 +31,9 @@ export default {
   margin: 0;
   padding: 0;
 }
-html {
-  height: 100%;
-  body {
-    height: 100%;
-    #app {
-      position: relative;
-      height: 100%;
-    }
-  }
+#app {
+  width: 100vw;
+  height: 100vh;
 }
 .blind {
   display: none;
