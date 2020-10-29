@@ -7,14 +7,13 @@ import { ActionContext } from 'vuex'
 export default {
   namespaced: true,
   state: {
-    user: {}
+    user: null
   },
   getters: {
   },
   mutations: {
     setUser (state: StateType, payload: UserType) {
-      // state.user = new User(payload)
-      state.user = payload
+      state.user = new User(payload)
     }
   },
   actions: {
@@ -22,17 +21,12 @@ export default {
       const fetchData = await apis.user.save(pUser)
       console.log(fetchData)
       commit('setUser', fetchData.data)
-      return fetchData
     },
-    async findByEmail (_: ActionContext<StateType, StateType>, email: string) {
-      const fetchData = await apis.user.findByEmail(email)
+    async signIn ({ state, commit }: ActionContext<StateType, StateType>, pUser: UserType) {
+      const fetchData = await apis.user.findByEmail(pUser.email)
       console.log(fetchData)
-      return fetchData.data
-    },
-    async signIn (context: ActionContext<StateType, StateType>, pUser: UserType) {
-      const user = await context.dispatch('findByEmail', pUser.email)
-      context.commit('setUser', user[0])
-      return user[0].password === pUser.password
+      commit('setUser', fetchData.data[0])
+      return state.user && state.user.password === pUser.password
     }
   }
 }

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'SignIn',
@@ -25,14 +25,17 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState('userModules', {
+      USER_INFO: 'user'
+    })
+  },
   methods: {
     ...mapActions('userModules', {
-      SAVE_USER: 'save',
       SIGN_IN: 'signIn'
     }),
     async onClickSignInBtn () {
-      const isSignIn = await this.SIGN_IN(this.user)
-      isSignIn
+      await this.SIGN_IN(this.user)
         ? this.$message.success('로그인 성공!!') && this.$router.push({ name: 'Trello' })
         : this.$message.error('이메일 또는 비밀번호가 올바르지않습니다.\n다시 시도해주세요.')
     },
@@ -46,12 +49,13 @@ export default {
 <style lang="scss" scoped>
 .sign-in {
   display: flex;
-  height: 100%;
+  height: 90vh;
 }
 .sign-in__box {
   margin: auto;
   text-align: center;
   h1 {
+    margin: 0;
     font-family: Roboto;
     font-style: normal;
     font-weight: bold;
@@ -90,8 +94,8 @@ export default {
   color: white;
 }
 .sign-up__btn {
-  background: #D32F4C;
-  border: 3px solid rgba(241, 85, 151, 0.5);
+  background: #1db65d;
+  border: 3px solid #34d176;
   color: white;
 }
 </style>

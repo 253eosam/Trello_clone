@@ -27,13 +27,9 @@ export default {
 </script>
 
 <style lang="scss">
-* {
+body {
   margin: 0;
   padding: 0;
-}
-#app {
-  width: 100vw;
-  height: 100vh;
 }
 .blind {
   display: none;
