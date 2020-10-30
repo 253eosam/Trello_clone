@@ -1,21 +1,14 @@
 <template>
   <div class="trello">
     <h1>trello</h1>
-    <div class="board-wrap">
-      <div class="board-utils">
-        <h2>{{ USER.name }}</h2>
-        <button @click="isShowMenuBtn = !isShowMenuBtn" class="menu__btn" type="menu">{{ isShowMenuBtn ? '닫기' : '열기' }}
-        </button>
-        <span class="menu__btn-wrap" :class="{'blind' : !isShowMenuBtn}">
-          <button type="button"><span class="blind">보드</span>추가</button>
-          <button type="button"><span class="blind">보드</span>삭제</button>
-        </span>
-      </div>
-      <ul class="board-list">
-        <li class="board-item" v-for="board in BOARDS" :key="board.id">
-          <div class="board-box" @click="onClickBoard(board)">
-            <p>{{ board.name }}</p>
-          </div>
+    <div class="board-container">
+      <ul class="list board-list">
+        <li>
+          <ul class="list task-list">
+            <li>
+              <div class="task-component"></div>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>
@@ -73,42 +66,38 @@ export default class Trello extends Vue {
     text-align: center;
   }
 }
-.board-wrap {
-  background: #ddd;
-  padding: 5px;
-  .board-utils {
-    h2 {
-      float: left;
-    }
-    .menu__btn {
-      float: right;
-    }
-    .menu__btn-wrap {
-      float: right;
-    }
-    &::after{
-      content: '';
-      display: block;
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.board-list {
+
+  width: 100%;
+  >li {
+    background: red;
+    margin-left: 10px;
+    float: left;
+    &::after {
       clear: both;
     }
   }
-  .board-list {
-    .board-item {
-      display: inline-block;
-      margin: 5px;
+}
+.task-list {
+  >li {
+    margin-bottom: 5px;
+    &:last-child{
+      margin-bottom: 0;
     }
   }
 }
-.board-box {
-  background: #D32F4C;
+
+.task-component {
+  width: 200px;
+  height: 80px;
   border-radius: 20px;
-  width: 120px;
-  height: 70px;
-  display: flex;
-  cursor: pointer;
-  p {
-    margin: auto;
-    color: white;
-  }
+  background: rgb(234, 230, 29);
+  margin: 3px;
 }
 </style>

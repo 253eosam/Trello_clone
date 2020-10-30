@@ -8,7 +8,15 @@ export interface BoardType {
 }
 
 export class Board {
+  readonly id: number;
+  tag: string;
+  user: UserType;
+  tasks: TaskType[];
+
   constructor (board: BoardType) {
-    Object.assign(this, board)
+    this.id = board.id
+    this.tag = board.tag
+    this.user = board.user
+    this.tasks = board.tasks
   }
 }

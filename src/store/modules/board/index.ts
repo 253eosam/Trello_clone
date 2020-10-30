@@ -15,10 +15,10 @@ export default {
     }
   },
   actions: {
-    async findByUid (context: ActionContext<StateType, StateType>, uid: number) {
+    async findByUid ({ commit }: ActionContext<StateType, StateType>, uid: number) {
       const fetchData = await apis.board.findByUid(uid)
       console.log(fetchData)
-      context.commit('setBoards', fetchData.data)
+      commit('setBoards', fetchData.data)
     }
   }
 }
