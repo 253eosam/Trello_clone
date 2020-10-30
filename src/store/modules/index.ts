@@ -1,7 +1,7 @@
 import userModules from './user'
-import boardModules from './board'
+import trelloModules from './trello'
 
 export default {
   userModules,
-  boardModules
+  trelloModules
 }

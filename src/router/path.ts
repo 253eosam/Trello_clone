@@ -13,11 +13,6 @@ export const routes: Array<RouteConfig> = [
   {
     path: '/trello',
     name: 'Trello',
-    component: () => import('@/views/Trello/index.vue')
-  },
-  {
-    path: '/board/:bid',
-    name: 'Board',
-    component: () => import('@/views/Trello/Board/index.vue')
+    component: () => import('@/views/Trello/TrelloPage.vue')
   }
 ]
