@@ -4,21 +4,35 @@
     <div class="board-container">
       <ul class="list board-list">
         <li v-for="(board, bIdx) in BOARDS_INFO" :key="bIdx">
-          <ul class="list task-list" @drop.stop @drop="onDropTaskCard">
-            <strong @click="onClickUpdateBoardTagName" class="tag-name">{{board.tag}}</strong>
-            <li v-for="(task, tIdx) in board.tasks" :key="`${board.id}-${tIdx}`">
-              <div
-              draggable @dragstart="onDragTaskCard"
-              @dragover.prevent
+          <strong @click="onClickUpdateBoardTagName" class="tag-name">{{board.tag}}</strong>
+          <ul
+          id="task-list"
+          class="list task-list"
+          @dragover.prevent
+          @drop="onDropTaskCard"
+          >
+            <li
+              v-for="(task, tIdx) in board.tasks" :key="`${board.id}-${tIdx}`"
+              :id="`task-${board.id}-${tIdx}`"
+              draggable
+          @dragstart="onDragTaskCard"
+
+              :data-tid="task.id"
               :data-bid="board.id"
               :data-position="task.position"
-              class="task-component">{{task.id}}</div>
+            >
+              <div
+                @drop.prevent
+                :id="`task-item-${board.id}-${tIdx}`"
+                class="task-component">
+                {{task.id}}
+              </div>
             </li>
-              <button @click="onClickAddTask(board)" type="button" class="btn add-task-btn">
-                {{ board.tasks.length ? '+ Add another card' : '+ Add a card'}}
-              </button>
-            <button @click="onClickDeleteBoard(board)" type="button" class="btn delete-board-btn">-</button>
           </ul>
+          <button @click="onClickAddTask(board)" type="button" class="btn add-task-btn">
+            {{ board.tasks.length ? '+ Add another card' : '+ Add a card'}}
+          </button>
+          <button @click="onClickDeleteBoard(board)" type="button" class="btn delete-board-btn">-</button>
         </li>
           <button @click="onClickAddBoard" type="button" class="btn add-board-btn">
           {{BOARDS_INFO.length ? '+ Add another list' : '+ Add a list'}}
@@ -30,7 +44,7 @@
 
 <script lang="ts">
 import { BoardType } from '@/model/Board'
-import { TaskType } from '@/model/Task'
+import { TaskType, Task } from '@/model/Task'
 import { UserType } from '@/model/User'
 import { Vue, Component } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
@@ -46,6 +60,7 @@ export default class Trello extends Vue {
   @trelloModules.Action('saveBoard') ADD_BOARD_DATA!: (user: UserType) => Promise<void>
   @trelloModules.Action('deleteBoard') DELETE_BOARD_DATA!: (board: BoardType) => Promise<void>
   @trelloModules.Action('saveTask') ADD_TASK_DATA!: (task: TaskType) => Promise<void>
+  @trelloModules.Action('updateTask') UPDATE_TASK_DATA!: (task: TaskType) => Promise<void>
 
   created () {
     this.fetchBoardData()
@@ -75,14 +90,23 @@ export default class Trello extends Vue {
     this.$message.warning('서비스 준비중입니다..\n popup으로 변경')
   }
 
-  onDropTaskCard (e: any) {
+  async onDropTaskCard (e: any) {
     e.preventDefault()
-    const fromTaskCardTid = e.dataTransfer.getData('tid')
-    const toTaskCardTid = e.target.dataset
-    console.log(
-      fromTaskCardTid,
-      toTaskCardTid
-    )
+    if (e.target.id === 'task-list') {
+      console.log('task-list')
+    } else if (e.target.id.includes('task')) {
+      console.log('task-component')
+    } else {
+      console.log('else')
+    }
+    // const fromTaskCardTid = e.dataTransfer.getData('tid')
+    // const parentEl = e.target.parentElement
+    // const { bid, position } = parentEl.dataset
+    // const nextPosition = parentEl.nextElementSibling?.dataset.position || Number(position) + 500
+    // console.log((Number(position) + Number(nextPosition)) / 2)
+
+    // await this.UPDATE_TASK_DATA(new Task({ id: fromTaskCardTid, board: bid, position: String((Number(position) + Number(nextPosition)) / 2) }))
+    // await this.fetchBoardData()
   }
 
   onDragTaskCard (e: any) {
@@ -120,12 +144,12 @@ export default class Trello extends Vue {
   .tag-name {
     font-size: 20px;
     display: inline-block;
-    margin-top: 3px;
+    margin: 3px 0;
     cursor: pointer;
   }
 }
 .add-task-btn {
-  margin: 0 3px 3px;
+  margin: 0 0 5px;
   width: 95%;
 }
 .add-board-btn {
@@ -148,6 +172,7 @@ export default class Trello extends Vue {
     margin-left: 10px;
     float: left;
     border-radius: 8px;
+    text-align: center;
     &::after {
       clear: both;
       content: '';
@@ -156,12 +181,10 @@ export default class Trello extends Vue {
 }
 .task-list {
   position: relative;
-  text-align: center;
+  width: 206px;
+  min-height: 15px;
   > li {
-    margin-bottom: 5px;
-    &:last-child {
-      margin-bottom: 0;
-    }
+    margin: 0 3px 5px;
   }
 }
 
@@ -170,6 +193,5 @@ export default class Trello extends Vue {
   height: 80px;
   border-radius: 20px;
   background: white;
-  margin: 3px;
 }
 </style>

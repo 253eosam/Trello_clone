@@ -38,6 +38,10 @@ export default {
       if (!task.title) task.title = 'Empty task title'
       const fetchData = await apis.task.save(task)
       console.log(fetchData)
+    },
+    async updateTask (_: ActionContext<StateType, StateType>, task: TaskType) {
+      const fetchData = await apis.task.update(task)
+      console.log(fetchData)
     }
   }
 }
