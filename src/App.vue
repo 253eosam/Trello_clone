@@ -1,23 +1,23 @@
 <template>
   <div id="app">
     <router-view/>
+    <popup />
   </div>
 </template>
 
 <script>
+import Popup from '@/components/common/Popup'
+
 export default {
   name: 'App',
   components: {
+    Popup
   },
   data () {
     return {
-      loadingInstance: null
     }
   },
   computed: {
-    isLoading () {
-      return this.$store.getters.isLoading
-    }
   }
 }
 </script>

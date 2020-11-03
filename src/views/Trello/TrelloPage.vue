@@ -8,25 +8,25 @@
           <ul
           id="task-list"
           class="list task-list"
+          :data-bid="board.id"
           @dragover.prevent
           @drop="onDropTaskCard"
           >
             <li
               v-for="(task, tIdx) in board.tasks" :key="`${board.id}-${tIdx}`"
-              :id="`task-${board.id}-${tIdx}`"
+              :id="`task-item-${board.id}-${tIdx}`"
               draggable
-          @dragstart="onDragTaskCard"
-
-              :data-tid="task.id"
+              @dragstart="onDragTaskCard"
               :data-bid="board.id"
+              :data-tid="task.id"
               :data-position="task.position"
             >
-              <div
-                @drop.prevent
-                :id="`task-item-${board.id}-${tIdx}`"
-                class="task-component">
-                {{task.id}}
-              </div>
+            <task-card
+              @drop.prevent
+              :title="task.title"
+              :content="task.content"
+              :id="`task-component-${board.id}-${tIdx}`"
+            />
             </li>
           </ul>
           <button @click="onClickAddTask(board)" type="button" class="btn add-task-btn">
@@ -48,11 +48,15 @@ import { TaskType, Task } from '@/model/Task'
 import { UserType } from '@/model/User'
 import { Vue, Component } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
+import taskCard from '@/components/Trello/TaskCard.vue'
+import detailTask from '@/components/Trello/DetailTaskPopup.vue'
 
 const userModules = namespace('userModules')
 const trelloModules = namespace('trelloModules')
 
-@Component
+@Component({
+  components: { taskCard }
+})
 export default class Trello extends Vue {
   @userModules.State('user') USER_INFO!: UserType
   @trelloModules.State('boards') BOARDS_INFO!: BoardType
@@ -88,29 +92,28 @@ export default class Trello extends Vue {
 
   async onClickUpdateBoardTagName () {
     this.$message.warning('서비스 준비중입니다..\n popup으로 변경')
+    console.log(this)
+    Vue.prototype.$showPopup(detailTask)
   }
 
-  async onDropTaskCard (e: any) {
-    e.preventDefault()
-    if (e.target.id === 'task-list') {
-      console.log('task-list')
-    } else if (e.target.id.includes('task')) {
-      console.log('task-component')
-    } else {
-      console.log('else')
+  async onDropTaskCard (event: any) {
+    event.preventDefault()
+    const fromTaskCardTid = event.dataTransfer.getData('tid')
+    let el = null
+    if (event.target.id === 'task-list') {
+      el = event.target
+    } else if (event.target.id.includes('task')) {
+      el = event.target.parentElement
     }
-    // const fromTaskCardTid = e.dataTransfer.getData('tid')
-    // const parentEl = e.target.parentElement
-    // const { bid, position } = parentEl.dataset
-    // const nextPosition = parentEl.nextElementSibling?.dataset.position || Number(position) + 500
-    // console.log((Number(position) + Number(nextPosition)) / 2)
+    const { bid, position = 0 } = el.dataset
+    const nextPosition = el.nextElementSibling?.dataset.position || Number(position) + 500
 
-    // await this.UPDATE_TASK_DATA(new Task({ id: fromTaskCardTid, board: bid, position: String((Number(position) + Number(nextPosition)) / 2) }))
-    // await this.fetchBoardData()
+    await this.UPDATE_TASK_DATA(new Task({ id: fromTaskCardTid, board: bid, position: String((Number(position) + Number(nextPosition)) / 2) }))
+    await this.fetchBoardData()
   }
 
-  onDragTaskCard (e: any) {
-    e.dataTransfer.setData('tid', e.target.dataset.tid)
+  onDragTaskCard (event: any) {
+    event.dataTransfer.setData('tid', event.target.dataset.tid)
   }
 }
 </script>
@@ -168,6 +171,7 @@ export default class Trello extends Vue {
 .board-list {
   width: 100%;
   > li {
+    position: relative;
     background: #ddd;
     margin-left: 10px;
     float: left;
@@ -186,12 +190,5 @@ export default class Trello extends Vue {
   > li {
     margin: 0 3px 5px;
   }
-}
-
-.task-component {
-  width: 200px;
-  height: 80px;
-  border-radius: 20px;
-  background: white;
 }
 </style>
