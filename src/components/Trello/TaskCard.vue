@@ -27,7 +27,7 @@ export default class Task extends Vue {
   }
   .content {
     margin: 0 auto;
-    font-size: 13px;
+    font-size: 15px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;

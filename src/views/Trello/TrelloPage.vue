@@ -4,7 +4,7 @@
     <div class="board-container">
       <ul class="list board-list">
         <li v-for="(board, bIdx) in BOARDS_INFO" :key="bIdx">
-          <strong @click="onClickUpdateBoardTagName" class="tag-name">{{board.tag}}</strong>
+          <strong @click="onClickUpdateBoardTagName(board)" class="tag-name">{{board.tag}}</strong>
           <ul
           id="task-list"
           class="list task-list"
@@ -49,13 +49,15 @@ import { UserType } from '@/model/User'
 import { Vue, Component } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 import taskCard from '@/components/Trello/TaskCard.vue'
-import detailTask from '@/components/Trello/DetailTaskPopup.vue'
+import EventBus from '@/utils/EventBus'
+import DetailTaskPopup from '@/components/Trello/DetailTaskPopup.vue'
+import BoardTagPopup from '@/components/Trello/BoardTagPopup.vue'
 
 const userModules = namespace('userModules')
 const trelloModules = namespace('trelloModules')
 
 @Component({
-  components: { taskCard }
+  components: { taskCard, BoardTagPopup }
 })
 export default class Trello extends Vue {
   @userModules.State('user') USER_INFO!: UserType
@@ -80,7 +82,7 @@ export default class Trello extends Vue {
   }
 
   async onClickAddTask (board: BoardType) {
-    const position = String(board.tasks.length * 500)
+    const position = String((board.tasks?.length || 0) * 500)
     await this.ADD_TASK_DATA({ board, position })
     await this.fetchBoardData()
   }
@@ -90,10 +92,12 @@ export default class Trello extends Vue {
     await this.fetchBoardData()
   }
 
-  async onClickUpdateBoardTagName () {
-    this.$message.warning('서비스 준비중입니다..\n popup으로 변경')
-    console.log(this)
-    Vue.prototype.$showPopup(detailTask)
+  async onClickUpdateBoardTagName (board: BoardType) {
+    EventBus.$emit('SHOW_POPUP', BoardTagPopup, { title: 'Board Tag Name', ...board })
+  }
+
+  async onClickTaskCard () {
+    EventBus.$emit('SHOW_POPUP', DetailTaskPopup, { title: 'Task Detail', id: 117 })
   }
 
   async onDropTaskCard (event: any) {
