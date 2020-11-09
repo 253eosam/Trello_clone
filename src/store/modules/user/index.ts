@@ -26,7 +26,10 @@ export default {
       const fetchData = await apis.user.findByEmail(pUser.email)
       console.log(fetchData)
       commit('setUser', fetchData.data[0])
-      return state.user && state.user.password === pUser.password
+      if (state.user && state.user.password === pUser.password) {
+        localStorage.setItem('userSession', JSON.stringify(state.user))
+        return true
+      } else return false
     }
   }
 }

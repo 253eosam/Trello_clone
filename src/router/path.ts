@@ -1,4 +1,6 @@
 import { RouteConfig } from 'vue-router'
+import UserStore from '@/store/modules/user'
+
 export const routes: Array<RouteConfig> = [
   {
     path: '/',
@@ -13,6 +15,9 @@ export const routes: Array<RouteConfig> = [
   {
     path: '/trello',
     name: 'Trello',
-    component: () => import('@/views/Trello/TrelloPage.vue')
+    component: () => import('@/views/Trello/TrelloPage.vue'),
+    beforeEnter: (to, from, next) => {
+      UserStore.state.user ? next() : next('/')
+    }
   }
 ]
