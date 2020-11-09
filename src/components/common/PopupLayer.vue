@@ -1,13 +1,13 @@
 <template>
   <div class="popup-wrap">
-    <input type="checkbox" id="popup-visibility-flag" v-model="isVisible" />
-    <div class="popup-background">
+    <input type="checkbox" id="popup-visibility-flag" v-model="data.isVisible" />
+    <div class="popup-wrap">
       <div class="popup-container">
         <div class="popup-header">
-          <h1>{{title}}</h1>
+          <h1>{{data.title}}</h1>
           <label for="popup-visibility-flag"><font-awesome-icon icon="times" /></label>
         </div>
-        <component :is="component" v-bind="data" />
+        <component :is="data.component" v-bind="data.propsData" @close="data.isVisible = false" />
       </div>
     </div>
   </div>
@@ -15,22 +15,33 @@
 
 <script lang="ts">
 import EventBus from '@/utils/EventBus'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
+
+const initData = () => {
+  return {
+    component: null,
+    isVisible: false,
+    title: '',
+    propsData: {}
+  }
+}
 
 @Component
 export default class PopupLayer extends Vue {
-  component = null;
-  isVisible = false;
-  title = ''
-  data = {}
+  data = initData()
 
   mounted () {
-    EventBus.$on('SHOW_POPUP', (pComponent: any, data: any): void => {
-      this.isVisible = true
-      this.component = pComponent
-      this.title = data.title || ''
-      this.data = data
+    EventBus.$on('SHOW_POPUP', (pComponent: any, title: string, propsData: any): void => {
+      this.data.isVisible = true
+      this.data.component = pComponent
+      this.data.title = title || ''
+      this.data.propsData = propsData
     })
+  }
+
+  @Watch('data.isVisible')
+  onVisibleChaged (newValue: boolean) {
+    !newValue && (this.data = initData())
   }
 }
 </script>
@@ -39,14 +50,14 @@ export default class PopupLayer extends Vue {
   #popup-visibility-flag {
     display: none;
   }
-  #popup-visibility-flag:checked + .popup-background {
+  #popup-visibility-flag:checked + .popup-wrap {
     visibility: visible;
   }
-  #popup-visibility-flag + .popup-background {
+  #popup-visibility-flag + .popup-wrap {
     visibility: hidden;
   }
 
-  .popup-background {
+  .popup-wrap {
     position: fixed;
     top: 0;
     left: 0;

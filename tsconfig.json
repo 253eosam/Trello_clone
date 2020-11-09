@@ -12,9 +12,6 @@
     "allowJs": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "typeRoots": [
-      "./src/@types"
-    ],
     "types": [
       "webpack-env",
       "jest"

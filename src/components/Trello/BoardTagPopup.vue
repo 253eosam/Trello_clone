@@ -12,20 +12,23 @@
 </template>
 
 <script lang="ts">
-import { BoardType, Board } from '@/model/Board'
+import { BoardType } from '@/model/Board'
 import { Vue, Prop, Component } from 'vue-property-decorator'
-import { namespace } from 'vuex-class'
 
 @Component
 export default class BoardTagPopup extends Vue {
   @Prop({ type: String, required: true }) tag!: string
   @Prop({ type: Number, required: true }) id!: number
+  @Prop({ type: Function, required: true }) updateData!: (board: BoardType) => Promise<void>
+  @Prop({ type: Function, required: true }) fetchData!: () => Promise<void>
 
-  @namespace('trelloModules').Action('updateBoard') UPDATE_BOARD_DATA!: (board: BoardType) => Promise<void>
   newTag = this.tag
 
   async onClickUpdateBoardTag () {
-    this.UPDATE_BOARD_DATA(new Board({ id: this.id, tag: this.newTag }))
+    await this.updateData({ id: this.id, tag: this.newTag })
+    await this.fetchData()
+
+    this.$emit('close')
   }
 }
 </script>

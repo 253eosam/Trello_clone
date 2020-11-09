@@ -23,6 +23,7 @@
             >
             <task-card
               @drop.prevent
+              @click.native="onClickTaskCard(task)"
               :title="task.title"
               :content="task.content"
               :id="`task-component-${board.id}-${tIdx}`"
@@ -46,34 +47,29 @@
 import { BoardType } from '@/model/Board'
 import { TaskType, Task } from '@/model/Task'
 import { UserType } from '@/model/User'
-import { Vue, Component } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 import taskCard from '@/components/Trello/TaskCard.vue'
 import EventBus from '@/utils/EventBus'
 import DetailTaskPopup from '@/components/Trello/DetailTaskPopup.vue'
 import BoardTagPopup from '@/components/Trello/BoardTagPopup.vue'
+import BoardHandler from '@/mixins/BoardHandler'
 
-const userModules = namespace('userModules')
 const trelloModules = namespace('trelloModules')
 
 @Component({
   components: { taskCard, BoardTagPopup }
 })
-export default class Trello extends Vue {
-  @userModules.State('user') USER_INFO!: UserType
+export default class Trello extends Mixins(BoardHandler) {
   @trelloModules.State('boards') BOARDS_INFO!: BoardType
-  @trelloModules.Action('findByUid') FETCH_BOARDS_DATA!: (uid: number) => Promise<void>
   @trelloModules.Action('saveBoard') ADD_BOARD_DATA!: (user: UserType) => Promise<void>
+  @trelloModules.Action('updateBoard') UPDATE_BOARD_DATA!: (board: BoardType) => Promise<void>
   @trelloModules.Action('deleteBoard') DELETE_BOARD_DATA!: (board: BoardType) => Promise<void>
   @trelloModules.Action('saveTask') ADD_TASK_DATA!: (task: TaskType) => Promise<void>
   @trelloModules.Action('updateTask') UPDATE_TASK_DATA!: (task: TaskType) => Promise<void>
 
-  created () {
-    this.fetchBoardData()
-  }
-
-  async fetchBoardData () {
-    await this.FETCH_BOARDS_DATA(this.USER_INFO.id)
+  async created () {
+    await this.fetchBoardData()
   }
 
   async onClickAddBoard () {
@@ -93,11 +89,21 @@ export default class Trello extends Vue {
   }
 
   async onClickUpdateBoardTagName (board: BoardType) {
-    EventBus.$emit('SHOW_POPUP', BoardTagPopup, { title: 'Board Tag Name', ...board })
+    const data = {
+      updateData: this.UPDATE_BOARD_DATA,
+      fetchData: this.fetchBoardData,
+      ...board
+    }
+    EventBus.$emit('SHOW_POPUP', BoardTagPopup, 'Board Tag Name', data)
   }
 
-  async onClickTaskCard () {
-    EventBus.$emit('SHOW_POPUP', DetailTaskPopup, { title: 'Task Detail', id: 117 })
+  async onClickTaskCard (task: TaskType) {
+    const data = {
+      updateData: this.UPDATE_TASK_DATA,
+      fetchData: this.fetchBoardData,
+      ...task
+    }
+    EventBus.$emit('SHOW_POPUP', DetailTaskPopup, 'Task Detail', data)
   }
 
   async onDropTaskCard (event: any) {

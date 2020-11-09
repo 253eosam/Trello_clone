@@ -15,9 +15,6 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
-Vue.prototype.$showPopup = function (popup: any, data: any) { this.$emit('SHOW_POPUP', { popup, ...data }) }
-Vue.prototype.$hidePopup = function () { this.$emit('HIDE_POPUP') }
-
 new Vue({
   router,
   store,
