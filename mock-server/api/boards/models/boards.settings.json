@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "boards",
+  "info": {
+    "name": "boards"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "user": {
+      "model": "users"
+    },
+    "boardTag": {
+      "type": "string"
+    }
+  }
+}

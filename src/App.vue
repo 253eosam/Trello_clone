@@ -1,52 +1,25 @@
 <template>
   <div id="app">
-    <header-component></header-component>
-    <router-view class="container" />
-    <footer-component></footer-component>
-    <loading></loading>
+    <router-view/>
+    <popup-layer/>
   </div>
 </template>
 
 <script>
-import HeaderComponent from '@/components/common/Header/Header'
-import FooterComponent from '@/components/common/Footer/Footer'
-import Loading from '@/components/common/Loading'
+import PopupLayer from '@/components/common/PopupLayer'
 
 export default {
   name: 'App',
   components: {
-    HeaderComponent,
-    FooterComponent,
-    Loading
-  },
-  data () {
-    return {
-      loadingInstance: null
-    }
-  },
-  computed: {
-    isLoading () {
-      return this.$store.getters.isLoading
-    }
+    PopupLayer
   }
 }
 </script>
 
 <style lang="scss">
-html {
-  height: 100%;
-  body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    #app {
-      position: relative;
-      height: 100%;
-      .container {
-        padding: 0 20px;
-      }
-    }
-  }
+body {
+  margin: 0;
+  padding: 0;
 }
 .blind {
   display: none;

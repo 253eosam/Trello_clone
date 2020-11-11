@@ -15,6 +15,9 @@
     "content": {
       "type": "string"
     },
+    "position": {
+      "type": "string"
+    },
     "board": {
       "via": "tasks",
       "model": "boards"

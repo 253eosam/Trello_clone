@@ -12,7 +12,7 @@
     "email": {
       "type": "string"
     },
-    "pwd": {
+    "password": {
       "type": "string"
     },
     "boards": {

@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { routes } from './path'
-import store from '@/store'
+import UserStore from '@/store/modules/user'
 
 Vue.use(VueRouter)
+
+const localStorageUserSession = localStorage.getItem('userSession')
 
 const router = new VueRouter({
   mode: 'history',
@@ -12,11 +14,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const session = JSON.parse(String(sessionStorage.getItem('user')))
-  console.log('session--------')
-  if (session && !store.getters.user) {
-    store.commit('setUser', session)
-  }
+  (localStorageUserSession && !UserStore.state.user) && (UserStore.state.user = JSON.parse(localStorageUserSession))
   next()
 })
 
