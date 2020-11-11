@@ -1,79 +1,101 @@
-<script src="src/router/index.ts"></script>
 <template>
   <div class="sign-in">
-    <Header/>
-    <el-form class="sign-in-form" label-position="top" label-width="100px" @submit.native.prevent="onClickSignIn"
-             :rules="rules" :model="signInForm" ref="signInForm">
-      <el-form-item label="Email" prop="email">
-        <el-input placeholder="Please input Email" v-model="signInForm.email"></el-input>
-      </el-form-item>
-      <el-form-item label="Password" prop="pwd">
-        <el-input show-password placeholder="Please input password" v-model="signInForm.pwd"></el-input>
-      </el-form-item>
-      <el-form-item class="sign-in-form-footer">
-        <el-button native-type="submit" round>로그인</el-button>
-        <el-button @click="onClickSignUp" round>회원가입</el-button>
-      </el-form-item>
-    </el-form>
+    <form class="sign-in__box" @submit.prevent="onClickSignInBtn">
+      <h1>로그인</h1>
+      <input id="email__input" type="email" class="input" name="email" placeholder="email.." v-model="user.email">
+      <input type="password" class="input" name="password" placeholder="password.." v-model="user.password">
+      <span class="sign-in__controller">
+        <input type="submit" class="btn sign-in__btn" value="로그인" >
+        <input type="button" @click="onClickSignUpBtn" class="btn sign-up__btn" value="회원가입" >
+      </span>
+    </form>
   </div>
 </template>
 
 <script>
-  import Header from '@/components/common/Header/Header.vue'
-  import { userSessionHandler }  from '../../mixins/userSessionHandler.js'
+import { mapActions, mapState } from 'vuex'
 
-  export default {
-    name: 'Login',
-    components: {
-      Header
-    },
-    data () {
-      return {
-        signInForm: {
-          uid: 0,
-          email: 'wmp@wemakeprice.com',
-          pwd: 'q1w2e3r4'
-        },
-        rules: {
-          email: [
-            {
-              required: true,
-              message: 'Please input email',
-              trigger: 'change'
-            }
-          ],
-          pwd: [
-            {
-              required: true,
-              message: 'Please input password',
-              trigger: 'change'
-            }
-          ]
-        },
+export default {
+  name: 'SignIn',
+  data () {
+    return {
+      user: {
+        email: 'wmp@wemakeprice.com',
+        password: 'q1w2e3r4'
       }
+    }
+  },
+  computed: {
+    ...mapState('userModules', {
+      USER_INFO: 'user'
+    })
+  },
+  methods: {
+    ...mapActions('userModules', {
+      SIGN_IN: 'signIn'
+    }),
+    async onClickSignInBtn () {
+      await this.SIGN_IN(this.user)
+        ? this.$message.success('로그인 성공!!') && this.$router.push({ name: 'Trello' })
+        : this.$message.error('이메일 또는 비밀번호가 올바르지않습니다.\n다시 시도해주세요.')
     },
-    methods: {
-      onClickSignIn () {
-        console.log('SignIn onClickSignIn method, sign-in form data')
-        console.log(this.signInForm)
-        userSessionHandler.methods.login(this.signInForm)
-      },
-      onClickSignUp () {
-        this.$router.push({ path: '/sign-up' })
-      }
-    },
-    mixins: [userSessionHandler]
+    onClickSignUpBtn () {
+      this.$router.push({ name: 'SignUp' })
+    }
   }
-
+}
 </script>
 
-<style>
-  .sign-in-form {
-    margin: 10vw;
-    text-align: left;
+<style lang="scss" scoped>
+.sign-in {
+  display: flex;
+  height: 90vh;
+}
+.sign-in__box {
+  margin: auto;
+  text-align: center;
+  h1 {
+    margin: 0;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 50px;
+    line-height: 117px;
+    letter-spacing: 0.2em;
+    color: #FFFFFF;
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
   }
-
-  .sign-in-form-footer {
-    text-align: right;
+}
+.input {
+  display: block;
+  margin-bottom: 10px;
+  width: 300px;
+  height: 30px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50px;
+  padding: 0 15px;
+}
+.sign-in__controller {
+  float: right;
+  &::after {
+    clear: both;
   }
+}
+.btn {
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 50px;
+  width: 70px;
+  height: 25px;
+  margin-right: 5px;
+}
+.sign-in__btn {
+  background: #2F3FD3;
+  border: 3px solid rgba(34, 147, 251, 0.5);
+  color: white;
+}
+.sign-up__btn {
+  background: #1db65d;
+  border: 3px solid #34d176;
+  color: white;
+}
 </style>

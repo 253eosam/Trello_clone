@@ -1,44 +1,27 @@
 <template>
   <div id="app">
     <router-view/>
+    <popup-layer/>
   </div>
 </template>
 
 <script>
-import { Loading } from 'element-ui'
+import PopupLayer from '@/components/common/PopupLayer'
 
 export default {
   name: 'App',
-  data () {
-    return {
-      loadingInstance: null
-    }
-  },
-  computed: {
-    isLoading () {
-      return this.$store.getters.isLoading
-    }
-  },
-  watch: {
-    isLoading (newValue) {
-      if (newValue) {
-        this.loadingInstance = Loading.service({ fullscreen: true })
-      } else {
-        this.loadingInstance.close()
-      }
-    }
-  },
-  methods: {
+  components: {
+    PopupLayer
   }
 }
 </script>
 
 <style lang="scss">
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-  }
+body {
+  margin: 0;
+  padding: 0;
+}
+.blind {
+  display: none;
+}
 </style>
