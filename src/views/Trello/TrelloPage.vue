@@ -8,25 +8,21 @@
           <ul
           id="task-list"
           class="list task-list"
-          :data-bid="board.id"
           @dragover.prevent
-          @drop="onDropTaskCard"
+          @drop="onDropToList($event, board)"
           >
             <li
               v-for="(task, tIdx) in board.tasks" :key="`${board.id}-${tIdx}`"
-              :id="`task-item-${board.id}-${tIdx}`"
               draggable
-              @dragstart="onDragTaskCard"
-              :data-bid="board.id"
+              @dragstart="onDragStart"
+              @dragover.prevent
+              @drop.stop="onDropItem($event, tIdx, board.tasks)"
               :data-tid="task.id"
-              :data-position="task.position"
             >
             <task-card
-              @drop.prevent
               @click.native="onClickTaskCard(task)"
               :title="task.title"
               :content="task.content"
-              :id="`task-component-${board.id}-${tIdx}`"
             />
             </li>
           </ul>
@@ -54,11 +50,11 @@ import EventBus from '@/utils/EventBus'
 import DetailTaskPopup from '@/components/Trello/DetailTaskPopup.vue'
 import BoardTagPopup from '@/components/Trello/BoardTagPopup.vue'
 import BoardHandler from '@/mixins/BoardHandler'
-
+import draggable from 'vuedraggable'
 const trelloModules = namespace('trelloModules')
 
 @Component({
-  components: { taskCard, BoardTagPopup }
+  components: { taskCard, BoardTagPopup, draggable }
 })
 export default class Trello extends Mixins(BoardHandler) {
   @trelloModules.State('boards') BOARDS_INFO!: BoardType
@@ -106,24 +102,21 @@ export default class Trello extends Mixins(BoardHandler) {
     EventBus.$emit('SHOW_POPUP', DetailTaskPopup, 'Task Detail', data)
   }
 
-  async onDropTaskCard (event: any) {
-    event.preventDefault()
-    const fromTaskCardTid = event.dataTransfer.getData('tid')
-    let el = null
-    if (event.target.id === 'task-list') {
-      el = event.target
-    } else if (event.target.id.includes('task')) {
-      el = event.target.parentElement
-    }
-    const { bid, position = 0 } = el.dataset
-    const nextPosition = el.nextElementSibling?.dataset.position || Number(position) + 500
+  onDragStart (event: any) {
+    event.dataTransfer.setData('tid', event.target.dataset.tid)
+  }
 
-    await this.UPDATE_TASK_DATA(new Task({ id: fromTaskCardTid, board: bid, position: String((Number(position) + Number(nextPosition)) / 2) }))
+  async onDropItem (event: any, curIndex: number, tasks: TaskType[]) {
+    const nextCardPosition = curIndex + 1 < tasks.length ? Number(tasks[curIndex + 1].position) : Number(tasks[curIndex].position) + 500
+    const fromCardTid = event.dataTransfer.getData('tid')
+    await this.UPDATE_TASK_DATA(new Task({ id: fromCardTid, board: tasks[curIndex].board, position: String((Number(tasks[curIndex].position) + Number(nextCardPosition)) / 2) }))
     await this.fetchBoardData()
   }
 
-  onDragTaskCard (event: any) {
-    event.dataTransfer.setData('tid', event.target.dataset.tid)
+  async onDropToList (event: any, board: BoardType) {
+    const fromCardTid = event.dataTransfer.getData('tid')
+    await this.UPDATE_TASK_DATA(new Task({ id: fromCardTid, board, position: '500' }))
+    await this.fetchBoardData()
   }
 }
 </script>
