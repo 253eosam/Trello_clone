@@ -1,27 +1,15 @@
 <template>
   <div id="app">
-    <router-view/>
-    <popup-layer/>
+    <layout />
   </div>
 </template>
 
 <script>
-import PopupLayer from '@/components/common/PopupLayer'
+import { Component, Vue } from 'vue-property-decorator'
+import Layout from '@/components/common/Layout'
 
-export default {
-  name: 'App',
-  components: {
-    PopupLayer
-  }
+@Component({ components: { Layout } })
+export default class App extends Vue {
+
 }
 </script>
-
-<style lang="scss">
-body {
-  margin: 0;
-  padding: 0;
-}
-.blind {
-  display: none;
-}
-</style>
