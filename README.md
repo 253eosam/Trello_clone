@@ -1,4 +1,4 @@
-# trello
+# trello_clone
 
 > 트렐로와 비슷한 기능을 토이프로젝트로 진행
 
