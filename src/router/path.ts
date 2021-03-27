@@ -8,7 +8,7 @@ export const routes: Array<RouteConfig> = [
   //   // children: []
   // },
   {
-    path: '/boards/:title',
+    path: '/title',
     name: 'Boards.trello',
     component: () => import('@/views/trello/Trello.vue')
   }
