@@ -110,8 +110,20 @@ export default class Trello extends Vue {}
   }
 
   .board {
-    margin: 10px;
+    overflow: auto;
+    width: 100vw;
+    height: calc(100vh - 80px);
+    padding: 10px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    &::after {
+      display: block;
+      content: '';
+      clear: both;
+    }
     .list {
+      display: inline-block;
+      margin-right: 10px;
       width: 272px;
       background: rgba($color: #aaa, $alpha: 0.3);
       border-radius: 3px;
@@ -147,6 +159,9 @@ export default class Trello extends Vue {}
             top: 10px;
             right: -284px;
             padding-top: 10px;
+            &:hover {
+              display: block;
+            }
             .list_menu_box {
               width: 100px;
               background: #fff;
@@ -174,9 +189,6 @@ export default class Trello extends Vue {}
               div:last-child {
                 line-height: 40px;
               }
-            }
-            &:hover {
-              display: block;
             }
           }
         }
