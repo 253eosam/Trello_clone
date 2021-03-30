@@ -13,3 +13,7 @@ export default class App extends Vue {
 
 }
 </script>
+
+<style>
+@import 'assets/css/style.css';
+</style>
