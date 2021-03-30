@@ -157,7 +157,7 @@ export default class Trello extends Vue {}
             display: none;
             position: absolute;
             top: 10px;
-            right: -284px;
+            right: -150px;
             padding-top: 10px;
             &:hover {
               display: block;
