@@ -1,15 +1,16 @@
 <template>
   <div id="warp">
     <main-header></main-header>
-    <router-view></router-view>
+    <auth-provider></auth-provider>
   </div>
 </template>
 
 <script>
 import { Component, Vue } from 'vue-property-decorator'
+import AuthProvider from '@/views/main/AuthProvider'
 import MainHeader from '@/components/common/Header'
 
-@Component({ components: { MainHeader } })
+@Component({ components: { MainHeader, AuthProvider } })
 export default class Layout extends Vue {
 
 }
