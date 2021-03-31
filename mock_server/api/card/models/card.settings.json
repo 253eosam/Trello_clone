@@ -1,22 +1,22 @@
 {
   "kind": "collectionType",
-  "collectionName": "tasks",
+  "collectionName": "cards",
   "info": {
-    "name": "BList"
+    "name": "Card"
   },
   "options": {
     "increments": true,
     "timestamps": true
   },
   "attributes": {
-    "title": {
+    "content": {
       "type": "string"
     },
-    "board": {
-      "model": "boards"
+    "description": {
+      "type": "string"
     },
-    "cards": {
-      "collection": "card"
+    "position": {
+      "type": "string"
     }
   }
 }

@@ -15,9 +15,8 @@
     "password": {
       "type": "string"
     },
-    "boards": {
-      "via": "user",
-      "collection": "boards"
+    "name": {
+      "type": "string"
     }
   }
 }

@@ -2,23 +2,18 @@
   "kind": "collectionType",
   "collectionName": "boards",
   "info": {
-    "name": "boards"
+    "name": "board"
   },
   "options": {
     "increments": true,
     "timestamps": true
   },
   "attributes": {
-    "tag": {
+    "title": {
       "type": "string"
     },
     "user": {
-      "model": "users",
-      "via": "boards"
-    },
-    "tasks": {
-      "collection": "tasks",
-      "via": "board"
+      "model": "users"
     }
   }
 }
