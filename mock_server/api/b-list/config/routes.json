@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/b-lists",
+      "handler": "b-list.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/b-lists/count",
+      "handler": "b-list.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/b-lists/:id",
+      "handler": "b-list.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/b-lists",
+      "handler": "b-list.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/b-lists/:id",
+      "handler": "b-list.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/b-lists/:id",
+      "handler": "b-list.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

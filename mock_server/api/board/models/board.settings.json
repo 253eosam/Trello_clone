@@ -1,8 +1,8 @@
 {
   "kind": "collectionType",
-  "collectionName": "users",
+  "collectionName": "boards",
   "info": {
-    "name": "Users"
+    "name": "Board"
   },
   "options": {
     "increments": true,
@@ -10,14 +10,11 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "email": {
+    "title": {
       "type": "string"
     },
-    "password": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
+    "user": {
+      "model": "users"
     }
   }
 }

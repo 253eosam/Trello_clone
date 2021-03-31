@@ -1,8 +1,9 @@
 {
   "kind": "collectionType",
-  "collectionName": "users",
+  "collectionName": "b_lists",
   "info": {
-    "name": "Users"
+    "name": "BList",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -10,14 +11,14 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "email": {
+    "title": {
       "type": "string"
     },
-    "password": {
-      "type": "string"
+    "board": {
+      "model": "board"
     },
-    "name": {
-      "type": "string"
+    "cards": {
+      "collection": "card"
     }
   }
 }

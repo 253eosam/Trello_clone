@@ -1,9 +1,27 @@
-import user from '@/api/userAPI'
-import board from './boardAPI'
-import task from './taskAPI'
 
 export default {
-  user,
-  board,
-  task
+  // Board
+  getBoard: ({ id }) => `/boards/${id}`,
+  postBoard: () => '/boards',
+  deleteBoard: ({ id }) => `/boards/${id}`,
+  putBoard: ({ id }) => `/boards/${id}`,
+
+  // Board > BList
+  getBList: ({ id }) => `/b-lists/${id}`,
+  postBList: () => '/b-lists',
+  deleteBList: ({ id }) => `/b-lists/${id}`,
+  putBList: ({ id }) => `/b-lists/${id}`,
+
+  // Board > BList > Card
+  getCard: ({ id }) => `/cards/${id}`,
+  postCard: () => '/cards',
+  deleteCard: ({ id }) => `/cards/${id}`,
+  putCard: ({ id }) => `/cards/${id}`,
+
+  // User
+  getUserByEmail: () => '/users',
+  postUser: () => '/users',
+  deleteUser: ({ id }) => `/users/${id}`,
+  putUser: ({ id }) => `/users/${id}`
+
 }
