@@ -1,5 +1,5 @@
 <template>
-  <div id="warp">
+  <div id="wrap">
     <main-header></main-header>
     <auth-provider></auth-provider>
   </div>
@@ -15,3 +15,9 @@ export default class Layout extends Vue {
 
 }
 </script>
+
+<style scoped>
+#wrap {
+  position: relative;
+}
+</style>
