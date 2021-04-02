@@ -6,7 +6,7 @@
 
 -   node.js
 -   vue.js
--   CMS
+-   CMS(strapi)
 
 ## Prerequisites
 
