@@ -14,26 +14,26 @@ Make sure you have installed all of the following prerequisites on your developm
 
 -   Git - [Download & Install Git](https://git-scm.com/downloads). OSX and Linux machines typically have this already installed.
 -   Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager. If you encounter any problems, you can also use this [GitLab Issue](https://lab.ssafy.com/webmobile1-sub1/s02p11d152/issues) to install Node.js.
--   strapi - CMS [strapi.io](https://strapi.io/)
+-   StrAPI - [strapi.io](https://strapi.io/) CMS.
 
 ## Setup & Build
 
-프로젝트를 로컬 스토리지에 저장
+프로젝트 클론
 
 ```bash
 $ git clone https://github.com/DDD05/Trello_web.git
 ```
 
-### Vue
+### FE
 
-기본적인 패키지들을 설치
+패키기 설치
 
 ```bash
 $ cd Trello_web
-$ npm install
+$ npm i
 ```
 
-프로젝트를 빌드
+프로젝트 빌드
 
 ```bash
 $ npm run build
@@ -45,14 +45,14 @@ $ npm run build
 
 ```bash
 $ cd Trello_web/mock_server
-$ npm install
+$ npm i
 ```
 
 ## Run
 
 ### Vue
 
-로컬에서 프로젝트 실행
+Front project 실행
 
 ```bash
 $ cd Trello_web
@@ -61,10 +61,10 @@ $ npm run serve
 
 ### Server
 
-로컬에서 프로젝트 실행
+CMS 서버 실행
 
 ```bash
-$ cd mock_server
+$ cd Trello_web/mock_server
 $ npm start
 ```
 
