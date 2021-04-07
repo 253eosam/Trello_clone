@@ -19,7 +19,7 @@ export default {
   putCard: ({ id }) => `/cards/${id}`,
 
   // User
-  getUserByEmail: () => '/users',
+  getUser: () => '/users',
   postUser: () => '/users',
   deleteUser: ({ id }) => `/users/${id}`,
   putUser: ({ id }) => `/users/${id}`

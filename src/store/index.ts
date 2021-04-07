@@ -21,7 +21,7 @@ const store: StoreOptions<StateType> = {
   actions: {
     async apiRequest (context, apiRequestOptions) {
       const options = { ...defaultApiRequestOption, ...apiRequestOptions }
-      const { method, url, isFullResponse, data, params, header, baseUrl, timeout } = options
+      const { method, url, isFullResponse, data, params, header, baseURL, timeout } = options
       const requestData = {
         method,
         url,
@@ -29,9 +29,9 @@ const store: StoreOptions<StateType> = {
         data,
         header,
         timeout,
-        baseUrl
+        baseURL
       }
-      // TODO: loading 시작
+
       try {
         const response = await axios(requestData)
         if (response) {
@@ -39,10 +39,7 @@ const store: StoreOptions<StateType> = {
           return response.data
         }
       } catch (e) {
-        prompt('API 요청 에러가 발생하였습니다. 잠시후 다시 시도해주세요.')
-        return e.response
-      } finally {
-        // loading off
+        throw new Error('API 요청 에러가 발생하였습니다. 잠시후 다시 시도해주세요.')
       }
     }
   }

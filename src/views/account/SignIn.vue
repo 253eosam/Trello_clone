@@ -7,14 +7,14 @@
       class="input"
       name="email"
       placeholder="email.."
-      v-model="user.email"
+      v-model="email"
     />
     <input
       type="password"
       class="input"
       name="password"
       placeholder="password.."
-      v-model="user.password"
+      v-model="password"
     />
     <span class="sign-in__controller">
       <input
@@ -34,34 +34,32 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'SignIn',
   data () {
     return {
-      user: {
-        email: '',
-        password: ''
-      }
+      email: '',
+      password: ''
     }
-  },
-  computed: {
-    ...mapState('userModules', {
-      USER_INFO: 'user'
-    })
   },
   methods: {
     ...mapActions('userModules', {
-      SIGN_IN: 'signIn'
+      GET_USER: 'getUser'
     }),
     async onClickSignInBtn () {
-      (await this.SIGN_IN(this.user))
-        ? this.$message.success('로그인 성공!!') &&
-          this.$router.push({ name: 'trello.board' })
-        : this.$message.error(
-          '이메일 또는 비밀번호가 올바르지않습니다.\n다시 시도해주세요.'
-        )
+      try {
+        if (!this.email) throw new Error('이메일을 입력하세요.')
+        if (!this.password) throw new Error('비밀번호를 입력하세요.')
+
+        const response = await this.GET_USER({ email: this.email, password: this.password })
+        if (!response || response.password !== this.password) throw new Error('비밀번호가 올바르지 않습니다.')
+        this.$message.success('로그인 성공!!')
+        this.$router.push({ name: 'trello.board', params: { uid: response.id } })
+      } catch (err) {
+        this.$message.error(err.message)
+      }
     },
     onClickSignUpBtn () {
       this.$router.push({ name: 'user.signUp' })
