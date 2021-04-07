@@ -1,15 +1,12 @@
 <template>
-  <div class="popup-wrap">
-    <input type="checkbox" id="popup-visibility-flag" v-model="data.isVisible" />
-    <div class="popup-wrap">
-      <div class="popup-container">
-        <div class="popup-header">
-          <h1>{{data.title}}</h1>
-          <label for="popup-visibility-flag"><font-awesome-icon icon="times" /></label>
-        </div>
-        <component :is="data.component" v-bind="data.propsData" @close="data.isVisible = false" />
-      </div>
-    </div>
+  <div id="popup-layer" v-if="data.isVisible">
+    <section>
+      <header id="popup-header">
+        <h2>{{data.title}}</h2>
+        <button type="button" class="close-btn" @click="data.isVisible = false">close</button>
+      </header>
+      <component :is="data.component" v-bind="data.propsData"></component>
+    </section>
   </div>
 </template>
 
@@ -21,79 +18,74 @@ const initData = () => {
   return {
     component: null,
     isVisible: false,
-    title: '',
+    title: 'ff',
     propsData: {}
   }
 }
 
 @Component
 export default class PopupLayer extends Vue {
-  data = initData()
+  data = initData();
 
   mounted () {
-    EventBus.$on('SHOW_POPUP', (pComponent: any, title: string, propsData: any): void => {
+    EventBus.$on('SHOW_POPUP', ({ component, title, props }: any): void => {
       this.data.isVisible = true
-      this.data.component = pComponent
+      this.data.component = component
       this.data.title = title || ''
-      this.data.propsData = propsData
+      this.data.propsData = props
     })
   }
 
   @Watch('data.isVisible')
   onVisibleChaged (newValue: boolean) {
-    !newValue && (this.data = initData())
+    if (!newValue) this.data = initData()
   }
 }
 </script>
 <style lang="scss" scoped>
-.popup-wrap {
-  #popup-visibility-flag {
-    display: none;
-  }
-  #popup-visibility-flag:checked + .popup-wrap {
-    visibility: visible;
-  }
-  #popup-visibility-flag + .popup-wrap {
-    visibility: hidden;
-  }
+#popup-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($color: #000000, $alpha: .6);
 
-  .popup-wrap {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 100;
-  }
-
-  .popup-container {
+  section {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: inline-block;
     min-width: 500px;
-    min-height: 100px;
-    background: white;
-    z-index: 2;
-    .popup-header {
-      display: flex;
-      width: 100%;
-      height: 59px;
-      border-bottom: 1px solid black;
-      h1 {
-        margin: auto 10px;
+    min-height: 300px;
+    background: #ffffff;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+
+    header {
+      position: relative;
+      height: 50px;
+      border-bottom: 1px solid rgba($color: #000000, $alpha: .2);
+      h2 {
+        line-height: 50px;
+        padding: 0 20px;
+        font-size: 130%;
       }
-      >label {
+      .close-btn {
         position: absolute;
-        top: 0%;
-        right: 0%;
-        padding: 20px;
-        background: inherit;
-        z-index: 1;
+        top: 15px;
+        bottom: 15px;
+        right: 20px;
+        width: 20px;
+        text-indent: -99999px;
+        background: #ffffff;
+        border: 0;
+        border-radius: 2px;
+        box-shadow: 0 0 4px;
+        &::before {
+          display: inline-block;
+        }
       }
     }
   }
-
 }
 </style>
