@@ -9,9 +9,14 @@ export default {
     user: null
   },
   getters: {
+    user (state: StateType) {
+      if (!state.user) state.user = JSON.parse(localStorage.getItem('trello.user')!) || null
+      return state.user
+    }
   },
   mutations: {
     setUser (state: StateType, user: UserType) {
+      localStorage.setItem('trello.user', JSON.stringify(user))
       state.user = user
     }
   },

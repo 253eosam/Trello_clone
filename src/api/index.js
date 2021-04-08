@@ -1,7 +1,7 @@
 
 export default {
   // Board
-  getBoard: ({ id }) => `/boards/${id}`,
+  getBoard: () => '/boards',
   postBoard: () => '/boards',
   deleteBoard: ({ id }) => `/boards/${id}`,
   putBoard: ({ id }) => `/boards/${id}`,

@@ -8,6 +8,7 @@
       name="email"
       placeholder="email.."
       v-model="email"
+      @keydown.enter="onClickSignInBtn"
     />
     <input
       type="password"
@@ -15,6 +16,7 @@
       name="password"
       placeholder="password.."
       v-model="password"
+      @keydown.enter="onClickSignInBtn"
     />
     <span class="sign-in__controller">
       <input
