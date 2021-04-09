@@ -18,6 +18,10 @@ export default {
     setUser (state: StateType, user: UserType) {
       localStorage.setItem('trello.user', JSON.stringify(user))
       state.user = user
+    },
+    clearUser (state: StateType) {
+      localStorage.removeItem('trello.user')
+      state.user = null
     }
   },
   actions: {

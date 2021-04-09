@@ -3,21 +3,33 @@
     <h1><a href="#">Trello</a></h1>
     <div @click="isShowAccountMenu = !isShowAccountMenu" id="account_avatar">Profile avatar</div>
     <div v-if="isShowAccountMenu" id="account_menu">
-      <strong>Account</strong>
-      <div id="profile_box">
-        <div class="avatar"/><span class="nick-name">DDD</span><span class="email">dhzm2aud@naver.com</span>
-      </div>
-      <div>Log out</div>
+      <template v-if="user">
+        <strong>Account</strong>
+        <div id="profile_box">
+          <div class="avatar"/><span class="nick-name">{{ user.name }}</span><span class="email">{{ user.email }}</span>
+        </div>
+        <div @click="onClickSignOut">Log out</div>
+      </template>
     </div>
   </header>
 </template>
 
 <script lang="ts">
+import { UserType } from '@/model/account/User'
 import { Component, Vue } from 'vue-property-decorator'
+import { namespace } from 'vuex-class'
 
 @Component
 export default class Header extends Vue {
+  @namespace('userModules').Getter('user') user!: UserType
+  @namespace('userModules').Mutation('clearUser') logout!: () => void
+
   isShowAccountMenu = false
+
+  onClickSignOut () {
+    this.logout()
+    this.$router.push('/')
+  }
 }
 </script>
 
