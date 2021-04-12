@@ -1,4 +1,3 @@
-import api from '@/api'
 import { UserType } from '@/model/account/User'
 import { StateType } from '@/store/stateType'
 import { ActionContext } from 'vuex'
@@ -28,7 +27,7 @@ export default {
     async postUser ({ commit, dispatch }: ActionContext<StateType, any>, data: UserType) {
       const response = await dispatch('apiRequest', {
         method: 'POST',
-        url: api.postUser(),
+        url: '/users',
         data
       }, { root: true })
 
@@ -38,7 +37,7 @@ export default {
     },
     async getUser ({ commit, dispatch }: ActionContext<StateType, any>, params: any) {
       const response = await dispatch('apiRequest', {
-        url: api.getUser(),
+        url: '/users',
         params
       }, { root: true })
 

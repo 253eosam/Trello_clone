@@ -1,4 +1,3 @@
-import api from '@/api'
 import { BoardType } from '@/model/trello/Board'
 import { StateType } from '@/store/stateType'
 import { ActionContext } from 'vuex'
@@ -18,7 +17,7 @@ export default {
   actions: {
     async getBoard ({ commit, dispatch }: ActionContext<StateType, any>, params: any) {
       const response = await dispatch('apiRequest', {
-        url: api.getBoard(),
+        url: '/boards',
         params
       }, { root: true })
 
