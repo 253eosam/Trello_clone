@@ -1,7 +1,7 @@
 <template>
   <section id="boards_wrap">
     <h2>Board list</h2>
-    <article class="board-box board-item" v-for="board in boards" :key="board.id">
+    <article @click="onClickGoDetailPage(board.id)" class="board-box board-item" v-for="board in boards" :key="board.id">
       <h3>{{ board.title }}</h3>
     </article>
     <div class="board-box" @click="onClickNewBoard">Create new Board</div>
@@ -31,8 +31,8 @@ export default class Boards extends Vue {
     await this.getBoard({ user: this.user.id })
   }
 
-  onClickGoDetailPage (bid: number) {
-    console.log('[🐱 DDD] ~ file: Boards.vue ~ line 30 ~ Boards ~ onClickGoDetailPage ~ bid', bid)
+  onClickGoDetailPage (bid: any) {
+    this.$router.push({ name: 'trello.blist', params: { bid } })
   }
 
   async onClickNewBoard (): Promise<void> {
