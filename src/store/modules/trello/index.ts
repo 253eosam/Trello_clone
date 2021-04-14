@@ -24,6 +24,15 @@ export default {
       if (response) commit('setBoard', response)
 
       return response[0]
+    },
+    async postBoard ({ dispatch }: ActionContext<StateType, any>, data: BoardType) {
+      const response = await dispatch('apiRequest', {
+        method: 'POST',
+        url: '/boards',
+        data
+      }, { root: true })
+
+      return response
     }
   }
 }
