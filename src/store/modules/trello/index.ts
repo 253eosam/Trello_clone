@@ -28,7 +28,7 @@ export default {
 
       if (response) commit('setBoard', response)
 
-      return response[0]
+      return response
     },
     async postBoard ({ dispatch }: ActionContext<StateType, any>, data: BoardType) {
       const response = await dispatch('apiRequest', {
@@ -41,11 +41,19 @@ export default {
     },
     async getBList ({ commit, dispatch }: ActionContext<StateType, any>, params: any) {
       const response = await dispatch('apiRequest', {
-        url: 'b-lists',
+        url: '/b-lists',
         params
       }, { root: true })
 
       if (response) commit('setBList', response)
+      return response
+    },
+    async postBList ({ dispatch }: ActionContext<StateType, any>, data: any) {
+      const response = await dispatch('apiRequest', {
+        method: 'POST',
+        url: '/b-lists',
+        data
+      }, { root: true })
       return response
     }
   }

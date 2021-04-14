@@ -5,17 +5,16 @@
         <span class="lnb-item menu">Board</span>
         <div class="menu_box">
           <ul>
-            <li>Board item 01</li>
-            <li>Board item 02</li>
+            <li v-for="board in boards" :key="board.id">{{ board.title }}</li>
           </ul>
         </div>
       </div>
-      <h2 class="lnb-item">title</h2>
+      <h2 class="lnb-item">{{ board.title }}</h2>
     </nav>
     <section class="board">
-      <article class="list">
+      <article class="list" v-for="list in bList" :key="list.id">
         <header>
-          <h3>List title</h3>
+          <h3>{{ list.title }}</h3>
           <div class="list_menu">
             <span class="none">dot menu</span>
             <div class="list_menu_wrap">
@@ -26,29 +25,64 @@
             </div>
           </div>
         </header>
-        <div class="card"><p>card content</p></div>
-        <div class="card"><p>card content</p></div>
+        <div class="card" v-for="card in list.cards" :key="card.id"><p>{{ card.content }}</p></div>
         <footer>
-          <div>+ Add another card</div>
+          <div @click="onClickAddNewCard">+ Add another card</div>
         </footer>
+      </article>
+      <article class="list create-list" @click="onClickCreateNewBList">
+        <strong>
+            + Add another list
+        </strong>
       </article>
     </section>
   </div>
 </template>
 
 <script lang="ts">
+import { UserType } from '@/model/account/User'
 import { BListType } from '@/model/trello/BList'
+import { BoardType } from '@/model/trello/Board'
 import { Component, Vue } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 
 @Component
 export default class Trello extends Vue {
   @namespace('trelloModules').Action('getBList') getBList!: (board: any) => Promise<void>
-  @namespace('trelloModules').State('bList') B_LIST!: BListType
+  @namespace('trelloModules').Action('postBList') postBList!: (bList: any) => Promise<void>
+  @namespace('trelloModules').State('bList') B_LIST!: BListType[]
+  @namespace('trelloModules').State('boards') boards!: BoardType[]
+  @namespace('trelloModules').State('bList') bList!: BListType[]
+  @namespace('userModules').Getter('user') user!: UserType
 
   async created () {
-    const board = this.$route.params.uid
-    await this.getBList({ board })
+    await this.fetch()
+  }
+
+  async fetch () {
+    const bid = this.$route.params.bid
+    await this.getBList({ board: bid })
+  }
+
+  async onClickCreateNewBList () {
+    try {
+      const { value } = await this.$prompt('리스트 이름을 정해주세요.', { confirmButtonText: '확인', cancelButtonText: '취소' }) as any
+      await this.postBList({
+        title: value,
+        board: this.board.id
+      })
+      await this.fetch()
+    } catch (err) {
+      if (err !== 'close') console.log(err)
+    }
+  }
+
+  onClickAddNewCard () {
+    console.log('ff')
+  }
+
+  get board () {
+    return this.boards?.filter(board => board.id === +this.$route.params.bid)[0] || {}
   }
 }
 </script>
@@ -130,6 +164,9 @@ export default class Trello extends Vue {
       display: block;
       content: '';
       clear: both;
+    }
+    .create-list {
+      vertical-align: top;
     }
     .list {
       display: inline-block;

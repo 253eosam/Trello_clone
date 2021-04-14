@@ -53,7 +53,7 @@ export default {
     async onClickSignInBtn () {
       try {
         if (!this.email) throw new Error('이메일을 입력하세요.')
-        if (!this.password) throw new Error('비밀번호를 입력하세요.')
+        if (!this.password) throw new Error('비밀번호를 입력하세요.`¡')
 
         const response = await this.GET_USER({ email: this.email, password: this.password })
         if (!response || response.password !== this.password) throw new Error('비밀번호가 올바르지 않습니다.')

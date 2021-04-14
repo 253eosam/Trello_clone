@@ -17,17 +17,8 @@ import { namespace } from 'vuex-class'
 @Component
 export default class Boards extends Vue {
   @namespace('userModules').Getter('user') user!: UserType
-  @namespace('trelloModules').Action('getBoard') getBoard!: (user: any) => Promise<BoardType>
   @namespace('trelloModules').Action('postBoard') postBoard!: (user: any) => Promise<BoardType>
-  @namespace('trelloModules').State('boards') boards!: BoardType
-
-  async created () {
-    await this.fetch()
-  }
-
-  async fetch () {
-    await this.getBoard({ user: this.user.id })
-  }
+  @namespace('trelloModules').State('boards') boards!: BoardType[]
 
   onClickGoDetailPage (bid: any) {
     this.$router.push({ name: 'trello.blist', params: { bid } })
@@ -36,11 +27,15 @@ export default class Boards extends Vue {
   async onClickNewBoard (): Promise<void> {
     try {
       const { value } = await this.$prompt('보드 이름을 정해주세요.', { confirmButtonText: '확인', cancelButtonText: '취소' }) as any
-      await this.postBoard({ title: value, user: this.user.id })
-      await this.fetch()
+      await this.postBoard({ title: value, user: this.UID })
+      await this.$emit('fetch')
     } catch (err) {
       if (err !== 'close') console.log(err)
     }
+  }
+
+  get UID () {
+    return this.user.id
   }
 }
 </script>
