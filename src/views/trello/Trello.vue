@@ -37,10 +37,20 @@
 </template>
 
 <script lang="ts">
+import { BListType } from '@/model/trello/BList'
 import { Component, Vue } from 'vue-property-decorator'
+import { namespace } from 'vuex-class'
 
 @Component
-export default class Trello extends Vue {}
+export default class Trello extends Vue {
+  @namespace('trelloModules').Action('getBList') getBList!: (board: any) => Promise<void>
+  @namespace('trelloModules').State('bList') B_LIST!: BListType
+
+  async created () {
+    const board = this.$route.params.uid
+    await this.getBList({ board })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

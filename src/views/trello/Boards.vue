@@ -22,9 +22,7 @@ export default class Boards extends Vue {
   @namespace('trelloModules').State('boards') boards!: BoardType
 
   async created () {
-    if (this.user && this.user.id === +this.$route.params.uid) {
-      await this.fetch()
-    }
+    await this.fetch()
   }
 
   async fetch () {
