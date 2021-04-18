@@ -55,6 +55,22 @@ export default {
         data
       }, { root: true })
       return response
+    },
+    async putBList ({ dispatch }: ActionContext<StateType, any>, data: any) {
+      const response = await dispatch('apiRequest', {
+        method: 'PUT',
+        url: '/b-lists',
+        data
+      }, { root: true })
+      return response
+    },
+    async deleteBList ({ dispatch }: ActionContext<StateType, any>, params: any) {
+      const response = await dispatch('apiRequest', {
+        method: 'DELETE',
+        url: '/b-lists',
+        params
+      }, { root: true })
+      return response
     }
   }
 }

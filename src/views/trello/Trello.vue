@@ -1,11 +1,12 @@
 <template>
   <div id="wrap">
     <nav id="lnb">
+      <div class="lnb-item" @click="goBack">&lt;</div>
       <div class="menu_wrap">
         <span class="lnb-item menu">Board</span>
         <div class="menu_box">
           <ul>
-            <li v-for="board in boards" :key="board.id">{{ board.title }}</li>
+            <li v-for="board in boards" :key="board.id" @click="goBoard(board.id)">{{ board.title }}</li>
           </ul>
         </div>
       </div>
@@ -20,7 +21,8 @@
             <div class="list_menu_wrap">
               <div class="list_menu_box">
                 <strong>List actions</strong>
-                <div>Delete</div>
+                <div @click="onClickBListUpdate(list.id)">Update</div>
+                <div @click="onClickBListDelete(list.id)">Delete</div>
               </div>
             </div>
           </div>
@@ -43,21 +45,19 @@
 import { UserType } from '@/model/account/User'
 import { BListType } from '@/model/trello/BList'
 import { BoardType } from '@/model/trello/Board'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 
 @Component
 export default class Trello extends Vue {
   @namespace('trelloModules').Action('getBList') getBList!: (board: any) => Promise<void>
   @namespace('trelloModules').Action('postBList') postBList!: (bList: any) => Promise<void>
+  @namespace('trelloModules').Action('putBList') putBList!: (bList: any) => Promise<void>
+  @namespace('trelloModules').Action('deleteBList') deleteBList!: (id: any) => Promise<void>
   @namespace('trelloModules').State('bList') B_LIST!: BListType[]
   @namespace('trelloModules').State('boards') boards!: BoardType[]
   @namespace('trelloModules').State('bList') bList!: BListType[]
   @namespace('userModules').Getter('user') user!: UserType
-
-  async created () {
-    await this.fetch()
-  }
 
   async fetch () {
     const bid = this.$route.params.bid
@@ -78,11 +78,40 @@ export default class Trello extends Vue {
   }
 
   onClickAddNewCard () {
-    console.log('ff')
+    // TODO: 이거 구현해야함
+    console.log('이거 구현해야함')
+  }
+
+  goBoard (bid: any) {
+    if (this.$route.params.bid === bid) return
+    this.$router.push({ name: 'trello.blist', params: { bid } })
+  }
+
+  goBack () {
+    this.$router.back()
+  }
+
+  async onClickBListUpdate (id: any) {
+    const res = await this.$prompt('변경할 이름을 입력하세요.', { cancelButtonText: '취소', confirmButtonText: '변경' }) as any
+    if (!res) return
+    await this.putBList({ id, title: res.value })
+    await this.fetch()
+  }
+
+  async onClickBListDelete (id: any) {
+    const res = await this.$confirm('정말로 삭제하시겠습니까?', { cancelButtonText: '아니요', confirmButtonText: '네' })
+    if (!res) return
+    await this.deleteBList({ id })
+    await this.fetch()
   }
 
   get board () {
     return this.boards?.filter(board => board.id === +this.$route.params.bid)[0] || {}
+  }
+
+  @Watch('$route.params.bid', { immediate: true })
+  async changeRoute () {
+    await this.fetch()
   }
 }
 </script>
@@ -232,8 +261,6 @@ export default class Trello extends Vue {
                 height: 40px;
                 border-bottom: 1px solid rgba(9, 30, 66, 0.13);
                 margin-bottom: 8px;
-              }
-              div:last-child {
                 line-height: 40px;
               }
             }
