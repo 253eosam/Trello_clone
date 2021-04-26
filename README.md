@@ -13,7 +13,7 @@
 Make sure you have installed all of the following prerequisites on your development machine:
 
 -   Git - [Download & Install Git](https://git-scm.com/downloads). OSX and Linux machines typically have this already installed.
--   Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager. If you encounter any problems, you can also use this [GitLab Issue](https://lab.ssafy.com/webmobile1-sub1/s02p11d152/issues) to install Node.js.
+-   Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
 -   StrAPI - [strapi.io](https://strapi.io/) CMS.
 
 ## Setup & Build
