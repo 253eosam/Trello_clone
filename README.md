@@ -1,11 +1,13 @@
 # trello_clone
 
-> 트렐로 클론 (토이 프로젝트)
+> 트렐로 클론 코딩, vue.js에 ts를 적용하여 개발
 
 ## Overview
 
 -   node.js
--   vue.js
+-   Vue.js
+-   TypeScript 적용 (using vue-property-decorator package)
+-   Vuex
 -   CMS(strapi)
 
 ## Prerequisites
@@ -70,5 +72,4 @@ $ npm start
 
 ## 디자인
 
-![login](./readme-img/login.png)
-![trello](./readme-img/trello.png)
+
