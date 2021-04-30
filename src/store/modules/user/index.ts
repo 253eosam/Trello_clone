@@ -9,7 +9,7 @@ export default {
   },
   getters: {
     user (state: StateType) {
-      if (!state.user) state.user = JSON.parse(localStorage.getItem('trello.user')!) || null
+      if (!state.user && localStorage.getItem('trello.user')) state.user = JSON.parse(localStorage.getItem('trello.user') as any)
       return state.user
     }
   },
@@ -24,6 +24,12 @@ export default {
     }
   },
   actions: {
+    async getAuth ({ dispatch }: ActionContext<StateType, any>) {
+      await dispatch('apiRequest', {
+        url: ''
+      }, { root: true })
+      return true
+    },
     async postUser ({ commit, dispatch }: ActionContext<StateType, any>, data: UserType) {
       const response = await dispatch('apiRequest', {
         method: 'POST',

@@ -18,7 +18,7 @@ const initData = () => {
   return {
     component: null,
     isVisible: false,
-    title: 'ff',
+    title: '',
     propsData: {}
   }
 }
@@ -27,11 +27,11 @@ const initData = () => {
 export default class PopupLayer extends Vue {
   data = initData();
 
-  mounted () {
+  created () {
     EventBus.$on('SHOW_POPUP', ({ component, title, props }: any): void => {
       this.data.isVisible = true
       this.data.component = component
-      this.data.title = title || ''
+      this.data.title = title || 'Empty title..'
       this.data.propsData = props
     })
   }

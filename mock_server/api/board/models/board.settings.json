@@ -2,13 +2,15 @@
   "kind": "collectionType",
   "collectionName": "boards",
   "info": {
-    "name": "Board"
+    "name": "board",
+    "description": ""
   },
   "options": {
     "increments": true,
     "timestamps": true,
     "draftAndPublish": true
   },
+  "pluginOptions": {},
   "attributes": {
     "title": {
       "type": "string"

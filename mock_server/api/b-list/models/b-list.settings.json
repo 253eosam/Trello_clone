@@ -10,8 +10,12 @@
     "timestamps": true,
     "draftAndPublish": true
   },
+  "pluginOptions": {},
   "attributes": {
     "title": {
+      "type": "string"
+    },
+    "position": {
       "type": "string"
     },
     "board": {

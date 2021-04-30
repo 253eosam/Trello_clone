@@ -67,20 +67,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions('userModules', { POST_USER: 'postSignUp' }),
+    ...mapActions('userModules', { POST_USER: 'postUser' }),
     async onClickSignUpBtn () {
       try {
         if (!this.email) throw new Error('Email을 입력해주세요.')
         if (!this.name) throw new Error('이름을 입력해주세요.')
         if (!this.password) throw new Error('비밀번호를 입력해주세요.')
         if (!this.isVerifyPassword) throw new Error('비밀번호가 올바르지않습니다.')
-        await this.POST_USER({
+        const response = await this.POST_USER({
           email: this.email,
           name: this.name,
           password: this.password
         })
+        this.$router.push({ name: 'trello.board', params: { uid: response.id } })
         this.$message.success('회원가입 성공!!')
-        this.$router.push({ name: 'trello.board' })
       } catch (err) {
         this.$message.error(err.message)
       }

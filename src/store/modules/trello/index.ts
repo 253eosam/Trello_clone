@@ -71,6 +71,24 @@ export default {
         params
       }, { root: true })
       return response
+    },
+    async getCard ({ commit, dispatch }: ActionContext<StateType, any>, params: any) {
+      const response = await dispatch('apiRequest', {
+        url: '/cards',
+        params
+      }, { root: true })
+
+      if (response) commit('setCard', response)
+      return response
+    },
+    async postCard ({ dispatch }: ActionContext<StateType, any>, data: any) {
+      const response = await dispatch('apiRequest', {
+        method: 'POST',
+        url: '/cards',
+        data
+      }, { root: true })
+
+      return response
     }
   }
 }

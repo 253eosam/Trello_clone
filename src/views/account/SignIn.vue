@@ -42,8 +42,8 @@ export default {
   name: 'SignIn',
   data () {
     return {
-      email: '',
-      password: ''
+      email: 'dhzm2aud@naver.com',
+      password: 'dltjdwns'
     }
   },
   methods: {

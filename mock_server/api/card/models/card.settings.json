@@ -2,18 +2,16 @@
   "kind": "collectionType",
   "collectionName": "cards",
   "info": {
-    "name": "Card"
+    "name": "card"
   },
   "options": {
     "increments": true,
     "timestamps": true,
     "draftAndPublish": true
   },
+  "pluginOptions": {},
   "attributes": {
     "content": {
-      "type": "string"
-    },
-    "description": {
       "type": "string"
     },
     "position": {

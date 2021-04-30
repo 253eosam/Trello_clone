@@ -47,6 +47,7 @@ import { BListType } from '@/model/trello/BList'
 import { BoardType } from '@/model/trello/Board'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
+import CardPopup from '@/components/CardPopup.vue'
 
 @Component
 export default class Trello extends Vue {
@@ -54,6 +55,7 @@ export default class Trello extends Vue {
   @namespace('trelloModules').Action('postBList') postBList!: (bList: any) => Promise<void>
   @namespace('trelloModules').Action('putBList') putBList!: (bList: any) => Promise<void>
   @namespace('trelloModules').Action('deleteBList') deleteBList!: (id: any) => Promise<void>
+  @namespace('trelloModules').Action('postCard') postCard!: (card: any) => Promise<void>
   @namespace('trelloModules').State('bList') B_LIST!: BListType[]
   @namespace('trelloModules').State('boards') boards!: BoardType[]
   @namespace('trelloModules').State('bList') bList!: BListType[]
@@ -77,9 +79,8 @@ export default class Trello extends Vue {
     }
   }
 
-  onClickAddNewCard () {
-    // TODO: 이거 구현해야함
-    console.log('이거 구현해야함')
+  async onClickAddNewCard () {
+    this.$showPopup({ component: CardPopup, title: '카드 만들기' })
   }
 
   goBoard (bid: any) {
@@ -92,10 +93,14 @@ export default class Trello extends Vue {
   }
 
   async onClickBListUpdate (id: any) {
-    const res = await this.$prompt('변경할 이름을 입력하세요.', { cancelButtonText: '취소', confirmButtonText: '변경' }) as any
-    if (!res) return
-    await this.putBList({ id, title: res.value })
-    await this.fetch()
+    try {
+      const res = await this.$prompt('변경할 이름을 입력하세요.', { cancelButtonText: '취소', confirmButtonText: '변경' }) as any
+      if (!res) return
+      await this.putBList({ id, title: res.value })
+      await this.fetch()
+    } catch (error) {
+
+    }
   }
 
   async onClickBListDelete (id: any) {
