@@ -72,4 +72,6 @@ $ npm start
 
 ## 디자인
 
-
+![login](./readme-img/login.png)
+![trllo](./readme-img/trello1.png)
+![trllo](./readme-img/trello2.png)

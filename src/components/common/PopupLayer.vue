@@ -5,7 +5,7 @@
         <h2>{{data.title}}</h2>
         <button type="button" class="close-btn" @click="data.isVisible = false">close</button>
       </header>
-      <component :is="data.component" v-bind="data.propsData"></component>
+      <component :is="data.component" v-bind="data.propsData" @close="data.isVisible = false"></component>
     </section>
   </div>
 </template>
