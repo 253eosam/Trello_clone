@@ -89,6 +89,14 @@ export default {
       }, { root: true })
 
       return response
+    },
+    async putCard ({ dispatch }: ActionContext<StateType, any>, data: any) {
+      const response = await dispatch('apiRequest', {
+        method: 'PUT',
+        url: '/cards',
+        data
+      }, { root: true })
+      return response
     }
   }
 }

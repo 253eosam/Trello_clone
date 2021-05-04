@@ -27,7 +27,9 @@
             </div>
           </div>
         </header>
+        <draggable group="card-group" draggable=".card">
         <div class="card" v-for="card in list.cards" :key="card.id"><p>{{ card.content }}</p></div>
+          </draggable>
         <footer>
           <div @click="onClickAddNewCard(list)">+ Add another card</div>
         </footer>
@@ -48,15 +50,19 @@ import { BoardType } from '@/model/trello/Board'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 import CardPopup from '@/components/CardPopup.vue'
+import draggable from 'vuedraggable'
 
-@Component
+@Component({
+  components: {
+    draggable
+  }
+})
 export default class Trello extends Vue {
   @namespace('trelloModules').Action('getBList') getBList!: (board: any) => Promise<void>
   @namespace('trelloModules').Action('postBList') postBList!: (bList: any) => Promise<void>
   @namespace('trelloModules').Action('putBList') putBList!: (bList: any) => Promise<void>
   @namespace('trelloModules').Action('deleteBList') deleteBList!: (id: any) => Promise<void>
   @namespace('trelloModules').Action('postCard') postCard!: (card: any) => Promise<void>
-  @namespace('trelloModules').State('bList') B_LIST!: BListType[]
   @namespace('trelloModules').State('boards') boards!: BoardType[]
   @namespace('trelloModules').State('bList') bList!: BListType[]
   @namespace('userModules').Getter('user') user!: UserType
