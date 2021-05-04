@@ -22,7 +22,8 @@
       "model": "board"
     },
     "cards": {
-      "collection": "card"
+      "collection": "card",
+      "via": "b_list"
     }
   }
 }

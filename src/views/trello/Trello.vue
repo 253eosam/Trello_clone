@@ -29,7 +29,7 @@
         </header>
         <div class="card" v-for="card in list.cards" :key="card.id"><p>{{ card.content }}</p></div>
         <footer>
-          <div @click="onClickAddNewCard">+ Add another card</div>
+          <div @click="onClickAddNewCard(list)">+ Add another card</div>
         </footer>
       </article>
       <article class="list create-list" @click="onClickCreateNewBList">
@@ -79,8 +79,8 @@ export default class Trello extends Vue {
     }
   }
 
-  async onClickAddNewCard () {
-    this.$showPopup({ component: CardPopup, title: '카드 만들기' })
+  async onClickAddNewCard ({ id: bid, cards }: { id: number; cards: any[] }) {
+    this.$showPopup({ component: CardPopup, title: '카드 만들기', props: { bid, position: cards.length * 1000, submit: () => this.fetch() } })
   }
 
   goBoard (bid: any) {
@@ -203,6 +203,7 @@ export default class Trello extends Vue {
       vertical-align: top;
     }
     .list {
+      vertical-align: top;
       display: inline-block;
       margin-right: 10px;
       width: 272px;

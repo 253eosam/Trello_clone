@@ -2,7 +2,7 @@
   <article id="card_popup">
     <form @submit.prevent>
       <label for="card_content">카드 내용 :
-      <input type="text" id="card_content"></label>
+      <input type="text" id="card_content" v-model="content"></label>
       <input class="util_btns submit" type="submit" value="생성" @click="createCard">
       <input class="util_btns cancel" type="button" value="취소" @click="cancel">
     </form>
@@ -10,15 +10,28 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 
 @Component
 export default class CardPopup extends Vue {
   @namespace('trelloModules').Action('postCard') postCard!: (data: any) => Promise<void>
+  @Prop({ type: Number, required: true }) bid!: number
+  @Prop({ type: Number, required: true }) position!: number
+  @Prop({ type: Function, required: true }) submit!: () => void
 
-  createCard () {
-    console.log('hi')
+  content = ''
+
+  async createCard () {
+    if (!this.content) return
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    await this.postCard({ content: this.content, b_list: this.bid, position: `${this.position}` })
+    await this.fetch()
+    this.$emit('close')
+  }
+
+  async fetch () {
+    await this.submit()
   }
 
   cancel () {
