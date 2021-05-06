@@ -90,7 +90,7 @@ export default class Trello extends Vue {
   }
 
   goBoard (bid: any) {
-    if (this.$route.params.bid === bid) return
+    if (this.$route.params.bid === `${bid}`) return
     this.$router.push({ name: 'trello.blist', params: { bid } })
   }
 
@@ -153,7 +153,7 @@ export default class Trello extends Vue {
         left: 5px;
         width: 150px;
         ul {
-          margin-top: 10px;
+          margin-top: 5px;
           padding: 10px;
           box-shadow: 0 0 2px #000;
           background: #fff;

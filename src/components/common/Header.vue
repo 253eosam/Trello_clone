@@ -64,6 +64,7 @@ export default class Header extends Vue {
     background-size: 32px 32px;
   }
   #account_menu {
+    z-index: 5000;
     position: absolute;
     right: 5px;
     box-shadow: 0 8px 16px -4px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
