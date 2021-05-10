@@ -9,7 +9,7 @@ const defaultApiRequestOption = {
   method: 'GET',
   url: '',
   isFullResponse: false,
-  baseURL: 'http://localhost:1337',
+  baseURL: process.env.VUE_APP_BASE_URL,
   headers: {
     'Content-type': 'application/json; charset=utf-8'
   },
