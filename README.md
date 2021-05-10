@@ -1,6 +1,6 @@
 # trello_clone
 
-> 트렐로 클론 코딩, vue.js에 ts를 적용하여 개발
+> [[Deploy](http://ec2-13-125-127-157.ap-northeast-2.compute.amazonaws.com:10000/)] 트렐로 클론 코딩, vue.js에 ts를 적용하여 개발
 
 ## Overview
 
